@@ -1,5 +1,7 @@
-import BoardRegister from "../../src/components/units/board/register/BoardRegister.container";
+import BoardList from "../../src/components/units/board/list/BoardList.container";
 
-export default function Home() {
-  return <BoardRegister />;
-}
+const Home = () => {
+  return <BoardList />;
+};
+
+export default Home;

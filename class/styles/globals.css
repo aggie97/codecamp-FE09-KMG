@@ -17,10 +17,14 @@ a {
 
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: dark;
+    color-scheme: white;
   }
   body {
     color: white;
     background: black;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

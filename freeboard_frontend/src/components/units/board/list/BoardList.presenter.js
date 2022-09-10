@@ -31,18 +31,31 @@ import {
   BestBoardProfile,
   BestBoardProfileImg,
   BestBoardWriter,
+  BoxForLayout,
+  PrevPage,
+  NextPage,
 } from "./BoardList.styles";
 
-const BoardListUI = ({ totalBoards, bestBoards }) => {
+const BoardListUI = ({
+  totalBoards,
+  bestBoards,
+  onClickCreate,
+  onClickListItem,
+  onClickBestItem,
+}) => {
   return (
     <>
       <Wrapper>
         <Header>
-          <Banner>베스트 게시물</Banner>
-          <BestBoards>
+          <Banner>베스트 게시글</Banner>
+          <BestBoards id="BestParent">
             {bestBoards.data?.fetchBoardsOfTheBest.map((best) => {
               return (
-                <BestBoard key={best._id}>
+                <BestBoard
+                  onClick={onClickBestItem}
+                  id={best._id}
+                  key={best._id}
+                >
                   <BestBoardImg />
                   <BestBoardInfo>
                     <BestBoardTitle>{best.title}</BestBoardTitle>
@@ -75,7 +88,7 @@ const BoardListUI = ({ totalBoards, bestBoards }) => {
           </ListHeader>
           <>
             {totalBoards.data?.fetchBoards.map((board, index) => (
-              <List key={board._id}>
+              <List onClick={onClickListItem} id={board._id} key={board._id}>
                 <BoardNumber>{index + 1}</BoardNumber>
                 <BoardTitle>{board.title}</BoardTitle>
                 <BoardWriter>{board.writer}</BoardWriter>
@@ -85,8 +98,14 @@ const BoardListUI = ({ totalBoards, bestBoards }) => {
           </>
         </ListBox>
         <Footer>
-          <PageBox>123</PageBox>
-          <RegisterButton>게시물 등록하기</RegisterButton>
+          <BoxForLayout></BoxForLayout>
+          <PageBox>
+            <PrevPage>👈</PrevPage>
+            <NextPage>👉</NextPage>
+          </PageBox>
+          <RegisterButton onClick={onClickCreate}>
+            게시물 등록하기
+          </RegisterButton>
         </Footer>
       </Wrapper>
     </>

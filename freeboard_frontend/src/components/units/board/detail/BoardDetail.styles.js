@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 /* --------- 게시물 상세 페이지 ---------- */
 
 export const DetailPageWrapper = styled.div`
-  width: 1200px;
+  width: 1240px;
   height: 100%;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
   padding: 5rem 6.5rem;
@@ -175,3 +175,31 @@ export const DislikeImg = styled.img`
   width: 22px;
   height: 20px;
 `;
+
+export const ButtonBox = styled.div`
+  width: 50vw;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  padding: 5rem 0;
+
+  & > button {
+    flex: 1;
+    padding: 1em 3em;
+    background: #fff;
+    border: 1px solid #bdbdbd;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 5px;
+  }
+
+  & > button:hover {
+    background: #ffd600;
+  }
+`;
+export const DeleteButton = styled.button``;
+export const UpdateButton = styled.button``;
+export const GoToListButton = styled.button``;

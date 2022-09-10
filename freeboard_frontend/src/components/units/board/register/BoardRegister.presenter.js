@@ -10,10 +10,18 @@ import {
 
 import styled from "@emotion/styled";
 
-const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
+const BoardRegisterUI = ({
+  onChangeInput,
+  submitForm,
+  editForm,
+  isEmpty,
+  isEdit,
+  data,
+}) => {
+  console.log("forDefault:", data?.fetchBoard);
   return (
-    <Wrapper onSubmit={submitForm}>
-      <h1>게시물 등록</h1>
+    <Wrapper onSubmit={isEdit ? editForm : submitForm}>
+      <h1>게시물 {isEdit ? "수정" : "등록"}</h1>
       <div>
         <InputBox>
           <span>작성자</span>
@@ -23,6 +31,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
             placeholder="이름을 적어주세요."
             isEmpty={isEmpty}
             onChange={onChangeInput}
+            defaultValue={data?.fetchBoard.writer}
           />
         </InputBox>
         <InputBox>
@@ -44,6 +53,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
           type="text"
           placeholder="제목을 작성해주세요."
           onChange={onChangeInput}
+          defaultValue={data?.fetchBoard.title}
         />
       </InputBox>
       <TextareaBox>
@@ -53,6 +63,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
           placeholder="내용을 작성해주세요."
           isEmpty={isEmpty}
           onChange={onChangeInput}
+          defaultValue={data?.fetchBoard.contents}
         />
       </TextareaBox>
       <AddressBox>
@@ -64,6 +75,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
             placeholder="07250"
             isEmpty={isEmpty}
             onChange={onChangeInput}
+            defaultValue={data?.fetchBoard.boardAddress.zipcode}
           />
           <a href="#">우편번호 검색</a>
         </div>
@@ -74,6 +86,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
           placeholder="주소를 입력해주세요."
           isEmpty={isEmpty}
           onChange={onChangeInput}
+          defaultValue={data?.fetchBoard.boardAddress.address}
         />
         <div></div>
         <Input
@@ -82,6 +95,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
           placeholder="상세 주소를 입력해주세요."
           isEmpty={isEmpty}
           onChange={onChangeInput}
+          defaultValue={data?.fetchBoard.boardAddress.addressDetail}
         />
       </AddressBox>
       <InputBox>
@@ -92,6 +106,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
           placeholder="링크를 적어주세요."
           onChange={onChangeInput}
           isEmpty={isEmpty}
+          defaultValue={data?.fetchBoard.youtubeUrl}
         />
       </InputBox>
       <PictureBox>
@@ -117,7 +132,7 @@ const BoardRegisterUI = ({ onChangeInput, submitForm, isEmpty }) => {
         <div></div>
       </MainSettingBox>
       <SubmitBox>
-        <button>등록하기</button>
+        <button>{isEdit ? "수정" : "등록"}</button>
       </SubmitBox>
     </Wrapper>
   );

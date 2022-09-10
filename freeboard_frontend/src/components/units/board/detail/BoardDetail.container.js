@@ -1,11 +1,13 @@
 import BoardDetailUI from "./BoardDetail.presenter";
-import FETCH_BOARD from "./BoardDetail.queries";
-import { useQuery } from "@apollo/client";
+import FETCH_BOARD, { DELETE_BOARD } from "./BoardDetail.queries";
+import { useQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const BoardDetail = () => {
   const router = useRouter();
+  const [deleteBoard] = useMutation(DELETE_BOARD);
+  console.log("DetailCurrRouterID:", router.query.id);
   const {
     loading,
     data = {
@@ -35,8 +37,17 @@ const BoardDetail = () => {
     addressBox ? setAddressBox(false) : setAddressBox(true);
   };
 
-  console.log("loading: ", loading);
-  console.log("data:", data);
+  const onClickEdit = () => router.push(`/boards/${router.query.id}/edit`);
+
+  const onClickToList = () => router.push(`/boards/`);
+
+  const onClickDelete = async () => {
+    await deleteBoard({
+      variables: { boardId: router.query.id },
+    });
+    alert("게시물이 삭제되었습니다.");
+    router.push(`/boards`);
+  };
 
   const {
     writer,
@@ -50,7 +61,10 @@ const BoardDetail = () => {
     boardAddress: { address, addressDetail },
   } = data?.fetchBoard;
 
+  console.log("detailCurrData:", data);
+
   const [year, month, day] = createdAt.slice(0, 10).split("-");
+
   return (
     <BoardDetailUI
       loading={loading}
@@ -68,6 +82,9 @@ const BoardDetail = () => {
       addressDetail={addressDetail}
       addressBox={addressBox}
       onClickAddressLink={onClickAddressLink}
+      onClickEdit={onClickEdit}
+      onClickToList={onClickToList}
+      onClickDelete={onClickDelete}
     />
   );
 };

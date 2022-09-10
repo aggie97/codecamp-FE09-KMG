@@ -31,6 +31,12 @@ export const BestBoard = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  cursor: pointer;
+  transition: 0.3s all ease;
+  &:hover {
+    transform: translateY(-20px);
+    box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const BestBoardImg = styled.img`
@@ -114,7 +120,7 @@ export const ListTitle = styled.div`
   flex: 7;
 `;
 export const ListWriter = styled.div`
-  flex: 3;
+  flex: 2;
 `;
 export const ListCreatedAt = styled.div`
   flex: 1;
@@ -129,35 +135,63 @@ export const List = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+  &:hover {
+    background-color: #ddd;
+  }
 `;
 
 export const BoardNumber = styled.div`
   flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 export const BoardTitle = styled.div`
   flex: 7;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 export const BoardWriter = styled.div`
-  flex: 3;
+  flex: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 export const BoardCreatedAt = styled.div`
   flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 export const Footer = styled.footer`
   padding-top: 3.5em;
   width: 100%;
   display: flex;
-  justify-content: flex-end;
-`;
-export const PageBox = styled.div`
-  position: relative;
-  left: -25%;
-  height: 52px;
-  width: 200px;
-  background: #ddd;
+  justify-content: space-between;
+  & > * {
+    max-width: 170px;
+  }
 `;
 
+export const BoxForLayout = styled.div`
+  flex: 1;
+`;
+
+export const PageBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ddd;
+  flex: 1;
+`;
+
+export const PrevPage = styled.div``;
+export const NextPage = styled.div``;
+
 export const RegisterButton = styled.button`
-  width: 171px;
-  height: 52px;
+  flex: 1;
+  padding: 1em;
 `;
