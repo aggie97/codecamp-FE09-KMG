@@ -9,7 +9,6 @@ import {
 } from "./BoardCommentInDetail.queries";
 
 const BoardComments = ({ routerId }) => {
-  console.log(routerId);
   const [createBoardComment] = useMutation(CREATE_BOARD_COMMENT);
   const [updateBoardComment] = useMutation(UPDATE_BOARD_COMMENT);
   const [deleteBoardComment] = useMutation(DELETE_BOARD_COMMENT);
@@ -28,6 +27,10 @@ const BoardComments = ({ routerId }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [idForEdit, setIdForEdit] = useState("");
+  const [editComment, setEditComment] = useState({
+    password: "",
+    contents: "",
+  });
 
   const onChangeComment = (event) => {
     if (event.target.placeholder === "작성자") {
@@ -41,17 +44,29 @@ const BoardComments = ({ routerId }) => {
     }
   };
 
-  const onSubmitComment = async (target) => {
-    if (isOpen) {
+  const onChangeEditComment = (event) => {
+    if (event.target.placeholder === "비밀번호를 입력해주세요.") {
+      setEditComment({ ...editComment, password: event.target.value });
+    }
+    if (event.target.nodeName === "TEXTAREA") {
+      setEditComment({ ...editComment, contents: event.target.value });
+    }
+  };
+  console.log(editComment);
+  const onUpdateComment = async (event) => {
+    console.log(event.target.id);
+    try {
       const myVariables = {
-        password: comment.password,
-      };
-
-      if (comment.contents)
-        myVariables.createBoardCommentInput = {
+        password: editComment.password,
+        boardCommentId: event.target.id,
+        updateBoardCommentInput: {
           rating: 1,
-          contents: comment.contents,
-        };
+        },
+      };
+      if (editComment.contents)
+        myVariables.updateBoardCommentInput.contents = editComment.contents;
+
+      console.log("myVar", myVariables);
       const result = await updateBoardComment({
         variables: myVariables,
         refetchQueries: [
@@ -63,40 +78,42 @@ const BoardComments = ({ routerId }) => {
           },
         ],
       });
-    } else {
-      try {
-        const result = await createBoardComment({
-          variables: {
-            boardId: routerId,
-            createBoardCommentInput: {
-              writer: comment.writer,
-              password: comment.password,
-              contents: comment.contents,
-              rating: comment.rating,
+      console.log(result);
+      setIsOpen((prev) => !prev);
+      alert("댓글이 수정되었습니다.");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onSubmitComment = async (event) => {
+    try {
+      const result = await createBoardComment({
+        variables: {
+          boardId: routerId,
+          createBoardCommentInput: {
+            writer: comment.writer,
+            password: comment.password,
+            contents: comment.contents,
+            rating: comment.rating,
+          },
+        },
+        refetchQueries: [
+          {
+            query: FETCH_BOARD_COMMENTS,
+            variables: {
+              boardId: routerId,
             },
           },
-          refetchQueries: [
-            {
-              query: FETCH_BOARD_COMMENTS,
-              variables: {
-                boardId: routerId,
-              },
-            },
-          ],
-        });
-      } catch (error) {
-        console.log(error);
-      }
+        ],
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const onUnfoldEditModal = (event) => {
     setIdForEdit(event.target.id);
     setIsOpen((prev) => !prev);
-  };
-
-  const onUpdateComment = async (event) => {
-    setId(event.target.id);
   };
 
   const onDeleteComment = async (event) => {
@@ -111,7 +128,7 @@ const BoardComments = ({ routerId }) => {
     });
     alert("댓글이 삭제되었습니다.");
   };
-  if (error) alert(error);
+  if (error) console(error);
   return (
     <>
       {loading ? (
@@ -123,9 +140,10 @@ const BoardComments = ({ routerId }) => {
           isOpen={isOpen}
           onUnfoldEditModal={onUnfoldEditModal}
           onSubmitComment={onSubmitComment}
-          onUpdateComment={onUpdateComment}
           onDeleteComment={onDeleteComment}
           onChangeComment={onChangeComment}
+          onChangeEditComment={onChangeEditComment}
+          onUpdateComment={onUpdateComment}
         />
       )}
     </>

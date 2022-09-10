@@ -38,6 +38,7 @@ const BoardCommentUI = ({
   onUpdateComment,
   onDeleteComment,
   onChangeComment,
+  onChangeEditComment,
 }) => {
   return (
     <>
@@ -150,11 +151,14 @@ const BoardCommentUI = ({
                     <CommentListMainContentBox style={{ padding: "0" }}>
                       <CreateCommentUserInfoBox>
                         <CreateCommentWriter
-                          onChange={onSubmitComment}
                           defaultValue={comment.writer}
                           disabled
                         />
-                        <CreateCommentPw placeholder="비밀번호를 입력해주세요." />
+                        <CreateCommentPw
+                          type="password"
+                          onChange={onChangeEditComment}
+                          placeholder="비밀번호를 입력해주세요."
+                        />
                         <CreateCommentStarBox style={{ padding: "0" }}>
                           {/* 별이 있어요 여기,,, */}
 
@@ -222,6 +226,7 @@ const BoardCommentUI = ({
                       </CreateCommentUserInfoBox>
                       <CreateCommentInputField>
                         <CreateCommentTextarea
+                          onChange={onChangeEditComment}
                           defaultValue={comment.contents}
                         ></CreateCommentTextarea>
                         <CreateCommentFooter>
@@ -230,6 +235,7 @@ const BoardCommentUI = ({
                           </CreateCommentTextCounter>
                           <div style={{ display: "flex" }}>
                             <CreateCommentSubmitButton
+                              id={comment._id}
                               onClick={onUpdateComment}
                             >
                               수정하기

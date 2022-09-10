@@ -48,10 +48,12 @@ export const UPDATE_BOARD_COMMENT = gql`
   mutation updateBoardComment(
     $password: String
     $updateBoardCommentInput: UpdateBoardCommentInput!
+    $boardCommentId: ID!
   ) {
     updateBoardComment(
       password: $password
       updateBoardCommentInput: $updateBoardCommentInput
+      boardCommentId: $boardCommentId
     ) {
       _id
       writer
