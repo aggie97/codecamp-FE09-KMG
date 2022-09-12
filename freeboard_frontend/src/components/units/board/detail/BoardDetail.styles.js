@@ -4,7 +4,8 @@ import styled from "@emotion/styled";
 
 export const DetailPageWrapper = styled.div`
   width: 1240px;
-  height: 100%;
+  margin: 0 auto;
+  margin-top: 5rem;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
   padding: 5rem 6.5rem;
   display: flex;
@@ -118,8 +119,9 @@ export const Title = styled.div`
 
 export const MainImgBox = styled.div``;
 export const MainImage = styled.img`
-  width: 100%;
-  height: 480px;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center center;
 `;
 
 export const MainContent = styled.div``;

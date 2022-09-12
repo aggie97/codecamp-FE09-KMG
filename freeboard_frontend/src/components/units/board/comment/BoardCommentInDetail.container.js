@@ -80,9 +80,12 @@ const BoardComments = ({ routerId }) => {
       });
       console.log(result);
       setIsOpen((prev) => !prev);
+      setEditComment("");
+      console.log("Hi");
       alert("댓글이 수정되었습니다.");
     } catch (error) {
       console.log(error);
+      alert("비밀번호가 일치하지 않습니다.");
     }
   };
   const onSubmitComment = async (event) => {
@@ -128,7 +131,7 @@ const BoardComments = ({ routerId }) => {
     });
     alert("댓글이 삭제되었습니다.");
   };
-  if (error) console(error);
+
   return (
     <>
       {loading ? (

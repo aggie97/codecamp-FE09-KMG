@@ -142,7 +142,7 @@ const BoardCommentUI = ({
         </CreateCommentInputField>
       </CreateCommentWrapper>
       <CommentListUl id="submittedComments">
-        {data.fetchBoardComments.map((comment) => {
+        {data?.fetchBoardComments.map((comment) => {
           return (
             <>
               {isOpen && idForEdit === comment._id ? (

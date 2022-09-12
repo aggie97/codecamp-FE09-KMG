@@ -2,6 +2,9 @@ import styled from "@emotion/styled";
 
 export const CreateCommentWrapper = styled.div`
   padding-top: 3em;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
 `;
 export const CreateCommentTitle = styled.div`
   display: flex;
@@ -88,6 +91,9 @@ export const CreateCommentSubmitButton = styled.button`
   }
 `;
 export const CommentListUl = styled.ul`
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
   list-style: none;
   padding: 0;
 `;

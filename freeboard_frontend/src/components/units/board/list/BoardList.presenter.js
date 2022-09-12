@@ -3,6 +3,7 @@ import {
   Header,
   Banner,
   BestBoards,
+  BestBoardLayout,
   BestBoard,
   Footer,
   PageBox,
@@ -37,6 +38,7 @@ import {
 } from "./BoardList.styles";
 
 const BoardListUI = ({
+  pages,
   totalBoards,
   bestBoards,
   onClickCreate,
@@ -51,31 +53,34 @@ const BoardListUI = ({
           <BestBoards id="BestParent">
             {bestBoards.data?.fetchBoardsOfTheBest.map((best) => {
               return (
-                <BestBoard
-                  onClick={onClickBestItem}
-                  id={best._id}
-                  key={best._id}
-                >
-                  <BestBoardImg />
-                  <BestBoardInfo>
-                    <BestBoardTitle>{best.title}</BestBoardTitle>
-                    <BestBoardContents>
-                      <BestBoardProfile>
-                        <BestBoardProfileImg />
-                        <BestBoardWriter>{best.writer}</BestBoardWriter>
-                      </BestBoardProfile>
-                    </BestBoardContents>
-                  </BestBoardInfo>
-                </BestBoard>
+                <BestBoardLayout>
+                  <BestBoard
+                    onClick={onClickBestItem}
+                    id={best._id}
+                    key={best._id}
+                  >
+                    <BestBoardImg />
+                    <BestBoardInfo>
+                      <BestBoardTitle>{best.title}</BestBoardTitle>
+                      <BestBoardContents>
+                        <BestBoardProfile>
+                          <BestBoardProfileImg />
+                          <BestBoardWriter>{best.writer}</BestBoardWriter>
+                        </BestBoardProfile>
+                      </BestBoardContents>
+                    </BestBoardInfo>
+                  </BestBoard>
+                </BestBoardLayout>
               );
             })}
           </BestBoards>
         </Header>
         <SearchBox>
-          <SearchInput></SearchInput>
+          <SearchInput placeholder="제목을 입력해주세요" />
           <SearchDate>
-            <StartAt />
-            <EndAt />
+            <StartAt type="date" />
+            <div>~</div>
+            <EndAt type="date" />
           </SearchDate>
           <SearchButton>검색하기</SearchButton>
         </SearchBox>
@@ -101,6 +106,13 @@ const BoardListUI = ({
           <BoxForLayout></BoxForLayout>
           <PageBox>
             <PrevPage>👈</PrevPage>
+            <div>
+              {/* {new Array(pages).map((value, i) => {
+                console.log("hi:", value, i, pages);
+                return <span key={i}>{i + 1}</span>;
+              })} */}
+              1 2 3
+            </div>
             <NextPage>👉</NextPage>
           </PageBox>
           <RegisterButton onClick={onClickCreate}>

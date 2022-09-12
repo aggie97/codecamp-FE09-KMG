@@ -68,7 +68,7 @@ const BoardDetailUI = ({
               <B.Main id="main-content-box">
                 <B.Title id="title">{title}</B.Title>
                 <B.MainImgBox id="image-box">
-                  <B.MainImage src="/mainImage.png" />
+                  <B.MainImage src={images} />
                 </B.MainImgBox>
                 <B.MainContent id="contents">{contents}</B.MainContent>
               </B.Main>

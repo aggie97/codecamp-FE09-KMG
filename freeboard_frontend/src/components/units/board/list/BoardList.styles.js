@@ -16,14 +16,24 @@ export const Banner = styled.h1`
 `;
 
 export const BestBoards = styled.div`
+  width: 100%;
   padding-top: 2.5em;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5em;
 `;
 
+export const BestBoardLayout = styled.div`
+  position: relative;
+  padding-bottom: 90%;
+  width: 100%;
+`;
+
 export const BestBoard = styled.div`
-  min-height: 257px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
   background: #fff;
   border-radius: 1.25em;
@@ -48,13 +58,13 @@ export const BestBoardInfo = styled.div`
   flex: 1.05;
   display: flex;
   flex-direction: column;
-  padding: 1.25em;
+  padding: 5%;
 `;
 
 export const BestBoardTitle = styled.span`
-  font-size: 18px;
+  font-size: 1.125em;
   font-weight: 500;
-  padding-bottom: 1.25em;
+  padding-bottom: 10%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -83,13 +93,18 @@ export const SearchInput = styled.input`
 export const SearchDate = styled.div`
   flex: 1;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid gray;
 `;
 
 export const StartAt = styled.input`
   padding: 1rem;
+  border: none;
 `;
 export const EndAt = styled.input`
   padding: 1rem;
+  border: none;
 `;
 export const SearchButton = styled.button`
   flex: 0.5;
