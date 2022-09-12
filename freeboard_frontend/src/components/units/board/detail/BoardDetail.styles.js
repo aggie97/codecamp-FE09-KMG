@@ -65,34 +65,40 @@ export const UrlBox = styled.div``;
 export const AddressBox = styled.div`
   padding-left: 20px;
   position: relative;
+`;
+export const AddressContentBox = styled.div`
+  position: absolute;
+  top: -80px;
+  left: -335px;
+`;
 
-  #addressContentBox {
-    position: absolute;
-    top: -80px;
-    left: -340px;
-  }
+export const AddressBackground = styled.img`
+  position: absolute;
+  width: 376px;
+  height: 72px;
+`;
 
-  #addressBackground {
-    position: absolute;
-    width: 376px;
-    height: 72px;
-  }
+export const AddressTextBox = styled.div`
+  padding: 0.5rem 1rem 1rem 1rem;
+  width: 376px;
+  height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+`;
 
-  #addressContentBox div {
-    padding: 0.5rem 1rem 1rem 1rem;
-    width: 376px;
-    height: 72px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: end;
-  }
+export const AddressText = styled.div`
+  font-weight: 500;
+  color: #fff;
+  z-index: 99;
+  text-align: end;
+`;
 
-  #addressContentBox div span {
-    font-weight: 500;
-    color: #fff;
-    z-index: 99;
-  }
+export const AddressButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
 
 export const UrlAddressImg = styled.img`

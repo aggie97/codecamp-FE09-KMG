@@ -52,17 +52,20 @@ const BoardDetailUI = ({
                   </B.UrlBox>
                   <B.AddressBox id="boardAddress_box">
                     {addressBox ? (
-                      <div id="addressContentBox">
-                        <img id="addressBackground" src="/addressAlert.png" />
-                        <div>
-                          <span>{address}</span>
-                          <span>{addressDetail}</span>
-                        </div>
-                      </div>
+                      <B.AddressContentBox id="addressContentBox">
+                        <B.AddressBackground
+                          id="addressBackground"
+                          src="/addressAlert.png"
+                        />
+                        <B.AddressTextBox>
+                          <B.AddressText>{address}</B.AddressText>
+                          <B.AddressText>{addressDetail}</B.AddressText>
+                        </B.AddressTextBox>
+                      </B.AddressContentBox>
                     ) : null}
-                    <a href="#2" onClick={onClickAddressLink}>
+                    <B.AddressButton onClick={onClickAddressLink}>
                       <B.UrlAddressImg id="address-icon" src="/address.png" />
-                    </a>
+                    </B.AddressButton>
                   </B.AddressBox>
                 </B.HeaderRightBox>
               </B.Header>

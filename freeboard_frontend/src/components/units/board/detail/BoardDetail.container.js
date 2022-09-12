@@ -38,9 +38,9 @@ const BoardDetail = () => {
   });
 
   const [addressBox, setAddressBox] = useState(false);
-
+  console.log(addressBox);
   const onClickAddressLink = (event) => {
-    addressBox ? setAddressBox(false) : setAddressBox(true);
+    setAddressBox((prev) => !prev);
   };
 
   const onClickEdit = () => router.push(`/boards/${router.query.id}/edit`);
