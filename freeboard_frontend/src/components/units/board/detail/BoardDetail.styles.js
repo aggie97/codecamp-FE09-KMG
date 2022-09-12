@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-
+import { keyframes } from "@emotion/react";
 /* --------- 게시물 상세 페이지 ---------- */
 
 export const DetailPageWrapper = styled.div`
@@ -150,6 +150,44 @@ export const LikeDislikeBox = styled.div`
   gap: 40px;
 `;
 
+const moveUpAndDown = keyframes`
+  0%{
+    transform: translateY(0px);
+  }
+  50%{
+    transform: translateY(-10px);
+  }
+  100%{
+    transform: translateY(0px);
+  }
+`;
+
+const danceWithLight = keyframes`
+  0%{
+    transform: translateY(0px);
+    color: #ffd600;
+  }
+  40%{
+    transform: translateY(-15px);
+    color: #ffff00;
+  }
+  50%{
+    transform: translateY(-20px) rotate(-0.1turn);
+    color: #ffd6ff;
+  }
+  60%{
+    transform: translateY(-15px);
+    transform: rotate(0turn);
+    color: #ffff00;
+  }
+
+
+  100%{
+    transform: translateY(0px);
+    color: #828282;
+  }
+`;
+
 export const LikeBox = styled.button`
   width: 40px;
   height: 51px;
@@ -157,7 +195,7 @@ export const LikeBox = styled.button`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  color: #ffd600;
+  color: #828282;
   font-family: Noto Sans CJK KR;
   font-size: 18px;
   font-weight: 400;
@@ -165,6 +203,7 @@ export const LikeBox = styled.button`
   border: none;
   cursor: pointer;
 `;
+
 export const DislikeBox = styled.button`
   width: 40px;
   height: 51px;
@@ -181,9 +220,12 @@ export const DislikeBox = styled.button`
   cursor: pointer;
 `;
 
-export const LikeImg = styled.img`
-  width: 20px;
-  height: 18px;
+export const LikeImg = styled.svg`
+  &:hover {
+    color: #ffd600;
+    animation: ${moveUpAndDown} 1s infinite linear;
+  }
+  ${(props) => props.active && `animation: ${danceWithLight} 2.5s;`}
 `;
 export const DislikeImg = styled.img`
   width: 22px;
@@ -191,7 +233,8 @@ export const DislikeImg = styled.img`
 `;
 
 export const ButtonBox = styled.div`
-  width: 50vw;
+  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: center;

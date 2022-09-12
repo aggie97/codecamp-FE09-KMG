@@ -11,6 +11,9 @@ const BoardList = () => {
   const router = useRouter();
   const [pages, setPages] = useState(1);
 
+  const [titleSearch, setTitleSearch] = useState("");
+  const [boardsArray, setBoardsArray] = useState({});
+
   const onClickCreate = async () => {
     router.push(`/boards/new`);
   };
@@ -25,22 +28,25 @@ const BoardList = () => {
   const bestBoards = useQuery(FETCH_BEST_BOARDS);
   const boardsCount = useQuery(FETCH_BOARDS_COUNT);
 
-  // useEffect(() => {
-  //   boardsCount.loading ||
-  //     setPages(Math.floor(boardsCount.data?.fetchBoardsCount / 10));
-  // }, [boardsCount.loading]);
-
-  // console.log(pages);
+  const onChangeSearch = (event) => {
+    setTitleSearch(event.target.value);
+    const titles = totalBoards.data.fetchBoards.filter((board) =>
+      board.title.includes(event.target.value)
+    );
+    setBoardsArray(titles);
+  };
 
   // const [year, month, day] = createdAt.slice(0, 10).split("-");
   return (
     <BoardListUI
+      boardsArray={boardsArray}
       pages={pages}
       onClickCreate={onClickCreate}
       totalBoards={totalBoards}
       bestBoards={bestBoards}
       onClickListItem={onClickListItem}
       onClickBestItem={onClickBestItem}
+      onChangeSearch={onChangeSearch}
     />
   );
 };

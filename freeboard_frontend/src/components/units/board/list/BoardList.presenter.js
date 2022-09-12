@@ -38,12 +38,14 @@ import {
 } from "./BoardList.styles";
 
 const BoardListUI = ({
+  boardsArray,
   pages,
   totalBoards,
   bestBoards,
   onClickCreate,
   onClickListItem,
   onClickBestItem,
+  onChangeSearch,
 }) => {
   return (
     <>
@@ -53,12 +55,8 @@ const BoardListUI = ({
           <BestBoards>
             {bestBoards.data?.fetchBoardsOfTheBest.map((best) => {
               return (
-                <BestBoardLayout id="BestParent">
-                  <BestBoard
-                    onClick={onClickBestItem}
-                    id={best._id}
-                    key={best._id}
-                  >
+                <BestBoardLayout key={best._id} id="BestParent">
+                  <BestBoard onClick={onClickBestItem} id={best._id}>
                     <BestBoardImg />
                     <BestBoardInfo>
                       <BestBoardTitle>{best.title}</BestBoardTitle>
@@ -76,7 +74,10 @@ const BoardListUI = ({
           </BestBoards>
         </Header>
         <SearchBox>
-          <SearchInput placeholder="제목을 입력해주세요" />
+          <SearchInput
+            onChange={onChangeSearch}
+            placeholder="제목을 입력해주세요"
+          />
           <SearchDate>
             <StartAt type="date" />
             <div>~</div>
@@ -92,14 +93,35 @@ const BoardListUI = ({
             <ListCreatedAt>날짜</ListCreatedAt>
           </ListHeader>
           <>
-            {totalBoards.data?.fetchBoards.map((board, index) => (
-              <List onClick={onClickListItem} id={board._id} key={board._id}>
-                <BoardNumber>{index + 1}</BoardNumber>
-                <BoardTitle>{board.title}</BoardTitle>
-                <BoardWriter>{board.writer}</BoardWriter>
-                <BoardCreatedAt>{board.createdAt.slice(0, 10)}</BoardCreatedAt>
-              </List>
-            ))}
+            {!boardsArray.length
+              ? totalBoards.data?.fetchBoards.map((board, index) => (
+                  <List
+                    onClick={onClickListItem}
+                    id={board._id}
+                    key={board._id}
+                  >
+                    <BoardNumber>{index + 1}</BoardNumber>
+                    <BoardTitle>{board.title}</BoardTitle>
+                    <BoardWriter>{board.writer}</BoardWriter>
+                    <BoardCreatedAt>
+                      {board.createdAt.slice(0, 10)}
+                    </BoardCreatedAt>
+                  </List>
+                ))
+              : boardsArray.map((board, index) => (
+                  <List
+                    onClick={onClickListItem}
+                    id={board._id}
+                    key={board._id}
+                  >
+                    <BoardNumber>{index + 1}</BoardNumber>
+                    <BoardTitle>{board.title}</BoardTitle>
+                    <BoardWriter>{board.writer}</BoardWriter>
+                    <BoardCreatedAt>
+                      {board.createdAt.slice(0, 10)}
+                    </BoardCreatedAt>
+                  </List>
+                ))}
           </>
         </ListBox>
         <Footer>

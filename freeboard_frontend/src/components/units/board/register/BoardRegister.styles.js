@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 
 export const Wrapper = styled.form`
-  width: 1200px;
-  height: 100%;
+  max-width: 1200px;
+  width: 100%;
+  margin: 5em auto;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
 
   display: flex;

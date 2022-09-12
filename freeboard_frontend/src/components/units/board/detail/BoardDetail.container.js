@@ -10,6 +10,7 @@ import { useState } from "react";
 
 const BoardDetail = () => {
   const router = useRouter();
+  const [dance, setDance] = useState(false);
   const [deleteBoard] = useMutation(DELETE_BOARD);
   const [likeBoard] = useMutation(LIKE_BOARD);
   const [dislikeBoard] = useMutation(DISLIKE_BOARD);
@@ -55,7 +56,9 @@ const BoardDetail = () => {
     router.push(`/boards`);
   };
 
-  const onClickLike = async () => {
+  const onClickLike = async (event) => {
+    setDance((prev) => !prev);
+    event.target.closest("#like").childNodes[0];
     await likeBoard({
       variables: { boardId: router.query.id },
       refetchQueries: [
@@ -63,7 +66,8 @@ const BoardDetail = () => {
       ],
     });
   };
-  const onClickDislike = async () => {
+  const onClickDislike = async (event) => {
+    console.log(event.target.child);
     await dislikeBoard({
       variables: { boardId: router.query.id },
       refetchQueries: [
@@ -90,6 +94,7 @@ const BoardDetail = () => {
 
   return (
     <BoardDetailUI
+      dance={dance}
       loading={loading}
       year={year}
       month={month}

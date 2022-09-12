@@ -181,7 +181,7 @@ export const BoardCreatedAt = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
-export const Footer = styled.footer`
+export const Footer = styled.div`
   padding-top: 3.5em;
   width: 100%;
   display: flex;
