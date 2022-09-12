@@ -1,5 +1,9 @@
 import BoardDetailUI from "./BoardDetail.presenter";
-import FETCH_BOARD, { DELETE_BOARD } from "./BoardDetail.queries";
+import FETCH_BOARD, {
+  DELETE_BOARD,
+  LIKE_BOARD,
+  DISLIKE_BOARD,
+} from "./BoardDetail.queries";
 import { useQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -7,6 +11,8 @@ import { useState } from "react";
 const BoardDetail = () => {
   const router = useRouter();
   const [deleteBoard] = useMutation(DELETE_BOARD);
+  const [likeBoard] = useMutation(LIKE_BOARD);
+  const [dislikeBoard] = useMutation(DISLIKE_BOARD);
   console.log("DetailCurrRouterID:", router.query.id);
   const {
     loading,
@@ -20,8 +26,8 @@ const BoardDetail = () => {
         images: "",
         contents: "",
         youtubeUrl: "",
-        likeCount: "",
-        dislikeCount: "",
+        likeCount: 0,
+        dislikeCount: 0,
         boardAddress: { address: "", addressDetail: "" },
       },
     },
@@ -47,6 +53,23 @@ const BoardDetail = () => {
     });
     alert("게시물이 삭제되었습니다.");
     router.push(`/boards`);
+  };
+
+  const onClickLike = async () => {
+    await likeBoard({
+      variables: { boardId: router.query.id },
+      refetchQueries: [
+        { query: FETCH_BOARD, variables: { boardId: router.query.id } },
+      ],
+    });
+  };
+  const onClickDislike = async () => {
+    await dislikeBoard({
+      variables: { boardId: router.query.id },
+      refetchQueries: [
+        { query: FETCH_BOARD, variables: { boardId: router.query.id } },
+      ],
+    });
   };
 
   const {
@@ -85,6 +108,8 @@ const BoardDetail = () => {
       onClickEdit={onClickEdit}
       onClickToList={onClickToList}
       onClickDelete={onClickDelete}
+      onClickLike={onClickLike}
+      onClickDislike={onClickDislike}
     />
   );
 };

@@ -50,10 +50,10 @@ const BoardListUI = ({
       <Wrapper>
         <Header>
           <Banner>베스트 게시글</Banner>
-          <BestBoards id="BestParent">
+          <BestBoards>
             {bestBoards.data?.fetchBoardsOfTheBest.map((best) => {
               return (
-                <BestBoardLayout>
+                <BestBoardLayout id="BestParent">
                   <BestBoard
                     onClick={onClickBestItem}
                     id={best._id}

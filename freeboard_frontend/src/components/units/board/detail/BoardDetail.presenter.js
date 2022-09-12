@@ -18,6 +18,8 @@ const BoardDetailUI = ({
   onClickEdit,
   onClickToList,
   onClickDelete,
+  onClickLike,
+  onClickDislike,
 }) => {
   return (
     <>
@@ -76,11 +78,11 @@ const BoardDetailUI = ({
                 <B.YoutubePlayer src={youtubeUrl}></B.YoutubePlayer>
               </B.YoutubeBox>
               <B.LikeDislikeBox id="like-dislike-box">
-                <B.LikeBox href="#3" id="like">
+                <B.LikeBox onClick={onClickLike} id="like">
                   <B.LikeImg src="/like.png" />
                   {likeCount}
                 </B.LikeBox>
-                <B.DislikeBox href="#4" id="dislike">
+                <B.DislikeBox onClick={onClickDislike} id="dislike">
                   <B.DislikeImg src="/dislike.png" />
                   {dislikeCount}
                 </B.DislikeBox>

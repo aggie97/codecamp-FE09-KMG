@@ -144,7 +144,7 @@ export const LikeDislikeBox = styled.div`
   gap: 40px;
 `;
 
-export const LikeBox = styled.a`
+export const LikeBox = styled.button`
   width: 40px;
   height: 51px;
   display: flex;
@@ -155,8 +155,11 @@ export const LikeBox = styled.a`
   font-family: Noto Sans CJK KR;
   font-size: 18px;
   font-weight: 400;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
-export const DislikeBox = styled.a`
+export const DislikeBox = styled.button`
   width: 40px;
   height: 51px;
   display: flex;
@@ -167,6 +170,9 @@ export const DislikeBox = styled.a`
   font-family: Noto Sans CJK KR;
   font-size: 18px;
   font-weight: 400;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
 
 export const LikeImg = styled.img`

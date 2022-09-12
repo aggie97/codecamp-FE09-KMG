@@ -28,4 +28,15 @@ export const DELETE_BOARD = gql`
   }
 `;
 
+export const LIKE_BOARD = gql`
+  mutation ($boardId: ID!) {
+    likeBoard(boardId: $boardId)
+  }
+`;
+export const DISLIKE_BOARD = gql`
+  mutation ($boardId: ID!) {
+    dislikeBoard(boardId: $boardId)
+  }
+`;
+
 export default FETCH_BOARD;
