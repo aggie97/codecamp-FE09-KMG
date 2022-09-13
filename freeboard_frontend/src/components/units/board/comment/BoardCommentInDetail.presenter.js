@@ -30,6 +30,7 @@ import {
 } from "./BoardCommentInDetail.styles";
 
 const BoardCommentUI = ({
+  comment,
   data,
   isOpen,
   idForEdit,
@@ -42,7 +43,7 @@ const BoardCommentUI = ({
 }) => {
   return (
     <>
-      <CreateCommentWrapper>
+      <CreateCommentWrapper id="CreateCommentWrapper">
         <CreateCommentTitle>
           <CreateCommentTitleImg
             width="20px"
@@ -56,11 +57,13 @@ const BoardCommentUI = ({
             onChange={onChangeComment}
             type="text"
             placeholder="작성자"
+            value={comment.writer}
           />
           <CreateCommentPw
             onChange={onChangeComment}
             type="password"
             placeholder="비밀번호"
+            value={comment.password}
           />
           <CreateCommentStarBox style={{ padding: "0" }}>
             {/* 별이 있어요 여기,,, */}
@@ -132,6 +135,7 @@ const BoardCommentUI = ({
             onChange={onChangeComment}
             maxLength="100"
             placeholder="개인정보를 공유 및 요청하거나, 명예 훼손, 무단 광고, 불법 정보 유포시 모니터링 후 삭제할 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다."
+            value={comment.contents}
           ></CreateCommentTextarea>
           <CreateCommentFooter id="textCounter_SubmitButton_Box">
             <CreateCommentTextCounter>0/100</CreateCommentTextCounter>

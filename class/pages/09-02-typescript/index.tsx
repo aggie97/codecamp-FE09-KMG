@@ -41,7 +41,7 @@ export default function qqq(hi: string) {
   profile.age = "26살";
 
   // 함수 타입
-  // 어디서 몇 번이든 호추 가능하므로, 타입 추론 할 수 없ㅇ=음.
+  // 어디서 몇 번이든 호출 가능하므로, 타입 추론 할 수 없음.
   const fn = (number1: number, number2: number, unit: string): string => {
     return number1 + number2 + unit;
   };

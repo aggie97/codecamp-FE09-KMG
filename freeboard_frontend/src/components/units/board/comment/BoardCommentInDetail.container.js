@@ -1,6 +1,6 @@
 import BoardCommentUI from "./BoardCommentInDetail.presenter";
 import { useQuery, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FETCH_BOARD_COMMENTS,
   CREATE_BOARD_COMMENT,
@@ -109,6 +109,11 @@ const BoardComments = ({ routerId }) => {
           },
         ],
       });
+      // const [, inputbox, textareabox] = event.target.closest(
+      //   "#CreateCommentWrapper"
+      // ).childNodes;
+      setComment({ writer: "", password: "", contents: "", rating: 1 });
+      console.log("hi!", inputbox, textareabox);
     } catch (error) {
       console.log(error);
     }
@@ -138,6 +143,7 @@ const BoardComments = ({ routerId }) => {
         <div>댓글을 불러오는 중입니다. 잠시만 기다려주세요.</div>
       ) : (
         <BoardCommentUI
+          comment={comment}
           data={data}
           idForEdit={idForEdit}
           isOpen={isOpen}

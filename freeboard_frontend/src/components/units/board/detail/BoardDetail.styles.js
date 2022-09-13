@@ -162,31 +162,30 @@ const moveUpAndDown = keyframes`
   }
 `;
 
-const danceWithLight = keyframes`
-  0%{
-    transform: translateY(0px);
-    color: #ffd600;
-  }
-  40%{
-    transform: translateY(-15px);
-    color: #ffff00;
-  }
-  50%{
-    transform: translateY(-20px) rotate(-0.1turn);
-    color: #ffd6ff;
-  }
-  60%{
-    transform: translateY(-15px);
-    transform: rotate(0turn);
-    color: #ffff00;
-  }
+// const danceWithLight = keyframes`
+//   0%{
+//     transform: translateY(0px);
+//     color: #ffd600;
+//   }
+//   40%{
+//     transform: translateY(-15px);
+//     color: #ffff00;
+//   }
+//   50%{
+//     transform: translateY(-20px) rotate(-0.1turn);
+//     color: #ffd6ff;
+//   }
+//   60%{
+//     transform: translateY(-15px);
+//     transform: rotate(0turn);
+//     color: #ffff00;
+//   }
 
-
-  100%{
-    transform: translateY(0px);
-    color: #828282;
-  }
-`;
+//   100%{
+//     transform: translateY(0px);
+//     color: #828282;
+//   }
+// `;
 
 export const LikeBox = styled.button`
   width: 40px;
@@ -225,7 +224,7 @@ export const LikeImg = styled.svg`
     color: #ffd600;
     animation: ${moveUpAndDown} 1s infinite linear;
   }
-  ${(props) => props.active && `animation: ${danceWithLight} 2.5s;`}
+  /* ${(props) => props.active && `animation: ${danceWithLight} 2.5s;`} */
 `;
 export const DislikeImg = styled.img`
   width: 22px;

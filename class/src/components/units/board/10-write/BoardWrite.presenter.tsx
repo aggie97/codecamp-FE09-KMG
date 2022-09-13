@@ -1,4 +1,6 @@
+import { ChangeEvent } from "react";
 import { RedInput, BlueInput, Button } from "./BoardWrite.styles";
+import { IBoardWriteUIProps } from "./BoardWrite.types";
 
 export default function BoardWriteUI({
   isEdit,
@@ -6,7 +8,7 @@ export default function BoardWriteUI({
   onChangeInput,
   onClickSync,
   data,
-}) {
+}: IBoardWriteUIProps) {
   return (
     <>
       <h1>게시물 {isEdit ? "수정" : "등록"}</h1>

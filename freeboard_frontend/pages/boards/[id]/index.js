@@ -8,7 +8,7 @@ const DynamicRoutedPage = () => {
   return (
     <>
       <BoardDetail />
-      <hr />
+      <hr style={{ maxWidth: "1240px", width: "100%", margin: "0 auto" }} />
       <BoardComments routerId={router.query.id} />
     </>
   );
