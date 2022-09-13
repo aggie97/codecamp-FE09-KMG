@@ -120,7 +120,7 @@ const BoardRegister = ({ isEdit, data }) => {
       alert("게시물이 수정되었습니다.");
       router.push(`/boards/${result.data.updateBoard._id}`);
     } catch (error) {
-      alert("fail! Error Message\n", error);
+      alert("fail! Error Message\n" + error);
     }
   };
 

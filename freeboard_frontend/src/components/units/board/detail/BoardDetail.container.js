@@ -88,7 +88,19 @@ const BoardDetail = () => {
     boardAddress: { address, addressDetail },
   } = data?.fetchBoard;
 
-  console.log("detailCurrData:", data);
+  console.log(
+    data.fetchBoard,
+    writer,
+    title,
+    createdAt,
+    images,
+    contents,
+    youtubeUrl,
+    likeCount,
+    dislikeCount,
+    address,
+    addressDetail
+  );
 
   const [year, month, day] = createdAt.slice(0, 10).split("-");
 
