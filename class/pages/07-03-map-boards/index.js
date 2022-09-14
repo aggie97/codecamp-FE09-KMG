@@ -37,7 +37,7 @@ export default function StaticRoutedPage() {
 
   const [deleteBoard] = useMutation(DELETE_BOARD);
   const onClickButton = async (event) => {
-    let id = event.target.parentNode.parentNode.id;
+    const id = event.target.parentNode.parentNode.id;
     await deleteBoard({
       variables: {
         number: Number(id),

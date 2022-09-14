@@ -30,7 +30,7 @@ export default function StaticRoutedPage() {
       {data?.fetchBoards.map(
         ({ writer = "글쓴이", title = "제목", contents = "내용" }) => {
           return (
-            <Row>
+            <Row key={writer}>
               <Column>
                 <input type="checkbox" />
               </Column>
