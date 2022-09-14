@@ -12,3 +12,9 @@ function solution(s) {
   }
   return answer;
 }
+
+
+function solution(s) {
+  let answer = s.split("" "").amp((word));
+  
+}
