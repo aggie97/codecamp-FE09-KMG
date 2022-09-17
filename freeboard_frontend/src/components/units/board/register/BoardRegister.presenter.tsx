@@ -9,6 +9,7 @@ import {
 } from "./BoardRegister.styles";
 
 import styled from "@emotion/styled";
+import { IProps } from "./BoardRegister.types";
 
 const BoardRegisterUI = ({
   onChangeInput,
@@ -17,8 +18,7 @@ const BoardRegisterUI = ({
   isEmpty,
   isEdit,
   data,
-}) => {
-  console.log("forDefault:", data?.fetchBoard);
+}: IProps) => {
   return (
     <Wrapper onSubmit={isEdit ? editForm : submitForm}>
       <h1>게시물 {isEdit ? "수정" : "등록"}</h1>
@@ -29,15 +29,17 @@ const BoardRegisterUI = ({
             id="author"
             type="text"
             placeholder="이름을 적어주세요."
+            // @ts-expect-error
             isEmpty={isEmpty}
             onChange={onChangeInput}
-            defaultValue={data?.fetchBoard.writer}
+            defaultValue={data?.fetchBoard?.writer ?? ""}
           />
         </InputBox>
         <InputBox>
           <span>비밀번호</span>
           <Input
             id="pw"
+            // @ts-expect-error
             isEmpty={isEmpty}
             type="password"
             placeholder="비밀번호를 입력해주세요."
@@ -49,11 +51,12 @@ const BoardRegisterUI = ({
         <span>제목</span>
         <Input
           id="title"
+          // @ts-expect-error
           isEmpty={isEmpty}
           type="text"
           placeholder="제목을 작성해주세요."
           onChange={onChangeInput}
-          defaultValue={data?.fetchBoard.title}
+          defaultValue={data?.fetchBoard?.title}
         />
       </InputBox>
       <TextareaBox>
@@ -61,9 +64,10 @@ const BoardRegisterUI = ({
         <TextArea
           id="contents"
           placeholder="내용을 작성해주세요."
+          // @ts-expect-error
           isEmpty={isEmpty}
           onChange={onChangeInput}
-          defaultValue={data?.fetchBoard.contents}
+          defaultValue={data?.fetchBoard?.contents}
         />
       </TextareaBox>
       <AddressBox>
@@ -73,9 +77,10 @@ const BoardRegisterUI = ({
             id="zipCode"
             type="text"
             placeholder="07250"
+            // @ts-expect-error
             isEmpty={isEmpty}
             onChange={onChangeInput}
-            defaultValue={data?.fetchBoard.boardAddress.zipcode}
+            defaultValue={data?.fetchBoard?.boardAddress?.zipcode ?? ""}
           />
           <a href="#">우편번호 검색</a>
         </div>
@@ -84,18 +89,20 @@ const BoardRegisterUI = ({
           id="address"
           type="text"
           placeholder="주소를 입력해주세요."
+          // @ts-expect-error
           isEmpty={isEmpty}
           onChange={onChangeInput}
-          defaultValue={data?.fetchBoard.boardAddress.address}
+          defaultValue={data?.fetchBoard?.boardAddress?.address ?? ""}
         />
         <div></div>
         <Input
           id="addressDetail"
           type="text"
           placeholder="상세 주소를 입력해주세요."
+          // @ts-expect-error
           isEmpty={isEmpty}
           onChange={onChangeInput}
-          defaultValue={data?.fetchBoard.boardAddress.addressDetail}
+          defaultValue={data?.fetchBoard?.boardAddress?.addressDetail ?? ""}
         />
       </AddressBox>
       <InputBox>
@@ -105,8 +112,9 @@ const BoardRegisterUI = ({
           type="text"
           placeholder="링크를 적어주세요."
           onChange={onChangeInput}
+          // @ts-expect-error
           isEmpty={isEmpty}
-          defaultValue={data?.fetchBoard.youtubeUrl}
+          defaultValue={data?.fetchBoard?.youtubeUrl ?? ""}
         />
       </InputBox>
       <PictureBox>
@@ -144,7 +152,9 @@ const Input = styled.input`
   outline: none;
 
   &::placeholder {
-    ${(props) => (props.isEmpty ? "color: red; " : null)}
+    ${(props) =>
+      // @ts-expect-error
+      props.isEmpty ? "color: red;" : "color: #bdbdbd"};
   }
 `;
 

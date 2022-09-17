@@ -1,16 +1,35 @@
 import BoardRegisterUI from "./BoardRegister.presenter";
-import { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
 import CREATE_BOARD, { UPDATE_BOARD } from "./BoardRegister.queries";
 
-const BoardRegister = ({ isEdit, data }) => {
+import {
+  IBoardRegisterProps,
+  IEventTarget,
+  IInput,
+  ObjectIndexable,
+} from "./BoardRegister.types";
+import {
+  IMutation,
+  IMutationCreateBoardArgs,
+  IMutationUpdateBoardArgs,
+} from "../../../../commons/types/generated/types";
+
+const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   const router = useRouter();
-  const [createBoard] = useMutation(CREATE_BOARD);
-  const [updateBoard] = useMutation(UPDATE_BOARD);
+  const [createBoard] = useMutation<
+    Pick<IMutation, "createBoard">,
+    IMutationCreateBoardArgs
+  >(CREATE_BOARD);
+
+  const [updateBoard] = useMutation<
+    Pick<IMutation, "updateBoard">,
+    IMutationUpdateBoardArgs
+  >(UPDATE_BOARD);
 
   const [isEmpty, setIsEmpty] = useState(false);
-  const [input, setInput] = useState({
+  const [input, setInput] = useState<IInput>({
     author: "",
     pw: "",
     title: "",
@@ -22,17 +41,18 @@ const BoardRegister = ({ isEdit, data }) => {
     images: "",
   });
 
-  console.log("isEdit state:", isEdit);
-  const submitForm = async (event) => {
+  const submitForm = async (event: React.SyntheticEvent): Promise<void> => {
     event.preventDefault();
-    const elements = [...event.target].slice(0, 8);
+    const target = event.target as typeof event.target & IEventTarget;
 
+    const elements = Object.values(target).slice(0, 8);
     const emptyInputExist = elements.some((input) => input.value === "");
+
     if (emptyInputExist) {
-      console.log("empty space exists");
+      alert("empty space exists");
       elements.forEach((ele) => {
-        const inputId = ele.id;
-        if (input[inputId] === "") {
+        const inputId: string = ele.id;
+        if ((input as ObjectIndexable)[inputId] === "") {
           ele.style.border = "1px solid red";
           setIsEmpty(true);
         } else {
@@ -40,8 +60,6 @@ const BoardRegister = ({ isEdit, data }) => {
         }
       });
     } else {
-      console.log("empty space doesn't exist");
-
       try {
         const result = await createBoard({
           variables: {
@@ -56,23 +74,23 @@ const BoardRegister = ({ isEdit, data }) => {
                 address: input.address,
                 addressDetail: input.addressDetail,
               },
-              images: input.images,
+              // images: input.images,
             },
           },
         });
         alert("게시물이 등록되었습니다.");
-        router.push("/boards/" + result.data.createBoard._id);
-      } catch (error) {
-        console.log(error.message);
+        await router.push(`/boards/${String(result?.data?.createBoard._id)}`);
+      } catch (error: Error) {
+        alert(error.message);
       }
     }
   };
 
-  const editForm = async (event) => {
+  const editForm = async (event: React.SyntheticEvent): Promise<void> => {
     event.preventDefault();
     try {
       const myVariables = {
-        boardId: router.query.id,
+        boardId: String(router.query.id),
         updateBoardInput: {},
         password: input.pw,
       };
@@ -96,7 +114,7 @@ const BoardRegister = ({ isEdit, data }) => {
           ...myVariables.updateBoardInput,
           boardAddress: { zipcode: input.zipCode },
         };
-      console.log("!", myVariables);
+
       if (input.address)
         myVariables.updateBoardInput = {
           ...myVariables.updateBoardInput,
@@ -112,26 +130,27 @@ const BoardRegister = ({ isEdit, data }) => {
           ...myVariables.updateBoardInput,
           images: input.images,
         };
-      console.log(myVariables);
+
       const result = await updateBoard({
         variables: myVariables,
       });
       console.log("try end", result);
       alert("게시물이 수정되었습니다.");
-      router.push(`/boards/${result.data.updateBoard._id}`);
+      await router.push(`/boards/${String(result?.data?.updateBoard._id)}`);
     } catch (error) {
-      alert("fail! Error Message\n" + error);
+      if (error instanceof Error) alert(error.message);
     }
   };
 
-  const onChangeInput = (event) => {
+  const onChangeInput = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     const targetEle = event.target.id;
     const changedContent = event.target.value;
     setInput({ ...input, [targetEle]: changedContent });
     event.target.style.border = "1px solid #dddddd";
   };
 
-  console.log(input);
   return (
     <BoardRegisterUI
       onChangeInput={onChangeInput}

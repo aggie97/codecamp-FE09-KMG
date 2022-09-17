@@ -224,7 +224,6 @@ export const LikeImg = styled.svg`
     color: #ffd600;
     animation: ${moveUpAndDown} 1s infinite linear;
   }
-  /* ${(props) => props.active && `animation: ${danceWithLight} 2.5s;`} */
 `;
 export const DislikeImg = styled.img`
   width: 22px;

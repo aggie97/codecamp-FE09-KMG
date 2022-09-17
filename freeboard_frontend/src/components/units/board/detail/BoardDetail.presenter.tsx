@@ -1,27 +1,31 @@
+import { IQuery } from "../../../../commons/types/generated/types";
 import * as B from "./BoardDetail.styles";
+
+interface IBoardDetailProps {
+  data?: Pick<IQuery, "fetchBoard">;
+  dance: boolean;
+  loading: boolean;
+  addressBox: boolean;
+  onClickAddressLink: () => void;
+  onClickEdit: () => void;
+  onClickToList: () => void;
+  onClickDelete: () => void;
+  onClickLike: () => void;
+  onClickDislike: () => void;
+}
+
 const BoardDetailUI = ({
+  data,
   dance,
-  year,
-  month,
-  day,
-  writer,
-  title,
-  images,
-  contents,
-  youtubeUrl,
-  likeCount,
-  dislikeCount,
-  address,
-  addressDetail,
-  onClickAddressLink,
   addressBox,
   loading,
+  onClickAddressLink,
   onClickEdit,
   onClickToList,
   onClickDelete,
   onClickLike,
   onClickDislike,
-}) => {
+}: IBoardDetailProps) => {
   return (
     <>
       <B.DetailPageWrapper>
@@ -39,9 +43,13 @@ const BoardDetailUI = ({
                     <B.ProfileImg id="profile__img" src="/profile.png" />
                   </B.ImgBox>
                   <B.WriterAndCreatedDateBox id="writer__createdAt">
-                    <B.Writer id="writer">{writer}</B.Writer>
+                    <B.Writer id="writer">{data?.fetchBoard?.writer}</B.Writer>
                     <B.CreatedDate id="createdAt">
-                      Date : {year}.{month}.{day}
+                      {data?.fetchBoard?.createdAt
+                        .split("T")
+                        .join(" ")
+                        .slice(0, 16)
+                        .replaceAll(":", " : ")}
                     </B.CreatedDate>
                   </B.WriterAndCreatedDateBox>
                 </B.HeaderLeftBox>
@@ -56,8 +64,12 @@ const BoardDetailUI = ({
                       <B.AddressContentBox>
                         <B.AddressBackground src="/addressAlert.png" />
                         <B.AddressTextBox>
-                          <B.AddressText>{address}</B.AddressText>
-                          <B.AddressText>{addressDetail}</B.AddressText>
+                          <B.AddressText>
+                            {data?.fetchBoard?.boardAddress?.address}
+                          </B.AddressText>
+                          <B.AddressText>
+                            {data?.fetchBoard?.boardAddress?.addressDetail}
+                          </B.AddressText>
                         </B.AddressTextBox>
                       </B.AddressContentBox>
                     ) : null}
@@ -69,14 +81,18 @@ const BoardDetailUI = ({
               </B.Header>
               <B.DivideLine id="divide-line"></B.DivideLine>
               <B.Main id="main-content-box">
-                <B.Title id="title">{title}</B.Title>
+                <B.Title id="title">{data?.fetchBoard?.title}</B.Title>
                 <B.MainImgBox id="image-box">
-                  <B.MainImage src={images} />
+                  <B.MainImage src={String(data?.fetchBoard?.images)} />
                 </B.MainImgBox>
-                <B.MainContent id="contents">{contents}</B.MainContent>
+                <B.MainContent id="contents">
+                  {data?.fetchBoard?.contents}
+                </B.MainContent>
               </B.Main>
               <B.YoutubeBox>
-                <B.YoutubePlayer src={youtubeUrl}></B.YoutubePlayer>
+                <B.YoutubePlayer
+                  src={String(data?.fetchBoard?.youtubeUrl)}
+                ></B.YoutubePlayer>
               </B.YoutubeBox>
               <B.LikeDislikeBox id="like-dislike-box">
                 <B.LikeBox onClick={onClickLike} id="like">
@@ -94,11 +110,11 @@ const BoardDetailUI = ({
                     />
                   </LikeBox>
 
-                  {likeCount}
+                  {data?.fetchBoard?.likeCount}
                 </B.LikeBox>
                 <B.DislikeBox onClick={onClickDislike} id="dislike">
                   <B.DislikeImg src="/dislike.png" />
-                  {dislikeCount}
+                  {data?.fetchBoard?.dislikeCount}
                 </B.DislikeBox>
               </B.LikeDislikeBox>
             </>
@@ -115,7 +131,7 @@ const BoardDetailUI = ({
   );
 };
 
-const LikeBox = ({ children, ...rest }) => {
+const LikeBox = ({ children, ...rest }: any) => {
   return <B.LikeImg {...rest}>{children}</B.LikeImg>;
 };
 

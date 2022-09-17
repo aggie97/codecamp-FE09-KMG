@@ -1,3 +1,5 @@
+import { ChangeEvent, MouseEvent } from "react";
+import { IBoard, IQuery } from "../../../../commons/types/generated/types";
 import {
   Wrapper,
   Header,
@@ -37,6 +39,19 @@ import {
   NextPage,
 } from "./BoardList.styles";
 
+import { IBoardArray } from "./BoardList.types";
+
+interface IBoardList {
+  onClickCreate: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClickListItem?: (event: MouseEvent<HTMLDivElement>) => void;
+  onClickBestItem: (event: MouseEvent<HTMLDivElement>) => void;
+  onChangeSearch: (event: ChangeEvent<HTMLInputElement>) => void;
+  boardsArray?: IBoardArray[];
+  totalBoards?: Pick<IQuery, "fetchBoards">;
+  bestBoards?: Pick<IQuery, "fetchBoardsOfTheBest">;
+  pages: number;
+}
+
 const BoardListUI = ({
   boardsArray,
   pages,
@@ -46,14 +61,14 @@ const BoardListUI = ({
   onClickListItem,
   onClickBestItem,
   onChangeSearch,
-}) => {
+}: IBoardList) => {
   return (
     <>
       <Wrapper>
         <Header>
           <Banner>베스트 게시글</Banner>
           <BestBoards>
-            {bestBoards.data?.fetchBoardsOfTheBest.map((best) => {
+            {bestBoards?.fetchBoardsOfTheBest.map((best) => {
               return (
                 <BestBoardLayout key={best._id} id="BestParent">
                   <BestBoard onClick={onClickBestItem} id={best._id}>
@@ -93,8 +108,8 @@ const BoardListUI = ({
             <ListCreatedAt>날짜</ListCreatedAt>
           </ListHeader>
           <>
-            {!boardsArray.length
-              ? totalBoards.data?.fetchBoards.map((board, index) => (
+            {boardsArray?.length === 0
+              ? totalBoards?.fetchBoards.map((board: IBoard, index: number) => (
                   <List
                     onClick={onClickListItem}
                     id={board._id}
@@ -108,7 +123,7 @@ const BoardListUI = ({
                     </BoardCreatedAt>
                   </List>
                 ))
-              : boardsArray.map((board, index) => (
+              : boardsArray?.map((board: IBoardArray, index: number) => (
                   <List
                     onClick={onClickListItem}
                     id={board._id}
@@ -118,7 +133,7 @@ const BoardListUI = ({
                     <BoardTitle>{board.title}</BoardTitle>
                     <BoardWriter>{board.writer}</BoardWriter>
                     <BoardCreatedAt>
-                      {board.createdAt.slice(0, 10)}
+                      {board?.createdAt?.slice(0, 10)}
                     </BoardCreatedAt>
                   </List>
                 ))}
