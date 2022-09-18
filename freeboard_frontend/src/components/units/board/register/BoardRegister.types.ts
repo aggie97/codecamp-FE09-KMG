@@ -1,5 +1,5 @@
 import { SyntheticEvent, ChangeEvent } from "react";
-import { IMutation, IQuery } from "../../../../commons/types/generated/types";
+import { IQuery } from "../../../../commons/types/generated/types";
 
 export interface IBoardRegisterProps {
   isEdit: boolean;
@@ -35,13 +35,17 @@ export interface ObjectIndexable extends IInput {
 }
 
 export interface IProps {
+  onCompleteAddressSearch: (data: any) => void;
+  onClickAddressSearch: () => void;
   onChangeInput: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   submitForm: (event: SyntheticEvent) => Promise<void>;
   editForm: (event: SyntheticEvent) => Promise<void>;
+  isOpen: boolean;
   isEmpty: boolean;
   isEdit: boolean;
+  input: IInput;
   data?: Pick<IQuery, "fetchBoard">;
 }
 

@@ -15,6 +15,7 @@ import {
   IQuery,
   IQueryFetchBoardArgs,
 } from "../../../../commons/types/generated/types";
+import { Modal } from "antd";
 
 const BoardDetail = () => {
   const router = useRouter();
@@ -47,20 +48,22 @@ const BoardDetail = () => {
     setAddressBox((prev) => !prev);
   };
 
-  const onClickEdit = () => {
-    void router.push(`/boards/${String(router.query.id)}/edit`);
+  const onClickEdit = async () => {
+    await router.push(`/boards/${String(router.query.id)}/edit`);
   };
 
-  const onClickToList = () => {
-    void router.push(`/boards/`);
+  const onClickToList = async () => {
+    await router.push(`/boards/`);
   };
 
-  const onClickDelete = () => {
-    void deleteBoard({
+  const onClickDelete = async () => {
+    await deleteBoard({
       variables: { boardId: String(router.query.id) },
     });
-    alert("게시물이 삭제되었습니다.");
-    void router.push(`/boards`);
+    Modal.success({
+      content: "게시글이 삭제되었습니다.",
+    });
+    await router.push(`/boards`);
   };
 
   const onClickLike = async () => {
@@ -81,8 +84,6 @@ const BoardDetail = () => {
       ],
     });
   };
-
-  console.log(data);
 
   return (
     <BoardDetailUI

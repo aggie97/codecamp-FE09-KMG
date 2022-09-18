@@ -10,6 +10,8 @@ import {
   IMutationCreateBoardCommentArgs,
 } from "../../../../commons/types/generated/types";
 
+import { Modal } from "antd";
+
 interface IRouter {
   routerId: string;
 }
@@ -45,42 +47,54 @@ const BoardCreateComment = ({ routerId }: IRouter) => {
   };
 
   const onSubmitComment = async () => {
-    console.log("등록전Comment:", comment);
-    try {
-      await createBoardComment({
-        variables: {
-          boardId: routerId,
-          createBoardCommentInput: {
-            writer: comment.writer,
-            password: comment.password,
-            contents: comment.contents,
-            rating: comment.rating,
-          },
-        },
-        refetchQueries: [
-          {
-            query: FETCH_BOARD_COMMENTS,
-            variables: {
-              boardId: routerId,
+    const { writer, password, contents, rating } = comment;
+    if (writer && password && contents && rating) {
+      try {
+        await createBoardComment({
+          variables: {
+            boardId: routerId,
+            createBoardCommentInput: {
+              writer,
+              password,
+              contents,
+              rating,
             },
           },
-        ],
+          refetchQueries: [
+            {
+              query: FETCH_BOARD_COMMENTS,
+              variables: {
+                boardId: routerId,
+              },
+            },
+          ],
+        });
+        // const [, inputbox, textareabox] = event.target.closest(
+        //   "#CreateCommentWrapper"
+        // ).childNodes;
+        setComment({
+          ...comment,
+          writer: "",
+          password: "",
+          contents: "",
+          rating: 1,
+        });
+        Modal.success({
+          content: "댓글이 등록되었습니다.",
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          Modal.error({
+            content: `${error.message}`,
+          });
+        }
+      }
+    } else {
+      Modal.warning({
+        content: "양식이 비어있습니다.",
       });
-      // const [, inputbox, textareabox] = event.target.closest(
-      //   "#CreateCommentWrapper"
-      // ).childNodes;
-      setComment({
-        ...comment,
-        writer: "",
-        password: "",
-        contents: "",
-        rating: 1,
-      });
-    } catch (error) {
-      if (error instanceof Error) alert(error.message);
     }
   };
-  console.log("등록후Comment:", comment);
 
   return (
     <BoardCommentCreateUI

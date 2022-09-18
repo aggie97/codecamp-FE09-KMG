@@ -15,6 +15,8 @@ import {
   IUpdateBoardCommentInput,
 } from "../../../../commons/types/generated/types";
 
+import { Modal } from "antd";
+
 interface IRouter {
   routerId: string;
 }
@@ -52,6 +54,8 @@ const CommentList = ({ routerId }: IRouter) => {
     contents: "",
     rating: 1,
   });
+
+  // const [deletePw, setDeletePw] = useState("");
 
   const onChangeEditComment = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -97,10 +101,14 @@ const CommentList = ({ routerId }: IRouter) => {
       console.log("updateResult:", result);
       setIsOpen((prev) => !prev);
       setEditComment({ password: "", contents: "", rating: 1 });
-      alert("댓글이 수정되었습니다.");
+      Modal.success({
+        content: "댓글이 수정되었습니다.",
+      });
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        Modal.error({
+          content: `${error.message}`,
+        });
       }
     }
   };
@@ -116,6 +124,18 @@ const CommentList = ({ routerId }: IRouter) => {
     const targetId = event.currentTarget.id;
     // 수정 전 const targetId = event.target.id;
     const password = prompt("비밀번호를 입력해주세요.");
+    // Modal.info({
+    //   title: "비밀번호를 입력해주세요.",
+    //   content: (
+    //     <input
+    //       type="text"
+    //       onChange={(event) => setDeletePw(event.currentTarget.value)}
+    //     />
+    //   ),
+    // });
+
+    // const password = deletePw;
+
     try {
       await deleteBoardComment({
         variables: { boardCommentId: targetId, password },
@@ -123,9 +143,15 @@ const CommentList = ({ routerId }: IRouter) => {
           { query: FETCH_BOARD_COMMENTS, variables: { boardId: routerId } },
         ],
       });
-      alert("댓글이 삭제되었습니다.");
+      Modal.success({
+        content: "댓글이 삭제되었습니다.",
+      });
     } catch (error) {
-      if (error instanceof Error) alert(error.message);
+      if (error instanceof Error) {
+        Modal.error({
+          content: `${error.message}`,
+        });
+      }
     }
   };
   const onClickComment = (event: any) => {};

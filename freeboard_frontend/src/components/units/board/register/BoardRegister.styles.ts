@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { Modal } from "antd";
+import DaumPostcode from "react-daum-postcode";
 
 export const Wrapper = styled.form`
   max-width: 1200px;
@@ -73,7 +75,7 @@ export const AddressBox = styled.div`
     height: 52px;
   }
 
-  div a {
+  div button {
     width: 124px;
     height: 52px;
     display: flex;
@@ -82,6 +84,7 @@ export const AddressBox = styled.div`
     color: white;
     background-color: black;
     padding: 14px 16px;
+    border: none;
   }
 `;
 
@@ -140,8 +143,12 @@ export const SubmitBox = styled.div`
   justify-content: center;
 
   button {
-    padding: 14px 60px;
-    background: #ffd600;
+    background: transparent;
     border: none;
+    outline: none;
   }
 `;
+
+export const AddressModal = styled(Modal)``;
+
+export const AddressSearchInput = styled(DaumPostcode)``;

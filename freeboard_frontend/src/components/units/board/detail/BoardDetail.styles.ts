@@ -69,18 +69,21 @@ export const AddressBox = styled.div`
 export const AddressContentBox = styled.div`
   position: absolute;
   top: -80px;
-  left: -335px;
+  left: -333px;
+  width: 376px;
+  display: flex;
+  justify-content: end;
+  overflow: hidden;
 `;
 
 export const AddressBackground = styled.img`
   position: absolute;
-  width: 376px;
+  width: 100%;
   height: 72px;
 `;
 
 export const AddressTextBox = styled.div`
   padding: 0.5rem 1rem 1rem 1rem;
-  width: 376px;
   height: 72px;
   display: flex;
   flex-direction: column;
@@ -90,6 +93,7 @@ export const AddressTextBox = styled.div`
 
 export const AddressText = styled.div`
   font-weight: 500;
+  white-space: nowrap;
   color: #fff;
   z-index: 99;
   text-align: end;
@@ -135,12 +139,13 @@ export const MainContent = styled.div``;
 export const YoutubeBox = styled.div`
   display: flex;
   justify-content: center;
-  padding: 120px 0;
+  padding: 100px 0;
 `;
 
 export const YoutubePlayer = styled.iframe`
-  width: 486px;
-  height: 240px;
+  min-width: 1080px;
+  width: 100%;
+  aspect-ratio: 1920 / 1080;
   border: none;
 `;
 

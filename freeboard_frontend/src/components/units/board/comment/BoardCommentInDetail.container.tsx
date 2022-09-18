@@ -17,6 +17,8 @@ import {
   IUpdateBoardCommentInput,
 } from "../../../../commons/types/generated/types";
 
+import { Modal } from "antd";
+
 interface IRouter {
   routerId: string;
 }
@@ -91,7 +93,6 @@ const BoardComments = ({ routerId }: IRouter) => {
       setEditComment({ ...editComment, contents: event.target.value });
     }
   };
-  console.log("editComment:", editComment);
 
   const onUpdateComment = async (event: MouseEvent<HTMLButtonElement>) => {
     try {
@@ -102,13 +103,10 @@ const BoardComments = ({ routerId }: IRouter) => {
           rating: 1,
         },
       };
-      console.log("1");
+
       if (editComment.contents) {
         myVariables.updateBoardCommentInput.contents = editComment.contents;
       }
-      console.log("!", editComment);
-      console.log("!", myVariables);
-      console.log("2");
 
       const result = await updateBoardComment({
         variables: myVariables,
@@ -125,15 +123,17 @@ const BoardComments = ({ routerId }: IRouter) => {
       console.log("updateResult:", result);
       setIsOpen((prev) => !prev);
       setEditComment({ password: "", contents: "", rating: 1 });
-      alert("댓글이 수정되었습니다.");
+      Modal.success({
+        content: "댓글이 수정되었습니다.",
+      });
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
+      if (error instanceof Error)
+        Modal.error({
+          content: `${error.message}`,
+        });
     }
   };
   const onSubmitComment = async () => {
-    console.log("등록전Comment:", comment);
     try {
       await createBoardComment({
         variables: {
@@ -154,6 +154,9 @@ const BoardComments = ({ routerId }: IRouter) => {
           },
         ],
       });
+      Modal.success({
+        content: "댓글이 등록되었습니다.",
+      });
       // const [, inputbox, textareabox] = event.target.closest(
       //   "#CreateCommentWrapper"
       // ).childNodes;
@@ -165,7 +168,10 @@ const BoardComments = ({ routerId }: IRouter) => {
         rating: 1,
       });
     } catch (error) {
-      if (error instanceof Error) alert(error.message);
+      if (error instanceof Error)
+        Modal.error({
+          content: `${error.message}`,
+        });
     }
   };
   console.log("등록후Comment:", comment);
@@ -181,6 +187,7 @@ const BoardComments = ({ routerId }: IRouter) => {
     const targetId = event.currentTarget.id;
     // 수정 전 const targetId = event.target.id;
     const password = prompt("비밀번호를 입력해주세요.");
+    if (password === "") return;
     try {
       await deleteBoardComment({
         variables: { boardCommentId: targetId, password },
@@ -188,9 +195,14 @@ const BoardComments = ({ routerId }: IRouter) => {
           { query: FETCH_BOARD_COMMENTS, variables: { boardId: routerId } },
         ],
       });
-      alert("댓글이 삭제되었습니다.");
+      Modal.success({
+        content: "댓글이 삭제되었습니다.",
+      });
     } catch (error) {
-      if (error instanceof Error) alert(error.message);
+      if (error instanceof Error)
+        Modal.error({
+          content: `${error.message}`,
+        });
     }
   };
   const onClickComment = (event: any) => {};

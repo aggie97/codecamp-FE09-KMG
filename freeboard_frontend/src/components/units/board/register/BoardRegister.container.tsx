@@ -3,10 +3,11 @@ import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
 import CREATE_BOARD, { UPDATE_BOARD } from "./BoardRegister.queries";
+import { Modal } from "antd";
+import { Address } from "react-daum-postcode";
 
 import {
   IBoardRegisterProps,
-  IEventTarget,
   IInput,
   ObjectIndexable,
 } from "./BoardRegister.types";
@@ -29,6 +30,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   >(UPDATE_BOARD);
 
   const [isEmpty, setIsEmpty] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState<IInput>({
     author: "",
     pw: "",
@@ -38,18 +40,29 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     address: "",
     addressDetail: "",
     youtubeLink: "",
-    images: "",
+    images: "1",
   });
 
-  const submitForm = async (event: React.SyntheticEvent): Promise<void> => {
+  const onClickAddressSearch = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  const onCompleteAddressSearch = (address: Address) => {
+    setInput({ ...input, address: address.address, zipCode: address.zonecode });
+
+    setIsOpen((prev) => !prev);
+  };
+  console.log(input);
+  const submitForm = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const target = event.target as typeof event.target & IEventTarget;
+    const { currentTarget } = event;
+    const elements = Object.values(currentTarget)
+      .filter((ele) => ele.type !== "button")
+      .slice(0, 8);
 
-    const elements = Object.values(target).slice(0, 8);
     const emptyInputExist = elements.some((input) => input.value === "");
-
+    console.log(elements);
     if (emptyInputExist) {
-      alert("empty space exists");
       elements.forEach((ele) => {
         const inputId: string = ele.id;
         if ((input as ObjectIndexable)[inputId] === "") {
@@ -58,6 +71,9 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
         } else {
           ele.style.border = "1px solid #ddd";
         }
+      });
+      Modal.warning({
+        content: "빈칸을 채워주세요.",
       });
     } else {
       try {
@@ -74,14 +90,19 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
                 address: input.address,
                 addressDetail: input.addressDetail,
               },
-              // images: input.images,
+              images: [input.images],
             },
           },
         });
-        alert("게시물이 등록되었습니다.");
+        Modal.success({
+          content: `게시글이 등록되었습니다.`,
+        });
         await router.push(`/boards/${String(result?.data?.createBoard._id)}`);
-      } catch (error: Error) {
-        alert(error.message);
+      } catch (error) {
+        if (error instanceof Error)
+          Modal.error({
+            content: `${error.message}`,
+          });
       }
     }
   };
@@ -134,11 +155,16 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
       const result = await updateBoard({
         variables: myVariables,
       });
-      console.log("try end", result);
-      alert("게시물이 수정되었습니다.");
+
+      Modal.success({
+        content: `게시글이 수정되었습니다.`,
+      });
       await router.push(`/boards/${String(result?.data?.updateBoard._id)}`);
     } catch (error) {
-      if (error instanceof Error) alert(error.message);
+      if (error instanceof Error)
+        Modal.error({
+          content: `${error.message}`,
+        });
     }
   };
 
@@ -152,14 +178,20 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   };
 
   return (
-    <BoardRegisterUI
-      onChangeInput={onChangeInput}
-      submitForm={submitForm}
-      editForm={editForm}
-      isEmpty={isEmpty}
-      isEdit={isEdit}
-      data={data}
-    />
+    <>
+      <BoardRegisterUI
+        onCompleteAddressSearch={onCompleteAddressSearch}
+        onClickAddressSearch={onClickAddressSearch}
+        onChangeInput={onChangeInput}
+        submitForm={submitForm}
+        editForm={editForm}
+        isOpen={isOpen}
+        isEmpty={isEmpty}
+        isEdit={isEdit}
+        input={input}
+        data={data}
+      />
+    </>
   );
 };
 
