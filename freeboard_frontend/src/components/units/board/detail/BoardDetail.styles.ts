@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
+import ReactPlayer from "react-player";
 /* --------- 게시물 상세 페이지 ---------- */
 
 export const DetailPageWrapper = styled.div`
@@ -142,10 +143,7 @@ export const YoutubeBox = styled.div`
   padding: 100px 0;
 `;
 
-export const YoutubePlayer = styled.iframe`
-  min-width: 1080px;
-  width: 100%;
-  aspect-ratio: 1920 / 1080;
+export const YoutubePlayer = styled(ReactPlayer)`
   border: none;
 `;
 

@@ -1,5 +1,8 @@
+import { Modal } from "antd";
 import { ChangeEvent, MouseEvent } from "react";
 import { IQuery } from "../../../../commons/types/generated/types";
+import AntdModal from "../../../common/antdModal";
+import MyModal from "../../../common/modal";
 import {
   CreateCommentStarBox,
   Star,
@@ -29,7 +32,9 @@ import {
 
 interface IBoardCommentListUI {
   data?: Pick<IQuery, "fetchBoardComments">;
+  textCount: number;
   isOpen: boolean;
+  isOpenDeleteModal: boolean;
   idForEdit: string;
   onUnfoldEditModal: (
     evnet: MouseEvent<HTMLButtonElement> | MouseEvent<HTMLImageElement>
@@ -46,7 +51,9 @@ interface IBoardCommentListUI {
 
 const BoardCommentListUI = ({
   data,
+  textCount,
   isOpen,
+  isOpenDeleteModal,
   idForEdit,
   onUnfoldEditModal,
   onUpdateComment,
@@ -145,7 +152,7 @@ const BoardCommentListUI = ({
                       ></CreateCommentTextarea>
                       <CreateCommentFooter>
                         <CreateCommentTextCounter>
-                          0/100
+                          {textCount}/100
                         </CreateCommentTextCounter>
                         <div style={{ display: "flex" }}>
                           <CreateCommentSubmitButton
@@ -256,6 +263,7 @@ const BoardCommentListUI = ({
                     <CommentListButtonBox>
                       <CommentListEditButton
                         id={comment._id}
+                        className={String(comment.contents.length)}
                         onClick={onUnfoldEditModal}
                         width="18px"
                         height="18px"
@@ -268,6 +276,14 @@ const BoardCommentListUI = ({
                         height="14px"
                         src="/delete.png"
                       />
+                      {isOpenDeleteModal && (
+                        <Modal>
+                          <input
+                            type="password"
+                            placeholder="비밀번호를 입력해주세요."
+                          />
+                        </Modal>
+                      )}
                     </CommentListButtonBox>
                   </CommentListLi>
                   <DivideLine key={`${comment._id}divLine`} />

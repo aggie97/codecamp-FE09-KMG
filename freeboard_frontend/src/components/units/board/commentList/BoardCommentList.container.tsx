@@ -48,12 +48,15 @@ const CommentList = ({ routerId }: IRouter) => {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   const [idForEdit, setIdForEdit] = useState("");
   const [editComment, setEditComment] = useState({
     password: "",
     contents: "",
     rating: 1,
   });
+
+  const [textCount, setTextCount] = useState(0);
 
   // const [deletePw, setDeletePw] = useState("");
 
@@ -65,9 +68,9 @@ const CommentList = ({ routerId }: IRouter) => {
     }
     if (event.target.nodeName === "TEXTAREA") {
       setEditComment({ ...editComment, contents: event.target.value });
+      setTextCount(event.target.value.length);
     }
   };
-  console.log("editComment:", editComment);
 
   const onUpdateComment = async (event: MouseEvent<HTMLButtonElement>) => {
     try {
@@ -78,15 +81,12 @@ const CommentList = ({ routerId }: IRouter) => {
           rating: 1,
         },
       };
-      console.log("1");
+
       if (editComment.contents) {
         myVariables.updateBoardCommentInput.contents = editComment.contents;
       }
-      console.log("!", editComment);
-      console.log("!", myVariables);
-      console.log("2");
 
-      const result = await updateBoardComment({
+      await updateBoardComment({
         variables: myVariables,
         refetchQueries: [
           {
@@ -98,7 +98,7 @@ const CommentList = ({ routerId }: IRouter) => {
           },
         ],
       });
-      console.log("updateResult:", result);
+
       setIsOpen((prev) => !prev);
       setEditComment({ password: "", contents: "", rating: 1 });
       Modal.success({
@@ -118,23 +118,17 @@ const CommentList = ({ routerId }: IRouter) => {
   ) => {
     setIdForEdit(event.currentTarget.id);
     setIsOpen((prev) => !prev);
+    if (textCount === 0) {
+      setTextCount(parseInt(event.currentTarget.className));
+    } else {
+      setTextCount(0);
+    }
   };
 
   const onDeleteComment = async (event: MouseEvent<HTMLImageElement>) => {
     const targetId = event.currentTarget.id;
     // 수정 전 const targetId = event.target.id;
     const password = prompt("비밀번호를 입력해주세요.");
-    // Modal.info({
-    //   title: "비밀번호를 입력해주세요.",
-    //   content: (
-    //     <input
-    //       type="text"
-    //       onChange={(event) => setDeletePw(event.currentTarget.value)}
-    //     />
-    //   ),
-    // });
-
-    // const password = deletePw;
 
     try {
       await deleteBoardComment({
@@ -163,8 +157,10 @@ const CommentList = ({ routerId }: IRouter) => {
       ) : (
         <BoardCommentListUI
           data={data}
+          textCount={textCount}
           idForEdit={idForEdit}
           isOpen={isOpen}
+          isOpenDeleteModal={isOpenDeleteModal}
           onUnfoldEditModal={onUnfoldEditModal}
           onDeleteComment={onDeleteComment}
           onUpdateComment={onUpdateComment}

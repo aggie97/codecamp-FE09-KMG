@@ -108,7 +108,7 @@ const BoardComments = ({ routerId }: IRouter) => {
         myVariables.updateBoardCommentInput.contents = editComment.contents;
       }
 
-      const result = await updateBoardComment({
+      await updateBoardComment({
         variables: myVariables,
         refetchQueries: [
           {
@@ -120,7 +120,7 @@ const BoardComments = ({ routerId }: IRouter) => {
           },
         ],
       });
-      console.log("updateResult:", result);
+
       setIsOpen((prev) => !prev);
       setEditComment({ password: "", contents: "", rating: 1 });
       Modal.success({
@@ -174,7 +174,6 @@ const BoardComments = ({ routerId }: IRouter) => {
         });
     }
   };
-  console.log("등록후Comment:", comment);
 
   const onUnfoldEditModal = (
     event: MouseEvent<HTMLButtonElement> | MouseEvent<HTMLImageElement>
