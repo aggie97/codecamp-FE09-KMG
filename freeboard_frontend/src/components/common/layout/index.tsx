@@ -1,13 +1,16 @@
+import Footer from "./footer";
 import Banner from "./banner";
 import Header from "./header";
-import Navigation from "./navigation";
+// import Navigation from "./navigation";
 
-const Layout = () => {
+const Layout = ({ children }) => {
   return (
     <>
       <Header />
       <Banner />
-      <Navigation />
+      {/* <Navigation /> */}
+      <div>{children}</div>
+      <Footer />
     </>
   );
 };

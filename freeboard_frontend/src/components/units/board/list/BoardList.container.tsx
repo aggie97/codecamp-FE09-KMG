@@ -8,12 +8,19 @@ import { useRouter } from "next/router";
 import { ChangeEvent, MouseEvent, useState } from "react";
 import {
   IQuery,
-  IQueryFetchBoardArgs,
+  IQueryFetchBoardsArgs,
 } from "../../../../commons/types/generated/types";
 import { IBoardArray } from "./BoardList.types";
 const BoardList = () => {
   const router = useRouter();
-  const [pages, setPages] = useState(1);
+  const { data: totalBoards, refetch } = useQuery<
+    Pick<IQuery, "fetchBoards">,
+    IQueryFetchBoardsArgs
+  >(FETCH_BOARDS);
+
+  const { data: totalBoardsCount } =
+    useQuery<Pick<IQuery, "fetchBoardsCount">>(FETCH_BOARDS_COUNT);
+
   const [titleSearch, setTitleSearch] = useState("");
 
   const [boardsArray, setBoardsArray] = useState<IBoardArray[] | undefined>([]);
@@ -27,10 +34,6 @@ const BoardList = () => {
   const onClickBestItem = (event: MouseEvent<HTMLDivElement>) => {
     void router.push(`/boards/${event.currentTarget.id}`);
   };
-  const { data: totalBoards } = useQuery<
-    Pick<IQuery, "fetchBoards">,
-    IQueryFetchBoardArgs
-  >(FETCH_BOARDS);
 
   const { data: bestBoards } =
     useQuery<Pick<IQuery, "fetchBoardsOfTheBest">>(FETCH_BEST_BOARDS);
@@ -41,7 +44,7 @@ const BoardList = () => {
     const titles: IBoardArray[] | undefined = totalBoards?.fetchBoards.filter(
       (board) => board.title.includes(event.target.value)
     );
-    console.log(titles);
+
     setBoardsArray(titles);
   };
 
@@ -49,13 +52,14 @@ const BoardList = () => {
   return (
     <BoardListUI
       boardsArray={boardsArray}
-      pages={pages}
       onClickCreate={onClickCreate}
       totalBoards={totalBoards}
       bestBoards={bestBoards}
       onClickListItem={onClickListItem}
       onClickBestItem={onClickBestItem}
       onChangeSearch={onChangeSearch}
+      refetch={refetch}
+      count={totalBoardsCount?.fetchBoardsCount}
     />
   );
 };

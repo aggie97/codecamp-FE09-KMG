@@ -1,5 +1,11 @@
+import { ApolloQueryResult } from "@apollo/client";
 import { ChangeEvent, MouseEvent } from "react";
-import { IBoard, IQuery } from "../../../../commons/types/generated/types";
+import {
+  IBoard,
+  IQuery,
+  IQueryFetchBoardsArgs,
+} from "../../../../commons/types/generated/types";
+import Pagination from "../../../common/pagination";
 import {
   Wrapper,
   Header,
@@ -8,7 +14,6 @@ import {
   BestBoardLayout,
   BestBoard,
   Footer,
-  PageBox,
   RegisterButton,
   SearchBox,
   SearchInput,
@@ -35,8 +40,6 @@ import {
   BestBoardProfileImg,
   BestBoardWriter,
   BoxForLayout,
-  PrevPage,
-  NextPage,
 } from "./BoardList.styles";
 
 import { IBoardArray } from "./BoardList.types";
@@ -49,18 +52,22 @@ interface IBoardList {
   boardsArray?: IBoardArray[];
   totalBoards?: Pick<IQuery, "fetchBoards">;
   bestBoards?: Pick<IQuery, "fetchBoardsOfTheBest">;
-  pages: number;
+  count?: number;
+  refetch: (
+    variables?: Partial<IQueryFetchBoardsArgs> | undefined
+  ) => Promise<ApolloQueryResult<Pick<IQuery, "fetchBoards">>>;
 }
 
 const BoardListUI = ({
   boardsArray,
-  pages,
   totalBoards,
   bestBoards,
   onClickCreate,
   onClickListItem,
   onClickBestItem,
   onChangeSearch,
+  refetch,
+  count,
 }: IBoardList) => {
   return (
     <>
@@ -141,17 +148,7 @@ const BoardListUI = ({
         </ListBox>
         <Footer>
           <BoxForLayout></BoxForLayout>
-          <PageBox>
-            <PrevPage>👈</PrevPage>
-            <div>
-              {/* {new Array(pages).map((value, i) => {
-                console.log("hi:", value, i, pages);
-                return <span key={i}>{i + 1}</span>;
-              })} */}
-              1 2 3
-            </div>
-            <NextPage>👉</NextPage>
-          </PageBox>
+          <Pagination count={count} refetch={refetch} />
           <RegisterButton onClick={onClickCreate}>
             게시물 등록하기
           </RegisterButton>

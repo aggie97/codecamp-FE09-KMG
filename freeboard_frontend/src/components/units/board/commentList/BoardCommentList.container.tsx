@@ -49,6 +49,8 @@ const CommentList = ({ routerId }: IRouter) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+  const [deletePw, setDeletePw] = useState("");
+  const [deleteId, setDeleteId] = useState("");
   const [idForEdit, setIdForEdit] = useState("");
   const [editComment, setEditComment] = useState({
     password: "",
@@ -70,6 +72,10 @@ const CommentList = ({ routerId }: IRouter) => {
       setEditComment({ ...editComment, contents: event.target.value });
       setTextCount(event.target.value.length);
     }
+  };
+
+  const onChangeDeletePw = (event: ChangeEvent<HTMLInputElement>) => {
+    setDeletePw(event.currentTarget.value);
   };
 
   const onUpdateComment = async (event: MouseEvent<HTMLButtonElement>) => {
@@ -125,11 +131,16 @@ const CommentList = ({ routerId }: IRouter) => {
     }
   };
 
-  const onDeleteComment = async (event: MouseEvent<HTMLImageElement>) => {
-    const targetId = event.currentTarget.id;
-    // 수정 전 const targetId = event.target.id;
-    const password = prompt("비밀번호를 입력해주세요.");
+  const onToggleDeleteModal = (
+    event: MouseEvent<HTMLImageElement> | MouseEvent<HTMLElement>
+  ) => {
+    setIsOpenDeleteModal((prev) => !prev);
+    setDeleteId(event.currentTarget.id);
+  };
 
+  const onDeleteComment = async () => {
+    const targetId = deleteId;
+    const password = deletePw;
     try {
       await deleteBoardComment({
         variables: { boardCommentId: targetId, password },
@@ -161,6 +172,8 @@ const CommentList = ({ routerId }: IRouter) => {
           idForEdit={idForEdit}
           isOpen={isOpen}
           isOpenDeleteModal={isOpenDeleteModal}
+          onToggleDeleteModal={onToggleDeleteModal}
+          onChangeDeletePw={onChangeDeletePw}
           onUnfoldEditModal={onUnfoldEditModal}
           onDeleteComment={onDeleteComment}
           onUpdateComment={onUpdateComment}

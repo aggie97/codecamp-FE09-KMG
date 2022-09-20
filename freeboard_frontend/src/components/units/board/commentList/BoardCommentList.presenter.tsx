@@ -1,8 +1,7 @@
 import { Modal } from "antd";
 import { ChangeEvent, MouseEvent } from "react";
 import { IQuery } from "../../../../commons/types/generated/types";
-import AntdModal from "../../../common/antdModal";
-import MyModal from "../../../common/modal";
+
 import {
   CreateCommentStarBox,
   Star,
@@ -35,13 +34,17 @@ interface IBoardCommentListUI {
   textCount: number;
   isOpen: boolean;
   isOpenDeleteModal: boolean;
+  onToggleDeleteModal: (
+    event: MouseEvent<HTMLImageElement> | MouseEvent<HTMLElement>
+  ) => void;
+  onChangeDeletePw: (event: ChangeEvent<HTMLInputElement>) => void;
   idForEdit: string;
   onUnfoldEditModal: (
     evnet: MouseEvent<HTMLButtonElement> | MouseEvent<HTMLImageElement>
   ) => void;
 
   onUpdateComment: (event: MouseEvent<HTMLButtonElement>) => void;
-  onDeleteComment: (event: MouseEvent<HTMLImageElement>) => void;
+  onDeleteComment: () => void;
 
   onChangeEditComment: (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -54,6 +57,8 @@ const BoardCommentListUI = ({
   textCount,
   isOpen,
   isOpenDeleteModal,
+  onToggleDeleteModal,
+  onChangeDeletePw,
   idForEdit,
   onUnfoldEditModal,
   onUpdateComment,
@@ -271,16 +276,28 @@ const BoardCommentListUI = ({
                       />
                       <CommentListDeleteButton
                         id={comment._id}
-                        onClick={onDeleteComment}
+                        onClick={onToggleDeleteModal}
                         width="14px"
                         height="14px"
                         src="/delete.png"
                       />
                       {isOpenDeleteModal && (
-                        <Modal>
+                        <Modal
+                          title="Password"
+                          open={isOpenDeleteModal}
+                          onOk={onDeleteComment}
+                          onCancel={onToggleDeleteModal}
+                        >
                           <input
+                            style={{
+                              border: "none",
+                              borderBottom: "1px solid #000",
+                              padding: "0.5em",
+                              outline: "none",
+                            }}
                             type="password"
                             placeholder="비밀번호를 입력해주세요."
+                            onChange={onChangeDeletePw}
                           />
                         </Modal>
                       )}
