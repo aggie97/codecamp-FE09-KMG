@@ -11,9 +11,9 @@ export const PaginationUl = styled.ul`
   padding: 0.5rem;
   border-radius: 5px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.3rem;
 `;
 
 export const PaginationLi = styled.li`
@@ -22,6 +22,14 @@ export const PaginationLi = styled.li`
   justify-content: center;
   align-items: center;
   position: relative;
+
+  & > * {
+    width: 42px;
+  }
+
+  label {
+    text-align: center;
+  }
 `;
 
 export const Label = styled.label`

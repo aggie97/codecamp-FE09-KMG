@@ -15,6 +15,7 @@ interface IPaginationUI {
   onClickPrevPage: () => void;
   onClickNextPage: () => void;
   startPage: number;
+  lastPage: number;
   isPrevEnd: boolean;
   isNextEnd: boolean;
 }
@@ -24,6 +25,7 @@ const PaginationUI = ({
   onClickPrevPage,
   onClickNextPage,
   startPage,
+  lastPage,
   isPrevEnd,
   isNextEnd,
 }: IPaginationUI) => {
@@ -31,19 +33,23 @@ const PaginationUI = ({
     <PaginationWrapper>
       <PaginationUl>
         <LeftOutlined disabled={isPrevEnd} onClick={onClickPrevPage} />
-        {new Array(10).fill(1).map((_, index) => (
-          <PaginationLi key={index + startPage}>
-            <Label htmlFor={String(index + startPage)}>
-              {index + startPage}
-            </Label>
-            <Radio
-              type="radio"
-              name="pages"
-              id={String(index + startPage)}
-              onClick={onClickPageNum}
-            />
-          </PaginationLi>
-        ))}
+        {new Array(10).fill(1).map((_, index) => {
+          return (
+            startPage + index <= lastPage && (
+              <PaginationLi key={index + startPage}>
+                <Label htmlFor={String(index + startPage)}>
+                  {index + startPage}
+                </Label>
+                <Radio
+                  type="radio"
+                  name="pages"
+                  id={String(index + startPage)}
+                  onClick={onClickPageNum}
+                />
+              </PaginationLi>
+            )
+          );
+        })}
         <RightOutlined disabled={isNextEnd} onClick={onClickNextPage} />
       </PaginationUl>
     </PaginationWrapper>

@@ -34,16 +34,8 @@ const BoardCreateComment = ({ routerId }: IRouter) => {
   const onChangeComment = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
-    if (event.target.placeholder === "작성자") {
-      setComment({ ...comment, writer: event.target.value });
-    }
-    if (event.target.placeholder === "비밀번호") {
-      setComment({ ...comment, password: event.target.value });
-    }
-    if (event.target.nodeName === "TEXTAREA") {
-      setComment({ ...comment, contents: event.target.value });
-      setTextCount(event.target.value.length);
-    }
+    setComment({ ...comment, [event.target.id]: event.target.value });
+    event.target.id === "contents" && setTextCount(event.target.value.length);
   };
 
   const onSubmitComment = async () => {
@@ -54,10 +46,7 @@ const BoardCreateComment = ({ routerId }: IRouter) => {
           variables: {
             boardId: routerId,
             createBoardCommentInput: {
-              writer,
-              password,
-              contents,
-              rating,
+              ...comment,
             },
           },
           refetchQueries: [
@@ -69,11 +58,7 @@ const BoardCreateComment = ({ routerId }: IRouter) => {
             },
           ],
         });
-        // const [, inputbox, textareabox] = event.target.closest(
-        //   "#CreateCommentWrapper"
-        // ).childNodes;
         setComment({
-          ...comment,
           writer: "",
           password: "",
           contents: "",

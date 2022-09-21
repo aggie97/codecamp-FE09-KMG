@@ -1,65 +1,8 @@
-import { ApolloQueryResult } from "@apollo/client";
-import { ChangeEvent, MouseEvent } from "react";
-import {
-  IBoard,
-  IQuery,
-  IQueryFetchBoardsArgs,
-} from "../../../../commons/types/generated/types";
+import { IBoard } from "../../../../commons/types/generated/types";
 import Pagination from "../../../common/pagination";
-import {
-  Wrapper,
-  Header,
-  Banner,
-  BestBoards,
-  BestBoardLayout,
-  BestBoard,
-  Footer,
-  RegisterButton,
-  SearchBox,
-  SearchInput,
-  SearchDate,
-  SearchButton,
-  List,
-  ListHeader,
-  ListTitle,
-  ListNumber,
-  ListCreatedAt,
-  ListWriter,
-  ListBox,
-  StartAt,
-  EndAt,
-  BoardCreatedAt,
-  BoardNumber,
-  BoardTitle,
-  BoardWriter,
-  BestBoardImg,
-  BestBoardInfo,
-  BestBoardTitle,
-  BestBoardContents,
-  BestBoardProfile,
-  BestBoardProfileImg,
-  BestBoardWriter,
-  BoxForLayout,
-} from "./BoardList.styles";
-
-import { IBoardArray } from "./BoardList.types";
-
-interface IBoardList {
-  onClickCreate: (event: MouseEvent<HTMLButtonElement>) => void;
-  onClickListItem?: (event: MouseEvent<HTMLDivElement>) => void;
-  onClickBestItem: (event: MouseEvent<HTMLDivElement>) => void;
-  onChangeSearch: (event: ChangeEvent<HTMLInputElement>) => void;
-  boardsArray?: IBoardArray[];
-  totalBoards?: Pick<IQuery, "fetchBoards">;
-  bestBoards?: Pick<IQuery, "fetchBoardsOfTheBest">;
-  count?: number;
-  refetch: (
-    variables?: Partial<IQueryFetchBoardsArgs> | undefined
-  ) => Promise<ApolloQueryResult<Pick<IQuery, "fetchBoards">>>;
-}
-
+import * as B from "./BoardList.styles";
+import { IBoardList } from "./BoardList.types";
 const BoardListUI = ({
-  boardsArray,
   totalBoards,
   bestBoards,
   onClickCreate,
@@ -70,92 +13,66 @@ const BoardListUI = ({
   count,
 }: IBoardList) => {
   return (
-    <>
-      <Wrapper>
-        <Header>
-          <Banner>베스트 게시글</Banner>
-          <BestBoards>
-            {bestBoards?.fetchBoardsOfTheBest.map((best) => {
-              return (
-                <BestBoardLayout key={best._id} id="BestParent">
-                  <BestBoard onClick={onClickBestItem} id={best._id}>
-                    <BestBoardImg />
-                    <BestBoardInfo>
-                      <BestBoardTitle>{best.title}</BestBoardTitle>
-                      <BestBoardContents>
-                        <BestBoardProfile>
-                          <BestBoardProfileImg />
-                          <BestBoardWriter>{best.writer}</BestBoardWriter>
-                        </BestBoardProfile>
-                      </BestBoardContents>
-                    </BestBoardInfo>
-                  </BestBoard>
-                </BestBoardLayout>
-              );
-            })}
-          </BestBoards>
-        </Header>
-        <SearchBox>
-          <SearchInput
-            onChange={onChangeSearch}
-            placeholder="제목을 입력해주세요"
-          />
-          <SearchDate>
-            <StartAt type="date" />
-            <div>~</div>
-            <EndAt type="date" />
-          </SearchDate>
-          <SearchButton>검색하기</SearchButton>
-        </SearchBox>
-        <ListBox>
-          <ListHeader>
-            <ListNumber>번호</ListNumber>
-            <ListTitle>제목</ListTitle>
-            <ListWriter>작성자</ListWriter>
-            <ListCreatedAt>날짜</ListCreatedAt>
-          </ListHeader>
-          <>
-            {boardsArray?.length === 0
-              ? totalBoards?.fetchBoards.map((board: IBoard, index: number) => (
-                  <List
-                    onClick={onClickListItem}
-                    id={board._id}
-                    key={board._id}
-                  >
-                    <BoardNumber>{index + 1}</BoardNumber>
-                    <BoardTitle>{board.title}</BoardTitle>
-                    <BoardWriter>{board.writer}</BoardWriter>
-                    <BoardCreatedAt>
-                      {board.createdAt.slice(0, 10)}
-                    </BoardCreatedAt>
-                  </List>
-                ))
-              : boardsArray?.map((board: IBoardArray, index: number) => (
-                  <List
-                    onClick={onClickListItem}
-                    id={board._id}
-                    key={board._id}
-                  >
-                    <BoardNumber>{index + 1}</BoardNumber>
-                    <BoardTitle>{board.title}</BoardTitle>
-                    <BoardWriter>{board.writer}</BoardWriter>
-                    <BoardCreatedAt>
-                      {board?.createdAt?.slice(0, 10)}
-                    </BoardCreatedAt>
-                  </List>
-                ))}
-          </>
-        </ListBox>
-        <Footer>
-          <BoxForLayout></BoxForLayout>
-          <Pagination count={count} refetch={refetch} />
-          <RegisterButton onClick={onClickCreate}>
-            게시물 등록하기
-          </RegisterButton>
-        </Footer>
-      </Wrapper>
-    </>
+    <B.Wrapper>
+      <B.Header>
+        <B.Banner>베스트 게시글</B.Banner>
+        <B.BestBoards>
+          {bestBoards?.fetchBoardsOfTheBest.map((best) => {
+            return (
+              <B.BestBoardLayout key={best._id} id="BestParent">
+                <B.BestBoard onClick={onClickBestItem} id={best._id}>
+                  <B.BestBoardImg />
+                  <B.BestBoardInfo>
+                    <B.BestBoardTitle>{best.title}</B.BestBoardTitle>
+                    <B.BestBoardContents>
+                      <B.BestBoardProfile>
+                        <B.BestBoardProfileImg />
+                        <B.BestBoardWriter>{best.writer}</B.BestBoardWriter>
+                      </B.BestBoardProfile>
+                    </B.BestBoardContents>
+                  </B.BestBoardInfo>
+                </B.BestBoard>
+              </B.BestBoardLayout>
+            );
+          })}
+        </B.BestBoards>
+      </B.Header>
+      <B.SearchBox>
+        <B.SearchInput
+          onChange={onChangeSearch}
+          placeholder="제목을 입력해주세요"
+        />
+        <B.SearchDate>
+          <B.StartAt type="date" />
+          <div>~</div>
+          <B.EndAt type="date" />
+        </B.SearchDate>
+        <B.SearchButton>검색하기</B.SearchButton>
+      </B.SearchBox>
+      <B.ListBox>
+        <B.ListHeader>
+          <B.ListNumber>번호</B.ListNumber>
+          <B.ListTitle>제목</B.ListTitle>
+          <B.ListWriter>작성자</B.ListWriter>
+          <B.ListCreatedAt>날짜</B.ListCreatedAt>
+        </B.ListHeader>
+        {totalBoards?.fetchBoards.map((board: IBoard, index: number) => (
+          <B.List onClick={onClickListItem} id={board._id} key={board._id}>
+            <B.BoardNumber>{index + 1}</B.BoardNumber>
+            <B.BoardTitle>{board.title}</B.BoardTitle>
+            <B.BoardWriter>{board.writer}</B.BoardWriter>
+            <B.BoardCreatedAt>{board.createdAt.slice(0, 10)}</B.BoardCreatedAt>
+          </B.List>
+        ))}
+      </B.ListBox>
+      <B.Footer>
+        <B.BoxForLayout></B.BoxForLayout>
+        <Pagination count={count} refetch={refetch} />
+        <B.RegisterButton onClick={onClickCreate}>
+          게시물 등록하기
+        </B.RegisterButton>
+      </B.Footer>
+    </B.Wrapper>
   );
 };
-
 export default BoardListUI;

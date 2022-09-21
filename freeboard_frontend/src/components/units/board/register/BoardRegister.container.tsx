@@ -61,7 +61,6 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
       .slice(0, 8);
 
     const emptyInputExist = elements.some((input) => input.value === "");
-    console.log(elements);
     if (emptyInputExist) {
       elements.forEach((ele) => {
         const inputId: string = ele.id;

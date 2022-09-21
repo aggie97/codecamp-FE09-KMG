@@ -5,12 +5,12 @@ import FETCH_BOARDS, {
 } from "./BoardList.queries";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent } from "react";
 import {
   IQuery,
   IQueryFetchBoardsArgs,
 } from "../../../../commons/types/generated/types";
-import { IBoardArray } from "./BoardList.types";
+
 const BoardList = () => {
   const router = useRouter();
   const { data: totalBoards, refetch } = useQuery<
@@ -21,9 +21,8 @@ const BoardList = () => {
   const { data: totalBoardsCount } =
     useQuery<Pick<IQuery, "fetchBoardsCount">>(FETCH_BOARDS_COUNT);
 
-  const [titleSearch, setTitleSearch] = useState("");
-
-  const [boardsArray, setBoardsArray] = useState<IBoardArray[] | undefined>([]);
+  // const [titleSearch, setTitleSearch] = useState("");
+  // 검색 state
 
   const onClickCreate = () => {
     void router.push(`/boards/new`);
@@ -37,21 +36,10 @@ const BoardList = () => {
 
   const { data: bestBoards } =
     useQuery<Pick<IQuery, "fetchBoardsOfTheBest">>(FETCH_BEST_BOARDS);
-  // const boardsCount = useQuery(FETCH_BOARDS_COUNT);
 
-  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setTitleSearch(event.target.value);
-    const titles: IBoardArray[] | undefined = totalBoards?.fetchBoards.filter(
-      (board) => board.title.includes(event.target.value)
-    );
-
-    setBoardsArray(titles);
-  };
-
-  // const [year, month, day] = createdAt.slice(0, 10).split("-");
+  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {};
   return (
     <BoardListUI
-      boardsArray={boardsArray}
       onClickCreate={onClickCreate}
       totalBoards={totalBoards}
       bestBoards={bestBoards}

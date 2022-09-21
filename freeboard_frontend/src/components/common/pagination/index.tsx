@@ -1,12 +1,17 @@
 import { MouseEvent, useState } from "react";
 import PaginationUI from "./pagination.present";
 
-const Pagination = ({ count, refetch }) => {
+interface IPaginationProps {
+  count?: number;
+  refetch: any;
+}
+
+const Pagination = ({ count, refetch }: IPaginationProps) => {
   const [startPage, setStartPage] = useState(1);
   const [isPrevEnd, setIsPrevEnd] = useState(true);
   const [isNextEnd, setIsNextEnd] = useState(false);
 
-  const lastPage = count != null ? Math.ceil(count / 10) : 0;
+  const lastPage = count != null ? Math.ceil(count / 10) + 1 : 0;
 
   const onClickPrevPage = () => {
     if (startPage === 1) return;
@@ -20,6 +25,7 @@ const Pagination = ({ count, refetch }) => {
   };
 
   const onClickNextPage = async () => {
+    if (Math.ceil(startPage / 10) === Math.ceil(lastPage / 10)) return;
     setIsPrevEnd(false);
     if (startPage + 10 <= lastPage) {
       setStartPage((prev) => prev + 10);
@@ -38,6 +44,7 @@ const Pagination = ({ count, refetch }) => {
       onClickPrevPage={onClickPrevPage}
       onClickNextPage={onClickNextPage}
       startPage={startPage}
+      lastPage={lastPage}
       isPrevEnd={isPrevEnd}
       isNextEnd={isNextEnd}
     />

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import BoardCreateComment from "../../../src/components/units/board/newComment/BoardCommentCreate.container";
-import CommentList from "../../../src/components/units/board/commentList/BoardCommentList.container";
+import BoardCreateComment from "../../../src/components/units/comment/newComment/BoardCommentCreate.container";
+import CommentList from "../../../src/components/units/comment/commentList/BoardCommentList.container";
 import BoardDetail from "../../../src/components/units/board/detail/BoardDetail.container";
 
 const DynamicRoutedPage = () => {

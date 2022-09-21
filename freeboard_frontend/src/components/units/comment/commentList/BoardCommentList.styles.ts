@@ -78,6 +78,10 @@ export const CreateCommentTextCounter = styled.span`
   color: #bdbdbd;
 `;
 
+export const CreateCommentButtonBox = styled.div`
+  display: flex;
+`;
+
 export const CreateCommentSubmitButton = styled.button`
   padding: 0.75em 1em;
   background: black;
@@ -159,4 +163,11 @@ export const EditCommentReturnButton = styled.button`
     background: red;
     color: white;
   }
+`;
+
+export const DeleteModalInput = styled.input`
+  border: none;
+  border-bottom: 1px solid #000;
+  padding: 0.5em;
+  outline: none;
 `;

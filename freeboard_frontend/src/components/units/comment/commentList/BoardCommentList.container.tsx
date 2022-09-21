@@ -12,20 +12,10 @@ import {
   IMutationUpdateBoardCommentArgs,
   IQuery,
   IQueryFetchBoardCommentsArgs,
-  IUpdateBoardCommentInput,
 } from "../../../../commons/types/generated/types";
 
 import { Modal } from "antd";
-
-interface IRouter {
-  routerId: string;
-}
-
-interface IMyVariables {
-  boardCommentId: string;
-  password: string;
-  updateBoardCommentInput: IUpdateBoardCommentInput;
-}
+import { IMyVariables, IRouter } from "../newComment/BoardCommentCreate.types";
 
 const CommentList = ({ routerId }: IRouter) => {
   const [updateBoardComment] = useMutation<
@@ -38,7 +28,7 @@ const CommentList = ({ routerId }: IRouter) => {
     IMutationDeleteBoardCommentArgs
   >(DELETE_BOARD_COMMENT);
 
-  const { loading, data } = useQuery<
+  const { loading, data, fetchMore } = useQuery<
     Pick<IQuery, "fetchBoardComments">,
     IQueryFetchBoardCommentsArgs
   >(FETCH_BOARD_COMMENTS, {
@@ -148,6 +138,7 @@ const CommentList = ({ routerId }: IRouter) => {
           { query: FETCH_BOARD_COMMENTS, variables: { boardId: routerId } },
         ],
       });
+      setIsOpenDeleteModal((prev) => !prev);
       Modal.success({
         content: "댓글이 삭제되었습니다.",
       });
@@ -160,6 +151,27 @@ const CommentList = ({ routerId }: IRouter) => {
     }
   };
   const onClickComment = (event: any) => {};
+  console.log("!", data);
+  const onLoadMore = async () => {
+    if (data === undefined) return;
+    await fetchMore({
+      variables: {
+        page: Math.ceil(data?.fetchBoardComments.length / 10) + 1,
+        // boardId: routerId,
+      },
+      updateQuery: (prev, options) => {
+        if (options.fetchMoreResult?.fetchBoardComments === undefined) {
+          return { fetchBoardComments: [...prev.fetchBoardComments] };
+        }
+        return {
+          fetchBoardComments: [
+            ...prev.fetchBoardComments,
+            ...options.fetchMoreResult.fetchBoardComments,
+          ],
+        };
+      },
+    });
+  };
 
   return (
     <>
@@ -179,6 +191,7 @@ const CommentList = ({ routerId }: IRouter) => {
           onUpdateComment={onUpdateComment}
           onChangeEditComment={onChangeEditComment}
           onClickComment={onClickComment}
+          onLoadMore={onLoadMore}
         />
       )}
     </>
