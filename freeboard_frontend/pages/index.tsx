@@ -1,7 +1,32 @@
 import { Button, Modal } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const AntdModal = () => {
+  const options = {
+    method: "GET",
+    url: "https://datagram-products-v1.p.rapidapi.com/storeproduct/search/",
+    params: { q: "coca" },
+    headers: {
+      "X-RapidAPI-Key": "d98caaf7demsh1a64590dffddd84p1e17efjsn20222d87a5e2",
+      "X-RapidAPI-Host": "datagram-products-v1.p.rapidapi.com",
+    },
+  };
+
+  useEffect(() => {
+    const runTest = async () => {
+      axios
+        .request(options)
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    };
+    void runTest();
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {

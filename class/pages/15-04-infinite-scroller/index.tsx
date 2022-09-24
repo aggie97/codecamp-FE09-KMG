@@ -23,15 +23,19 @@ export default function StaticRoutedPage() {
   const onFetchMore = async () => {
     if (data === undefined) return;
     await fetchMore({
-      variables: { page: Math.ceil(data?.fetchBoards.length) / 10 + 1 },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (fetchMoreResult.fetchBoards === undefined) {
+      variables: { page: Math.ceil(data?.fetchBoards.length / 10) + 1 },
+      updateQuery: (prev, options) => {
+        if (options.fetchMoreResult.fetchBoards === undefined) {
           return {
             fetchBoards: [...prev.fetchBoards],
           };
         }
+        console.log(options);
         return {
-          fetchBoards: [...prev.fetchBoards, ...fetchMoreResult?.fetchBoards],
+          fetchBoards: [
+            ...prev.fetchBoards,
+            ...options.fetchMoreResult?.fetchBoards,
+          ],
         };
       },
     });
