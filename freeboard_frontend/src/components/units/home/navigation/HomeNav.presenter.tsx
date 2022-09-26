@@ -5,12 +5,20 @@ import {
   WrapperInnerRight,
 } from "./HomeNav.styles";
 
-const HomeNavigationUI = () => {
+const HomeNavigationUI = ({ idMenu, onClickMenu }) => {
   return (
     <>
       <Wrapper>
         <WrapperInner>
-          <WrapperInnerLeft>left</WrapperInnerLeft>
+          <WrapperInnerLeft>
+            <ul style={{ display: "flex", listStyle: "none", gap: "20px" }}>
+              {idMenu.map((el) => (
+                <li key={el.id} id={el.id} onClick={onClickMenu}>
+                  {el.menu}
+                </li>
+              ))}
+            </ul>
+          </WrapperInnerLeft>
           <WrapperInnerRight>right</WrapperInnerRight>
         </WrapperInner>
       </Wrapper>

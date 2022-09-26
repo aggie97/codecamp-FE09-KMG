@@ -1,13 +1,17 @@
 import styled from "@emotion/styled";
+import SimpleSlider from "../../carousel";
 
 const Wrapper = styled.div`
-  height: 200px;
+  height: 100%;
   background-color: #ffffb3;
   text-align: center;
   font-size: 3rem;
-  line-height: 200px;
 `;
 
 export default function Banner() {
-  return <Wrapper>Banner</Wrapper>;
+  return (
+    <Wrapper>
+      <SimpleSlider />
+    </Wrapper>
+  );
 }
