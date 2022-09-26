@@ -1,4 +1,4 @@
-import { SyntheticEvent, ChangeEvent } from "react";
+import React, { SyntheticEvent, ChangeEvent } from "react";
 import { IQuery } from "../../../../commons/types/generated/types";
 
 export interface IBoardRegisterProps {
@@ -31,12 +31,13 @@ export interface IInput {
 }
 
 export interface ObjectIndexable extends IInput {
-  [key: string]: string;
+  [key: string]: string | [string];
 }
 
 export interface IProps {
   onCompleteAddressSearch: (data: any) => void;
   onClickAddressSearch: () => void;
+  onClickPicture: () => void;
   onChangeInput: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -46,6 +47,7 @@ export interface IProps {
   isEmpty: boolean;
   isEdit: boolean;
   input: IInput;
+  imageRef: React.MutableRefObject<HTMLInputElement | null>;
   data?: Pick<IQuery, "fetchBoard">;
 }
 

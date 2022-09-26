@@ -1,8 +1,11 @@
 import BoardRegisterUI from "./BoardRegister.presenter";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
-import CREATE_BOARD, { UPDATE_BOARD } from "./BoardRegister.queries";
+import CREATE_BOARD, {
+  UPDATE_BOARD,
+  UPLOAD_FILE,
+} from "./BoardRegister.queries";
 import { Modal } from "antd";
 import { Address } from "react-daum-postcode";
 
@@ -15,10 +18,18 @@ import {
   IMutation,
   IMutationCreateBoardArgs,
   IMutationUpdateBoardArgs,
+  IMutationUploadFileArgs,
 } from "../../../../commons/types/generated/types";
 
 const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   const router = useRouter();
+
+  const imageRef = useRef<HTMLInputElement>(null);
+  const [uploadFile] = useMutation<
+    Pick<IMutation, "uploadFile">,
+    IMutationUploadFileArgs
+  >(UPLOAD_FILE);
+
   const [createBoard] = useMutation<
     Pick<IMutation, "createBoard">,
     IMutationCreateBoardArgs
@@ -40,7 +51,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     address: "",
     addressDetail: "",
     youtubeLink: "",
-    images: "1",
+    images: "",
   });
 
   const onClickAddressSearch = () => {
@@ -49,10 +60,11 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
 
   const onCompleteAddressSearch = (address: Address) => {
     setInput({ ...input, address: address.address, zipCode: address.zonecode });
-
     setIsOpen((prev) => !prev);
   };
+
   console.log(input);
+
   const submitForm = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const { currentTarget } = event;
@@ -167,13 +179,28 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     }
   };
 
-  const onChangeInput = (
+  const onChangeInput = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    const targetEle = event.target.id;
+  ) => {
+    if (event.target.id === "images") {
+      const file = event.target.files?.[0];
+      try {
+        const result = await uploadFile({
+          variables: { file },
+        });
+        console.log(result.data?.uploadFile.url ?? "");
+        setInput({ ...input, images: result?.data?.uploadFile?.url ?? "" });
+      } catch (error) {
+        if (error instanceof Error) console.log(error.message);
+      }
+    }
     const changedContent = event.target.value;
-    setInput({ ...input, [targetEle]: changedContent });
+    setInput({ ...input, [event.target.id]: changedContent });
     event.target.style.border = "1px solid #dddddd";
+  };
+
+  const onClickPicture = () => {
+    imageRef.current?.click();
   };
 
   return (
@@ -181,6 +208,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
       <BoardRegisterUI
         onCompleteAddressSearch={onCompleteAddressSearch}
         onClickAddressSearch={onClickAddressSearch}
+        onClickPicture={onClickPicture}
         onChangeInput={onChangeInput}
         submitForm={submitForm}
         editForm={editForm}
@@ -189,6 +217,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
         isEdit={isEdit}
         input={input}
         data={data}
+        imageRef={imageRef}
       />
     </>
   );

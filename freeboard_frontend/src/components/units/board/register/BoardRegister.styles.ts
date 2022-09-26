@@ -93,11 +93,21 @@ export const PictureBox = styled.div`
   display: flex;
   flex-direction: column;
 
-  img {
-    width: 78px;
-    height: 78px;
-    margin-right: 10px;
+  & > div {
+    display: flex;
+    gap: 10px;
   }
+`;
+
+export const Picture = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  width: 78px;
+  height: 78px;
+  background-image: url("/image 3.png");
+  cursor: pointer;
 `;
 
 export const MainSettingBox = styled.div`

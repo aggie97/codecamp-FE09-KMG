@@ -8,6 +8,7 @@ import {
   SubmitBox,
   AddressModal,
   AddressSearchInput,
+  Picture,
 } from "./BoardRegister.styles";
 import { Button } from "antd";
 
@@ -17,6 +18,7 @@ import { IProps } from "./BoardRegister.types";
 const BoardRegisterUI = ({
   onCompleteAddressSearch,
   onClickAddressSearch,
+  onClickPicture,
   onChangeInput,
   submitForm,
   editForm,
@@ -25,6 +27,7 @@ const BoardRegisterUI = ({
   isEdit,
   input,
   data,
+  imageRef,
 }: IProps) => {
   return (
     <>
@@ -101,7 +104,6 @@ const BoardRegisterUI = ({
               우편번호 검색
             </button>
           </div>
-
           <Input
             id="address"
             type="text"
@@ -139,9 +141,16 @@ const BoardRegisterUI = ({
         <PictureBox>
           <span>사진 첨부</span>
           <div>
-            <img src="/image 3.png" />
-            <img src="/image 3.png" />
-            <img src="/image 3.png" />
+            <Picture onClick={onClickPicture}>+</Picture>
+            <input
+              ref={imageRef}
+              type="file"
+              id="images"
+              onChange={onChangeInput}
+              style={{ display: "none" }}
+            />
+            <Picture>+</Picture>
+            <Picture>+</Picture>
           </div>
         </PictureBox>
         <MainSettingBox>

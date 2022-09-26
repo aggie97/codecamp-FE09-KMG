@@ -73,7 +73,8 @@ const resolvers = {
       // 실무에서는 실제로 삭제하지 않고, isDeleted 라는 컬럼이 true면 삭제되었다고 가정.
 
       // await Board.update({ number: 3 }, { deletedAt: new Date() });
-      // 언제 삭제되었는지 알기 위해, new Date() 사용 + deletedAt 유무 구분으로 삭제되었는지 안되었는지 확인도 가능
+      // 언제 삭제되었는지 알기 위해, new Date() 사용 + deletedAt 유무 구분으로
+      // 삭제되었는지 안되었는지 확인도 가능
       return "게시글 삭제 성공";
     },
   },
