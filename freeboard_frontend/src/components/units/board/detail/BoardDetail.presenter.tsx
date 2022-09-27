@@ -1,6 +1,5 @@
 import { IQuery } from "../../../../commons/types/generated/types";
 import * as B from "./BoardDetail.styles";
-import ReactPlayer from "react-player";
 interface IBoardDetailProps {
   data?: Pick<IQuery, "fetchBoard">;
   dance: boolean;

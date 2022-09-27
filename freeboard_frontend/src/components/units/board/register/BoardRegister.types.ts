@@ -7,8 +7,8 @@ export interface IBoardRegisterProps {
 }
 
 export interface IEventTarget {
-  author: string;
-  pw: string;
+  writer: string;
+  password: string;
   title: string;
   contents: string;
   zipCode: string;
@@ -19,8 +19,8 @@ export interface IEventTarget {
 }
 
 export interface IInput {
-  author: string;
-  pw: string;
+  writer: string;
+  password: string;
   title: string;
   contents: string;
   zipCode: string;

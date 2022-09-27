@@ -43,8 +43,8 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   const [isEmpty, setIsEmpty] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState<IInput>({
-    author: "",
-    pw: "",
+    writer: "",
+    password: "",
     title: "",
     contents: "",
     zipCode: "",
@@ -63,7 +63,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     setIsOpen((prev) => !prev);
   };
 
-  console.log(input);
+  console.log("input:", input);
 
   const submitForm = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -91,8 +91,8 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
         const result = await createBoard({
           variables: {
             createBoardInput: {
-              writer: input.author,
-              password: input.pw,
+              writer: input.writer,
+              password: input.password,
               title: input.title,
               contents: input.contents,
               youtubeUrl: input.youtubeLink,
@@ -124,7 +124,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
       const myVariables = {
         boardId: String(router.query.id),
         updateBoardInput: {},
-        password: input.pw,
+        password: input.password,
       };
       if (input.title)
         myVariables.updateBoardInput = {
@@ -189,14 +189,20 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
           variables: { file },
         });
         console.log(result.data?.uploadFile.url ?? "");
-        setInput({ ...input, images: result?.data?.uploadFile?.url ?? "" });
+        setInput({
+          ...input,
+          images: `https://storage.googleapis.com/${
+            result?.data?.uploadFile?.url ?? ""
+          }`,
+        });
       } catch (error) {
         if (error instanceof Error) console.log(error.message);
       }
+    } else {
+      const changedContent = event.target.value;
+      setInput({ ...input, [event.target.id]: changedContent });
+      event.target.style.border = "1px solid #dddddd";
     }
-    const changedContent = event.target.value;
-    setInput({ ...input, [event.target.id]: changedContent });
-    event.target.style.border = "1px solid #dddddd";
   };
 
   const onClickPicture = () => {

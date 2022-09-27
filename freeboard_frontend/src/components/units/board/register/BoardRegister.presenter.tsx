@@ -42,7 +42,7 @@ const BoardRegisterUI = ({
           <InputBox>
             <span>작성자</span>
             <Input
-              id="author"
+              id="writer"
               type="text"
               placeholder="이름을 적어주세요."
               // @ts-expect-error
