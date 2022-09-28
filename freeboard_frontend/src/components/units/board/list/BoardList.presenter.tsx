@@ -21,7 +21,11 @@ const BoardListUI = ({
             return (
               <B.BestBoardLayout key={best._id} id="BestParent">
                 <B.BestBoard onClick={onClickBestItem} id={best._id}>
-                  <B.BestBoardImg />
+                  <B.BestBoardImg
+                    src={`https://storage.googleapis.com/${
+                      best.images?.[0] ?? ""
+                    }`}
+                  />
                   <B.BestBoardInfo>
                     <B.BestBoardTitle>{best.title}</B.BestBoardTitle>
                     <B.BestBoardContents>
