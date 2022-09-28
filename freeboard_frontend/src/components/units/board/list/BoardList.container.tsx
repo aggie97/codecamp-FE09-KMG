@@ -5,14 +5,17 @@ import FETCH_BOARDS, {
 } from "./BoardList.queries";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { ChangeEvent, MouseEvent } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
 import {
   IQuery,
   IQueryFetchBoardsArgs,
 } from "../../../../commons/types/generated/types";
 
+import { debounce } from "lodash";
+
 const BoardList = () => {
   const router = useRouter();
+  const [keyword, setKeyword] = useState("");
   const { data: totalBoards, refetch } = useQuery<
     Pick<IQuery, "fetchBoards">,
     IQueryFetchBoardsArgs
@@ -37,7 +40,15 @@ const BoardList = () => {
   const { data: bestBoards } =
     useQuery<Pick<IQuery, "fetchBoardsOfTheBest">>(FETCH_BEST_BOARDS);
 
-  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {};
+  const getDebounceToRefetch = debounce(async (value) => {
+    await refetch({ search: value, page: 1 });
+    setKeyword(value);
+  }, 500);
+
+  const onChangeSearch = async (event: ChangeEvent<HTMLInputElement>) => {
+    await getDebounceToRefetch(event.target.value);
+  };
+
   return (
     <BoardListUI
       onClickCreate={onClickCreate}
@@ -48,6 +59,7 @@ const BoardList = () => {
       onChangeSearch={onChangeSearch}
       refetch={refetch}
       count={totalBoardsCount?.fetchBoardsCount}
+      keyword={keyword}
     />
   );
 };

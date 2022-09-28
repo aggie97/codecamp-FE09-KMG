@@ -54,7 +54,7 @@ export const BestBoardImg = styled.img`
   max-height: 110px;
   object-fit: contain;
 
-  background: ${(props) => (props.src !== "" ? "transparent" : "#ddd")};
+  background: ${(props) => (props.src?.[31] ? "transparent" : "#ddd")};
 `;
 
 export const BestBoardInfo = styled.div`
@@ -166,7 +166,7 @@ export const BoardNumber = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
-export const BoardTitle = styled.div`
+export const BoardTitle = styled.span`
   flex: 7;
   overflow: hidden;
   white-space: nowrap;

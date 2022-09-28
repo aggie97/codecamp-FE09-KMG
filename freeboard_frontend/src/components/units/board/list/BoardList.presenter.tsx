@@ -11,6 +11,7 @@ const BoardListUI = ({
   onChangeSearch,
   refetch,
   count,
+  keyword,
 }: IBoardList) => {
   return (
     <B.Wrapper>
@@ -44,7 +45,7 @@ const BoardListUI = ({
       <B.SearchBox>
         <B.SearchInput
           onChange={onChangeSearch}
-          placeholder="제목을 입력해주세요"
+          placeholder="제목으로 검색하기"
         />
         <B.SearchDate>
           <B.StartAt type="date" />
@@ -63,7 +64,22 @@ const BoardListUI = ({
         {totalBoards?.fetchBoards.map((board: IBoard, index: number) => (
           <B.List onClick={onClickListItem} id={board._id} key={board._id}>
             <B.BoardNumber>{index + 1}</B.BoardNumber>
-            <B.BoardTitle>{board.title}</B.BoardTitle>
+            <B.BoardTitle>
+              {board.title
+                .replaceAll(keyword, `åß∂ƒ${keyword}åß∂ƒ`)
+                .split("åß∂ƒ")
+                .map((word) => (
+                  <span
+                    key={board._id}
+                    style={{
+                      background: keyword === word ? "yellow" : "",
+                      color: keyword === word ? "red" : "",
+                    }}
+                  >
+                    {word}
+                  </span>
+                ))}
+            </B.BoardTitle>
             <B.BoardWriter>{board.writer}</B.BoardWriter>
             <B.BoardCreatedAt>{board.createdAt.slice(0, 10)}</B.BoardCreatedAt>
           </B.List>

@@ -1743,7 +1743,7 @@
 
 "@types/apollo-upload-client@^17.0.1":
   version "17.0.1"
-  resolved "https://registry.yarnpkg.com/@types/apollo-upload-client/-/apollo-upload-client-17.0.1.tgz#7aca38e160097162024d7b427d66168c3874ab1d"
+  resolved "https://registry.npmjs.org/@types/apollo-upload-client/-/apollo-upload-client-17.0.1.tgz"
   integrity sha512-8+JEhQdfDcauKnRhpedDAhlJoSD9hv+AJwYF3GvG7SusoGzHuoWlOsJbQXK1p1n+WJYHD4BNAZ+HtpGeIVMrpw==
   dependencies:
     "@apollo/client" "^3.6.6"
@@ -1781,6 +1781,11 @@
   integrity sha512-272FMnFGzAVMGtu9tkr29hRL6bZj4Zs1KZNeHLnKqAvp06tAIcarTMwOh8/8bz4FmKRcMxZhZNeUAQsNLoiPhg==
   dependencies:
     "@types/node" "*"
+
+"@types/lodash@^4.14.185":
+  version "4.14.185"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.185.tgz"
+  integrity sha512-evMDG1bC4rgQg4ku9tKpuMh5iBNEwNa3tf9zRHdP1qlv+1WUg44xat4IxCE14gIpZRGUUWAx2VhItCZc25NfMA==
 
 "@types/long@^4.0.1":
   version "4.0.2"

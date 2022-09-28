@@ -23,6 +23,7 @@ export interface IBoardList {
   totalBoards?: Pick<IQuery, "fetchBoards">;
   bestBoards?: Pick<IQuery, "fetchBoardsOfTheBest">;
   count?: number;
+  keyword: string;
   refetch: (
     variables?: Partial<IQueryFetchBoardsArgs> | undefined
   ) => Promise<ApolloQueryResult<Pick<IQuery, "fetchBoards">>>;
