@@ -54,7 +54,7 @@ const BoardRegisterUI = ({
           <InputBox>
             <span>비밀번호</span>
             <Input
-              id="pw"
+              id="password"
               // @ts-expect-error
               isEmpty={isEmpty}
               type="password"

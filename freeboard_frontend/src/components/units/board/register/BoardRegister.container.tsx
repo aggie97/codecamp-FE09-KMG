@@ -51,7 +51,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     address: "",
     addressDetail: "",
     youtubeLink: "",
-    images: "",
+    images: [""],
   });
 
   const onClickAddressSearch = () => {
@@ -101,7 +101,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
                 address: input.address,
                 addressDetail: input.addressDetail,
               },
-              images: [input.images],
+              images: input.images,
             },
           },
         });
@@ -188,12 +188,10 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
         const result = await uploadFile({
           variables: { file },
         });
-        console.log(result.data?.uploadFile.url ?? "");
+        console.log(result);
         setInput({
           ...input,
-          images: `https://storage.googleapis.com/${
-            result?.data?.uploadFile?.url ?? ""
-          }`,
+          images: [result?.data?.uploadFile?.url ?? ""],
         });
       } catch (error) {
         if (error instanceof Error) console.log(error.message);

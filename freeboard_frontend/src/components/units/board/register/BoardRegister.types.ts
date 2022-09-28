@@ -27,11 +27,11 @@ export interface IInput {
   address: string;
   addressDetail: string;
   youtubeLink: string;
-  images: string;
+  images: string[];
 }
 
 export interface ObjectIndexable extends IInput {
-  [key: string]: string | [string];
+  [key: string]: string | string[];
 }
 
 export interface IProps {

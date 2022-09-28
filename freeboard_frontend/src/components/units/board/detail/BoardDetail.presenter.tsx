@@ -84,7 +84,11 @@ const BoardDetailUI = ({
               <B.Main id="main-content-box">
                 <B.Title id="title">{data?.fetchBoard?.title}</B.Title>
                 <B.MainImgBox id="image-box">
-                  <B.MainImage src={String(data?.fetchBoard?.images)} />
+                  <B.MainImage
+                    src={`https://storage.googleapis.com/${
+                      data?.fetchBoard.images?.[0] ?? ""
+                    }`}
+                  />
                 </B.MainImgBox>
                 <B.MainContent id="contents">
                   {data?.fetchBoard?.contents}
