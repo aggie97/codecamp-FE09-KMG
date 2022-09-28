@@ -11,7 +11,7 @@ const Pagination = ({ count, refetch }: IPaginationProps) => {
   const [isPrevEnd, setIsPrevEnd] = useState(true);
   const [isNextEnd, setIsNextEnd] = useState(false);
 
-  const lastPage = count != null ? Math.ceil(count / 10) + 1 : 0;
+  const lastPage = count != null ? Math.ceil(count / 10) : 0;
 
   const onClickPrevPage = () => {
     if (startPage === 1) return;

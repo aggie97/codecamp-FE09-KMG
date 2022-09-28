@@ -2,8 +2,9 @@ import styled from "@emotion/styled";
 
 export const PaginationWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  min-width: 520px;
 `;
 
 export const PaginationUl = styled.ul`

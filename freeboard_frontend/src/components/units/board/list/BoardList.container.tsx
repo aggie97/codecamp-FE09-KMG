@@ -21,7 +21,10 @@ const BoardList = () => {
     IQueryFetchBoardsArgs
   >(FETCH_BOARDS);
 
-  const { data: totalBoardsCount } =
+  const { data: bestBoards } =
+    useQuery<Pick<IQuery, "fetchBoardsOfTheBest">>(FETCH_BEST_BOARDS);
+
+  const { data: totalBoardsCount, refetch: refetchCount } =
     useQuery<Pick<IQuery, "fetchBoardsCount">>(FETCH_BOARDS_COUNT);
 
   // const [titleSearch, setTitleSearch] = useState("");
@@ -37,17 +40,17 @@ const BoardList = () => {
     void router.push(`/boards/${event.currentTarget.id}`);
   };
 
-  const { data: bestBoards } =
-    useQuery<Pick<IQuery, "fetchBoardsOfTheBest">>(FETCH_BEST_BOARDS);
-
   const getDebounceToRefetch = debounce(async (value) => {
     await refetch({ search: value, page: 1 });
+    await refetchCount({ search: value });
     setKeyword(value);
   }, 500);
 
   const onChangeSearch = async (event: ChangeEvent<HTMLInputElement>) => {
     await getDebounceToRefetch(event.target.value);
   };
+
+  console.log(totalBoardsCount?.fetchBoardsCount);
 
   return (
     <BoardListUI

@@ -1,3 +1,4 @@
+import { uniqueId } from "lodash";
 import { IBoard } from "../../../../commons/types/generated/types";
 import Pagination from "../../../common/pagination";
 import * as B from "./BoardList.styles";
@@ -52,7 +53,6 @@ const BoardListUI = ({
           <div>~</div>
           <B.EndAt type="date" />
         </B.SearchDate>
-        <B.SearchButton>검색하기</B.SearchButton>
       </B.SearchBox>
       <B.ListBox>
         <B.ListHeader>
@@ -70,7 +70,7 @@ const BoardListUI = ({
                 .split("åß∂ƒ")
                 .map((word) => (
                   <span
-                    key={board._id}
+                    key={uniqueId()}
                     style={{
                       background: keyword === word ? "yellow" : "",
                       color: keyword === word ? "red" : "",
