@@ -32,7 +32,13 @@ const PaginationUI = ({
   return (
     <PaginationWrapper>
       <PaginationUl>
-        <LeftOutlined disabled={isPrevEnd} onClick={onClickPrevPage} />
+        <LeftOutlined
+          style={{
+            color: isPrevEnd ? "#ddd" : "#222",
+          }}
+          disabled={isPrevEnd}
+          onClick={onClickPrevPage}
+        />
         {new Array(10).fill(1).map((_, index) => {
           return (
             startPage + index <= lastPage && (
@@ -50,7 +56,13 @@ const PaginationUI = ({
             )
           );
         })}
-        <RightOutlined disabled={isNextEnd} onClick={onClickNextPage} />
+        <RightOutlined
+          style={{
+            color: isNextEnd ? "#ddd" : "#222",
+          }}
+          disabled={isNextEnd}
+          onClick={onClickNextPage}
+        />
       </PaginationUl>
     </PaginationWrapper>
   );

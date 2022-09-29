@@ -47,7 +47,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     password: "",
     title: "",
     contents: "",
-    zipCode: "",
+    zipcode: "",
     address: "",
     addressDetail: "",
     youtubeLink: "",
@@ -59,7 +59,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   };
 
   const onCompleteAddressSearch = (address: Address) => {
-    setInput({ ...input, address: address.address, zipCode: address.zonecode });
+    setInput({ ...input, address: address.address, zipcode: address.zonecode });
     setIsOpen((prev) => !prev);
   };
 
@@ -95,12 +95,12 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
               password: input.password,
               title: input.title,
               contents: input.contents,
-              youtubeUrl: input.youtubeLink,
               boardAddress: {
-                zipcode: input.zipCode,
                 address: input.address,
                 addressDetail: input.addressDetail,
+                zipcode: input.zipcode,
               },
+              youtubeUrl: input.youtubeLink,
               images: input.images,
             },
           },
@@ -141,10 +141,10 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
           ...myVariables.updateBoardInput,
           youtubeUrl: input.youtubeLink,
         };
-      if (input.zipCode)
+      if (input.zipcode)
         myVariables.updateBoardInput = {
           ...myVariables.updateBoardInput,
-          boardAddress: { zipcode: input.zipCode },
+          boardAddress: { zipcode: input.zipcode },
         };
 
       if (input.address)

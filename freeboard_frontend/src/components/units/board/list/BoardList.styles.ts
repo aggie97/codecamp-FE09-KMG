@@ -53,8 +53,7 @@ export const BestBoardImg = styled.img`
   flex: 1;
   max-height: 110px;
   object-fit: contain;
-
-  background: ${(props) => (props.src?.[31] ? "transparent" : "#ddd")};
+  background: #eee;
 `;
 
 export const BestBoardInfo = styled.div`

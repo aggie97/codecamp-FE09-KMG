@@ -47,8 +47,7 @@ const BoardDetailUI = ({
                       {data?.fetchBoard?.createdAt
                         .split("T")
                         .join(" ")
-                        .slice(0, 16)
-                        .replaceAll(":", " : ")}
+                        .slice(0, 16)}
                     </B.CreatedDate>
                   </B.WriterAndCreatedDateBox>
                 </B.HeaderLeftBox>

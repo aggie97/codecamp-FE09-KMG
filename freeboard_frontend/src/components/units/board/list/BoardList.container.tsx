@@ -50,8 +50,6 @@ const BoardList = () => {
     await getDebounceToRefetch(event.target.value);
   };
 
-  console.log(totalBoardsCount?.fetchBoardsCount);
-
   return (
     <BoardListUI
       onClickCreate={onClickCreate}

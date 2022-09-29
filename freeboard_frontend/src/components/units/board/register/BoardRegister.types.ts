@@ -11,7 +11,7 @@ export interface IEventTarget {
   password: string;
   title: string;
   contents: string;
-  zipCode: string;
+  zipcode: string;
   address: string;
   addressDetail: string;
   youtubeLink: string;
@@ -23,7 +23,7 @@ export interface IInput {
   password: string;
   title: string;
   contents: string;
-  zipCode: string;
+  zipcode: string;
   address: string;
   addressDetail: string;
   youtubeLink: string;

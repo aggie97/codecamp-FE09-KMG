@@ -90,14 +90,14 @@ const BoardRegisterUI = ({
           <span>주소</span>
           <div>
             <Input
-              id="zipCode"
+              id="zipcode"
               type="text"
               readOnly
               placeholder="07250"
               // @ts-expect-error
               isEmpty={isEmpty}
               value={
-                input.zipCode || (data?.fetchBoard?.boardAddress?.zipcode ?? "")
+                input.zipcode || (data?.fetchBoard?.boardAddress?.zipcode ?? "")
               }
             />
             <button type="button" onClick={onClickAddressSearch}>
@@ -141,6 +141,9 @@ const BoardRegisterUI = ({
         <PictureBox>
           <span>사진 첨부</span>
           <div>
+            {new Array(3).fill(1).map((img) => {
+              <Picture>{/* <img src={isEdit ? ``} /> */}</Picture>;
+            })}
             <Picture onClick={onClickPicture}>+</Picture>
             <input
               ref={imageRef}
