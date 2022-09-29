@@ -39,7 +39,8 @@ export const HamburgerButton = styled.button`
   }
 `;
 
-export const Logo = styled.h1`
+export const Logo = styled.span`
+  display: block;
   background-image: url("/11pnges.png");
   background-position: -162px 0px;
   width: 94px;

@@ -1,9 +1,8 @@
+import Logo from "../../../common/logo";
 import {
   Best,
   HamburgerBox,
   HamburgerButton,
-  HomeLink,
-  Logo,
   MyCart,
   MyInfo,
   MyLately,
@@ -27,9 +26,7 @@ const HomeHeaderUI = () => {
           <HamburgerBox id="hamburger">
             <HamburgerButton></HamburgerButton>
           </HamburgerBox>
-          <Logo id="logo">
-            <HomeLink href="/"></HomeLink>
-          </Logo>
+          <Logo />
           <SearchBox id="search">
             <SearchGlobal>통합검색</SearchGlobal>
             <SearchInput type="text" />
