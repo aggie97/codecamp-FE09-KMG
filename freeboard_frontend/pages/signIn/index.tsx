@@ -1,7 +1,7 @@
-import SignInPage from "../../src/components/units/signIn";
+import SignIn from "../../src/components/units/signIn";
 
-const signInPage = () => {
-  return <SignInPage />;
+const SignInPage = () => {
+  return <SignIn />;
 };
 
-export default signInPage;
+export default SignInPage;

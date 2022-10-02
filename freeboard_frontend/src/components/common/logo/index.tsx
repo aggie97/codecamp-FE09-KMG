@@ -1,4 +1,7 @@
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { isLoginPageState } from "../../../commons/store";
 
 export const LogoIcon = styled.span`
   display: block;
@@ -17,9 +20,15 @@ export const HomeLink = styled.a`
 `;
 
 const Logo = () => {
+  const router = useRouter();
+  const [, setIsLoginPage] = useRecoilState(isLoginPageState);
+  const onClickLogo = async () => {
+    setIsLoginPage(false);
+    await router.push("/");
+  };
   return (
     <LogoIcon>
-      <HomeLink href="/"></HomeLink>
+      <HomeLink onClick={onClickLogo}></HomeLink>
     </LogoIcon>
   );
 };

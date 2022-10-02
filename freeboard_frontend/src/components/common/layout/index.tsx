@@ -1,12 +1,11 @@
 import Footer from "./footer";
-import Banner from "./banner";
 import Header from "./header";
 import Navigation from "./navigation";
 import { useRecoilState } from "recoil";
 import { isLoginPageState } from "../../../commons/store";
 
 const Layout = ({ children }) => {
-  const [isLoginPage, setIsLoginPage] = useRecoilState(isLoginPageState);
+  const [isLoginPage] = useRecoilState(isLoginPageState);
   return (
     <>
       {isLoginPage ? (
@@ -15,7 +14,6 @@ const Layout = ({ children }) => {
         <>
           <Header />
           <Navigation />
-          <Banner />
           <div>{children}</div>
           <Footer />
         </>

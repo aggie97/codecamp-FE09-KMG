@@ -1,15 +1,16 @@
 import styled from "@emotion/styled";
 
 const Wrapper = styled.div`
-  height: 100px;
-  background-color: blue;
-  line-height: 100px;
+  width: 100%;
+  min-height: 300px;
+  background-color: #fcfcfc;
+
   text-align: center;
   font-size: 3rem;
 `;
 
 const Footer = () => {
-  return <Wrapper>Footer</Wrapper>;
+  return <Wrapper></Wrapper>;
 };
 
 export default Footer;

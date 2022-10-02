@@ -1,8 +1,14 @@
 import { gql, useMutation } from "@apollo/client";
 import styled from "@emotion/styled";
+import { Modal } from "antd";
+import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { isLoginPageState } from "../../../commons/store";
+import {
+  accessTokenState,
+  isLoggedInUserState,
+  isLoginPageState,
+} from "../../../commons/store";
 import {
   IMutation,
   IMutationLoginUserArgs,
@@ -11,7 +17,7 @@ import Logo from "../../common/logo";
 
 const LOGIN_USER = gql`
   mutation loginUser($email: String!, $password: String!) {
-    loginUser(eamil: $email, password: $password) {
+    loginUser(email: $email, password: $password) {
       accessToken
     }
   }
@@ -19,15 +25,24 @@ const LOGIN_USER = gql`
 
 // 뒤로가기 시, 리코일 스테이트 변경시켜야함...!
 
-const SignInPage = () => {
-  const [isLogInPage, setIsLoginPage] = useRecoilState(isLoginPageState);
-  const result = window.history.state;
-  console.log("!", result);
+const SignIn = () => {
+  const router = useRouter();
+  const [, setIsLoginPage] = useRecoilState(isLoginPageState);
+  const [, setIsLoggedInUser] = useRecoilState(isLoggedInUserState);
+  useEffect(() => {
+    router.beforePopState(({ as }) => {
+      if (as !== "/logIn") {
+        setIsLoginPage(false);
+        return true;
+      }
+    });
+  }, []);
+  const [, setToken] = useRecoilState(accessTokenState);
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
-  const [isPasswordMasked, setIsMaskedPassword] = useState(false);
+  const [isPasswordMasked, setIsMaskedPassword] = useState(true);
 
   const [loginUser] = useMutation<
     Pick<IMutation, "loginUser">,
@@ -41,9 +56,30 @@ const SignInPage = () => {
   const onClickLoginButton = async () => {
     console.log("login test");
     // 로그인 뮤테이션 전송
-    // const result = loginUser({
-    //   variables: { ...input },
-    // });
+    if (input.email && input.password) {
+      try {
+        const result = await loginUser({
+          variables: { ...input },
+        });
+        console.log(result);
+        const accessToken = result.data?.loginUser.accessToken;
+        if (!accessToken) {
+          Modal.error({ content: "로그인을 해주세요." });
+          return;
+        }
+        setToken(accessToken);
+        setIsLoggedInUser(true);
+        Modal.success({ content: "로그인이 완료되었습니다." });
+        setIsLoginPage(false);
+
+        await router.push("/");
+      } catch (error) {
+        if (error instanceof Error) Modal.error({ content: error.message });
+      }
+    } else {
+      if (input.email) Modal.error({ content: "비밀번호를 입력해주세요." });
+      else Modal.error({ content: "이메일을 입력해주세요." });
+    }
   };
 
   const onClickToggleLabel = () => {
@@ -63,10 +99,12 @@ const SignInPage = () => {
           <Password
             onChange={onChangeLoginInput}
             placeholder="비밀번호는 8자~20자"
-            type={isPasswordMasked ? "text" : "password"}
+            type={isPasswordMasked ? "password" : "text"}
             id="password"
           />
-          <ToggleLabel onClick={onClickToggleLabel}>비밀번호 보기</ToggleLabel>
+          <ToggleLabel onClick={onClickToggleLabel}>
+            {isPasswordMasked ? "비밀번호 보기" : "가리기"}
+          </ToggleLabel>
         </PasswordWrapper>
         <LoginButton onClick={onClickLoginButton}>로그인</LoginButton>
       </FormWrapper>
@@ -74,7 +112,7 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default SignIn;
 
 export const SignPageWrapper = styled.div`
   /* width: 100%; */
@@ -117,10 +155,13 @@ export const Password = styled.input`
 export const ToggleLabel = styled.label`
   position: absolute;
   top: 0;
-  left: 240px;
+  left: 220px;
   line-height: 45px;
   font-size: 14px;
+  font-weight: 400;
+  width: 100px;
   cursor: pointer;
+  text-align: end;
 `;
 
 export const LoginButton = styled.button`

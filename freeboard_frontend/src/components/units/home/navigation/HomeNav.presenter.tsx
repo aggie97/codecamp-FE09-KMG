@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import {
   Wrapper,
   WrapperInner,
@@ -5,7 +6,11 @@ import {
   WrapperInnerRight,
 } from "./HomeNav.styles";
 
-const HomeNavigationUI = ({ menu, onClickMenu, sign }) => {
+interface INavProps {
+  onClickMenu: (event: MouseEvent<HTMLLIElement>) => void;
+}
+
+const HomeNavigationUI = ({ menu, onClickMenu, sign }: INavProps) => {
   return (
     <>
       <Wrapper>
