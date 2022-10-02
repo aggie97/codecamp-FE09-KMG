@@ -5,11 +5,15 @@ import {
   ApolloLink,
 } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
+import { useRecoilState } from "recoil";
+import { loginToken } from "../../../commons/store";
 
 const GLOBAL_STATE = new InMemoryCache();
-const ApolloSettings = ({ children }: JSX.Element) => {
+const ApolloSettings = ({ children }: any) => {
+  const [token, setLoginToken] = useRecoilState(loginToken);
   const uploadLink = createUploadLink({
     uri: "http://backend09.codebootcamp.co.kr/graphql",
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   const client = new ApolloClient({
