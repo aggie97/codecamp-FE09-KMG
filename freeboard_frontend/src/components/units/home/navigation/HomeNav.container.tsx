@@ -42,9 +42,9 @@ const HomeNavigation = () => {
   ];
 
   const onClickMenu = async (event: MouseEvent<HTMLLIElement>) => {
-    // if (event.currentTarget.id === "signIn") {
-    setIsLoginPage(true);
-    // }
+    if (event.currentTarget.id.includes("sign")) {
+      setIsLoginPage(true);
+    }
     await router.push(`/${String(event.currentTarget.id)}`);
   };
 

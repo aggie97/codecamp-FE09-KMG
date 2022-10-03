@@ -6,6 +6,7 @@ import { isLoginPageState } from "../../../commons/store";
 
 const Layout = ({ children }) => {
   const [isLoginPage] = useRecoilState(isLoginPageState);
+  console.log(isLoginPage);
   return (
     <>
       {isLoginPage ? (
