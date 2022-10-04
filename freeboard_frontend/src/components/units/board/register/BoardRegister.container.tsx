@@ -1,5 +1,5 @@
 import BoardRegisterUI from "./BoardRegister.presenter";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
 import CREATE_BOARD, {
@@ -53,6 +53,12 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     youtubeLink: "",
     images: [""],
   });
+
+  useEffect(() => {
+    if (isEdit) {
+      setInput({ ...input, images: data?.fetchBoard.images });
+    }
+  }, []);
 
   const onClickAddressSearch = () => {
     setIsOpen((prev) => !prev);
@@ -184,15 +190,25 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   ) => {
     if (event.target.id === "images") {
       const file = event.target.files?.[0];
+
       try {
         const result = await uploadFile({
           variables: { file },
         });
-        console.log(result);
-        setInput({
-          ...input,
-          images: [result?.data?.uploadFile?.url ?? ""],
-        });
+        const imgUrl = result.data?.uploadFile.url ?? "";
+        if (input.images[0].length) {
+          if (input.images.length > 2) {
+            setInput({
+              ...input,
+              images: [imgUrl, input.images[0], input.images[1]],
+            });
+          } else {
+            setInput({
+              ...input,
+              images: [...input.images, imgUrl],
+            });
+          }
+        } else setInput({ ...input, images: [imgUrl] });
       } catch (error) {
         if (error instanceof Error) console.log(error.message);
       }

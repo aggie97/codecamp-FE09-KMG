@@ -14,6 +14,7 @@ import { Button } from "antd";
 
 import styled from "@emotion/styled";
 import { IProps } from "./BoardRegister.types";
+import { uniqueId } from "lodash";
 
 const BoardRegisterUI = ({
   onCompleteAddressSearch,
@@ -141,19 +142,28 @@ const BoardRegisterUI = ({
         <PictureBox>
           <span>사진 첨부</span>
           <div>
-            {new Array(3).fill(1).map((img) => {
-              <Picture>{/* <img src={isEdit ? ``} /> */}</Picture>;
-            })}
-            <Picture onClick={onClickPicture}>+</Picture>
-            <input
-              ref={imageRef}
-              type="file"
-              id="images"
-              onChange={onChangeInput}
-              style={{ display: "none" }}
-            />
-            <Picture>+</Picture>
-            <Picture>+</Picture>
+            {new Array(3).fill(1).map((_, i) => (
+              <>
+                <Picture onClick={onClickPicture} key={uniqueId()}>
+                  {input.images?.[i] ? (
+                    <img
+                      width={78}
+                      height={78}
+                      src={`https://storage.googleapis.com/${input.images[i]}`}
+                    />
+                  ) : (
+                    "+"
+                  )}
+                </Picture>
+                <input
+                  ref={imageRef}
+                  type="file"
+                  id="images"
+                  onChange={onChangeInput}
+                  style={{ display: "none" }}
+                />
+              </>
+            ))}
           </div>
         </PictureBox>
         <MainSettingBox>
@@ -171,7 +181,7 @@ const BoardRegisterUI = ({
           <div></div>
         </MainSettingBox>
         <SubmitBox>
-          <button>
+          <button style={{ border: "1px solid skyblue", borderRadius: "5px" }}>
             <Button
               style={{
                 padding: "1em 2em",
