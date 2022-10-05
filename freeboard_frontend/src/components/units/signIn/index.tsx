@@ -2,18 +2,19 @@ import { gql, useMutation } from "@apollo/client";
 import styled from "@emotion/styled";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import {
-  accessTokenState,
-  isLoggedInUserState,
-  isLoginPageState,
-} from "../../../commons/store";
+import { accessTokenState, isLoggedInUserState } from "../../../commons/store";
 import {
   IMutation,
   IMutationLoginUserArgs,
 } from "../../../commons/types/generated/types";
 import Logo from "../../common/logo";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import CommonError from "../../common/error";
+import Button from "../../common/button";
 
 const LOGIN_USER = gql`
   mutation loginUser($email: String!, $password: String!) {
@@ -23,25 +24,27 @@ const LOGIN_USER = gql`
   }
 `;
 
-// 뒤로가기 시, 리코일 스테이트 변경시켜야함...!
+const MySchema = yup.object({
+  email: yup.string().required("필수 입력란입니다."),
+  password: yup
+    .string()
+    .matches(
+      /^.*(?=^.{3,12}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/,
+      "영문, 숫자, 특수문자를 포함한 12자 이내로 입력해주세요."
+    )
+    .required("필수 입력란입니다."),
+});
 
 const SignIn = () => {
   const router = useRouter();
-  const [, setIsLoginPage] = useRecoilState(isLoginPageState);
+  const { register, handleSubmit, formState } = useForm<IMutationLoginUserArgs>(
+    {
+      resolver: yupResolver(MySchema),
+      mode: "onSubmit",
+    }
+  );
   const [, setIsLoggedInUser] = useRecoilState(isLoggedInUserState);
-  useEffect(() => {
-    router.beforePopState(({ as }) => {
-      if (as !== "/logIn") {
-        setIsLoginPage(false);
-        return true;
-      }
-    });
-  }, []);
   const [, setToken] = useRecoilState(accessTokenState);
-  const [input, setInput] = useState({
-    email: "",
-    password: "",
-  });
   const [isPasswordMasked, setIsMaskedPassword] = useState(true);
 
   const [loginUser] = useMutation<
@@ -49,36 +52,27 @@ const SignIn = () => {
     IMutationLoginUserArgs
   >(LOGIN_USER);
 
-  const onChangeLoginInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput({ ...input, [event.target.id]: event.target.value });
-  };
-
-  const onClickLoginButton = async () => {
+  const onSubmit = async (formData: IMutationLoginUserArgs) => {
     console.log("login test");
     // 로그인 뮤테이션 전송
-    if (input.email && input.password) {
-      try {
-        const result = await loginUser({
-          variables: { ...input },
-        });
-        console.log(result);
-        const accessToken = result.data?.loginUser.accessToken;
-        if (!accessToken) {
-          Modal.error({ content: "로그인을 해주세요." });
-          return;
-        }
-        setToken(accessToken);
-        setIsLoggedInUser(true);
-        Modal.success({ content: "로그인이 완료되었습니다." });
-        setIsLoginPage(false);
 
-        await router.push("/");
-      } catch (error) {
-        if (error instanceof Error) Modal.error({ content: error.message });
+    try {
+      const result = await loginUser({
+        variables: { ...formData },
+      });
+      console.log(result);
+      const accessToken = result.data?.loginUser.accessToken;
+      if (!accessToken) {
+        Modal.error({ content: "로그인을 해주세요." });
+        return;
       }
-    } else {
-      if (input.email) Modal.error({ content: "비밀번호를 입력해주세요." });
-      else Modal.error({ content: "이메일을 입력해주세요." });
+      setToken(accessToken);
+      setIsLoggedInUser(true);
+      Modal.success({ content: "로그인이 완료되었습니다." });
+
+      await router.push("/");
+    } catch (error) {
+      if (error instanceof Error) Modal.error({ content: error.message });
     }
   };
 
@@ -88,26 +82,34 @@ const SignIn = () => {
   return (
     <SignPageWrapper>
       <Logo />
-      <FormWrapper>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <Email
-          onChange={onChangeLoginInput}
-          placeholder="이메일"
+          placeholder="이메일을 입력해주세요."
           type="email"
           id="email"
+          {...register("email")}
         />
+        <CommonError>{formState.errors.email?.message}</CommonError>
         <PasswordWrapper>
           <Password
-            onChange={onChangeLoginInput}
-            placeholder="비밀번호는 8자~20자"
+            placeholder="비밀번호를 입력해주세요."
+            {...register("password")}
             type={isPasswordMasked ? "password" : "text"}
             id="password"
           />
+          <CommonError>{formState.errors.password?.message}</CommonError>
           <ToggleLabel onClick={onClickToggleLabel}>
             {isPasswordMasked ? "비밀번호 보기" : "가리기"}
           </ToggleLabel>
         </PasswordWrapper>
-        <LoginButton onClick={onClickLoginButton}>로그인</LoginButton>
+        <Button>로그인</Button>
       </FormWrapper>
+      <div>
+        <p>회원이 아니신가요?</p>
+        <MoveToSignUp onClick={async () => await router.push("/signUp")}>
+          회원가입 하러가기
+        </MoveToSignUp>
+      </div>
     </SignPageWrapper>
   );
 };
@@ -125,7 +127,7 @@ export const SignPageWrapper = styled.div`
   gap: 40px;
 `;
 
-export const FormWrapper = styled.div`
+export const FormWrapper = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -164,12 +166,8 @@ export const ToggleLabel = styled.label`
   text-align: end;
 `;
 
-export const LoginButton = styled.button`
-  border: 1px solid #ff0038;
-  background-color: #ff0038;
-  color: white;
-  padding: 10px 1em;
-  font-size: 15px;
-  font-weight: 400;
-  cursor: pointer;
+export const MoveToSignUp = styled.a`
+  &:hover {
+    text-decoration: underline;
+  }
 `;

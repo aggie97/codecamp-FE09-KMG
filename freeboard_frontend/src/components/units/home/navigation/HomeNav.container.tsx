@@ -2,10 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 import { useRecoilState } from "recoil";
-import {
-  isLoggedInUserState,
-  isLoginPageState,
-} from "../../../../commons/store";
+import { isLoggedInUserState } from "../../../../commons/store";
 import { IQuery } from "../../../../commons/types/generated/types";
 import HomeNavigationUI from "./HomeNav.presenter";
 
@@ -21,7 +18,6 @@ const FETCH_USER_LOGGED_IN = gql`
 
 const HomeNavigation = () => {
   const router = useRouter();
-  const [, setIsLoginPage] = useRecoilState(isLoginPageState);
   const [isLoggedInUser] = useRecoilState(isLoggedInUserState);
   console.log(isLoggedInUser ? "환영합니다." : "누구세요?");
   const { data } =
@@ -42,9 +38,6 @@ const HomeNavigation = () => {
   ];
 
   const onClickMenu = async (event: MouseEvent<HTMLLIElement>) => {
-    if (event.currentTarget.id.includes("sign")) {
-      setIsLoginPage(true);
-    }
     await router.push(`/${String(event.currentTarget.id)}`);
   };
 

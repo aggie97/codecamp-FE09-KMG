@@ -2,7 +2,7 @@ import { gql, useMutation } from "@apollo/client";
 import styled from "@emotion/styled";
 import { Button, Modal } from "antd";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { isLoginPageState } from "../../../commons/store";
 import {
@@ -10,7 +10,6 @@ import {
   IMutationCreateUserArgs,
 } from "../../../commons/types/generated/types";
 import Input from "../../common/input";
-import Logo from "../../common/logo";
 
 const CREATE_USER = gql`
   mutation createUser($createUserInput: CreateUserInput!) {
@@ -25,7 +24,7 @@ const CREATE_USER = gql`
 
 const SignUp = () => {
   const router = useRouter();
-  const [, setIsLoginPage] = useRecoilState(isLoginPageState);
+  const inputRef = useRef(null);
   const [createUser] = useMutation<
     Pick<IMutation, "createUser">,
     IMutationCreateUserArgs
@@ -39,12 +38,7 @@ const SignUp = () => {
   const [passwordSame, setPasswordSame] = useState("");
 
   useEffect(() => {
-    router.beforePopState(({ as }) => {
-      if (as !== "/logIn" || as !== "/singUp") {
-        setIsLoginPage(false);
-        return true;
-      }
-    });
+    inputRef.current?.focus();
   }, []);
 
   const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -78,11 +72,16 @@ const SignUp = () => {
   return (
     <SignUpPageWrapper>
       <Header>
-        <Logo />
         <Title>회원가입</Title>
       </Header>
       <FormWrapper>
-        이메일 <Input onChange={onChangeInput} type="text" id="email" />
+        이메일{" "}
+        <EmailInput
+          onChange={onChangeInput}
+          type="text"
+          id="email"
+          ref={inputRef}
+        />
         비밀번호{" "}
         <Input onChange={onChangeInput} type="password" id="password" />
         비밀번호 확인 <Input onChange={onChangePwSame} type="password" />
@@ -122,5 +121,19 @@ export const FormWrapper = styled.div`
   flex-direction: column;
   & > input {
     margin-bottom: 1em;
+  }
+`;
+
+export const EmailInput = styled.input`
+  position: relative;
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 10px 1em;
+  font-size: 15px;
+  font-weight: 400;
+  outline: none;
+  transition: border 0.3s ease;
+  &:focus {
+    border: 1px solid skyblue;
   }
 `;

@@ -6,8 +6,15 @@ import {
   WrapperInnerRight,
 } from "./HomeNav.styles";
 
+interface IIdMenuProps {
+  id: string;
+  menu: string;
+}
+
 interface INavProps {
   onClickMenu: (event: MouseEvent<HTMLLIElement>) => void;
+  menu: IIdMenuProps[];
+  sign: IIdMenuProps[];
 }
 
 const HomeNavigationUI = ({ menu, onClickMenu, sign }: INavProps) => {

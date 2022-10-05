@@ -1,56 +1,74 @@
 import Banner from "../src/components/common/layout/banner";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import styled from "@emotion/styled";
-import ContentsPage from "../src/components/units/home/contents/Contents.container";
+import { gql, useQuery } from "@apollo/client";
+import {
+  IQuery,
+  IQueryFetchUseditemsArgs,
+  IUseditem,
+} from "../src/commons/types/generated/types";
+import Button from "../src/components/common/button";
 
 // const MY_11ST_API_KEY = "2b25e80987bcd209bca5ed6a64832e7f";
 
+const FETCH_USED_ITEMS = gql`
+  query {
+    fetchUseditems {
+      _id
+      name
+      contents
+      price
+      images
+      pickedCount
+    }
+  }
+`;
+
+type IItems = Array<
+  Pick<
+    IUseditem,
+    "_id" | "contents" | "images" | "name" | "price" | "pickedCount"
+  >
+>;
+
 const Home = () => {
-  const [data, setData] = useState([]);
+  const { data: itemsData } = useQuery<
+    Pick<IQuery, "fetchUseditems">,
+    IQueryFetchUseditemsArgs
+  >(FETCH_USED_ITEMS);
 
-  useEffect(() => {
-    const getDogs = async () => {
-      const result = await axios.get(
-        "https://dog.ceo/api/breeds/image/random/30"
-      );
-      setData(result.data.message);
-    };
-
-    void getDogs();
-  }, []);
-
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     const result = await axios.get(
-  //       `http://openapi.11st.co.kr/openapi/OpenApiService.tmall?key=${MY_11ST_API_KEY}&apiCode=ProductSearch&keyword=phone`
-  //     );
-  //     console.log(result);
-  //   };
-  //   void getProducts();
-  // }, []);
+  const onClickCart = (item: IUseditem) => () => {
+    console.log(item);
+    const items: IItems = JSON.parse(localStorage.getItem("useditems") ?? "[]");
+    const temp = items.filter((el) => el._id === item._id);
+    if (temp.length === 1) {
+      alert("이미 담으신 물품입니다!!!");
+      return;
+    }
+    items.push(item);
+    localStorage.setItem("useditems", JSON.stringify(items));
+  };
 
   return (
     <>
       <Banner />
-      <ImageWrapper style={{ margin: "0 auto", width: "1240px" }}>
-        {data.map((dog, i) => (
+      <ProductWrapper style={{ margin: "0 auto", width: "1240px" }}>
+        {itemsData?.fetchUseditems.map((item, i) => (
           <ProductCard key={i}>
             <div style={{ overflow: "hidden" }}>
-              <ProductImg width={220} height={220} src={dog} />
+              <ProductImg src={item.images?.[0]} />
+              <ProductInfo>{item.contents}</ProductInfo>
+              <Button onClick={onClickCart(item)}>카트에 담기</Button>
             </div>
-            <ProductInfo>제품 설명</ProductInfo>
           </ProductCard>
         ))}
-      </ImageWrapper>
-      <ContentsPage />
+      </ProductWrapper>
     </>
   );
 };
 
 export default Home;
 
-const ImageWrapper = styled.div`
+const ProductWrapper = styled.div`
   width: 1240px;
   margin: 0 auto;
   display: flex;
@@ -62,8 +80,7 @@ const ImageWrapper = styled.div`
 export const ProductCard = styled.li`
   position: relative;
   width: 220px;
-  aspect-ratio: 1 / 1.5;
-  overflow: hidden;
+  height: 330px;
   position: relative;
   list-style: none;
   background-color: #eee;
@@ -78,11 +95,9 @@ export const ProductCard = styled.li`
 `;
 
 export const ProductImg = styled.img`
-  aspect-ratio: 1 / 1;
+  width: 220px;
+  height: 220px;
   transition: all 0.3s ease;
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 export const ProductInfo = styled.p`
