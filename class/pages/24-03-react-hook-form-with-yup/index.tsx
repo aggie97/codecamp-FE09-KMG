@@ -39,7 +39,7 @@ const HookForm = () => {
     // useForm에 yup을 연결하는 방법...!
   } = useForm<IFormData>({ resolver: yupResolver(mySchema), mode: "onChange" }); // mode를 선언해주면 비제어 -> 제어 컴포넌트로 전환 가능
 
-  const onSubmit = (data: IFormData) => {
+  const onSubmit = async (data: IFormData) => {
     console.log(data);
   };
   return (

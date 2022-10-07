@@ -1,4 +1,4 @@
-export function useMyState<S>(initialValue: S): [S, (a: S) => void] {
+export const useMyState = <S,>(initialValue: S): [S, (a: S) => void] => {
   const myState = initialValue; // state 초기값 설정
 
   const mySetState = (inputValue: S) => {
@@ -9,6 +9,6 @@ export function useMyState<S>(initialValue: S): [S, (a: S) => void] {
   };
 
   return [myState, mySetState];
-}
+};
 
 const [] = useMyState<number>(3);
