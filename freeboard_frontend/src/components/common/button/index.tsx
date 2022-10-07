@@ -3,10 +3,15 @@ import styled from "@emotion/styled";
 interface IButtonProps {
   onClick?: () => void;
   children: string | JSX.Element;
+  type?: string;
 }
 
 const Button = (props: IButtonProps) => {
-  return <StyledButton onClick={props.onClick}>{props.children}</StyledButton>;
+  return (
+    <StyledButton type={props.type} onClick={props.onClick}>
+      {props.children}
+    </StyledButton>
+  );
 };
 
 export default Button;

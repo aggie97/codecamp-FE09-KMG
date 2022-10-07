@@ -4,20 +4,19 @@ import { Modal } from "antd";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import {
-  ICreateUseditemInput,
   IMutation,
   IMutationCreateUseditemArgs,
 } from "../../../../commons/types/generated/types";
 import ProductRegisterUI from "./ProductRegister.presenter";
 import { CREATE_USED_ITEM } from "./ProductRegister.queries";
 import * as yup from "yup";
+import { IFormDataProps } from "./ProductRegister.types";
 
 const createItemSchema = yup.object({
-  name: yup.string().required(),
-  remarks: yup.string().required(),
-  contents: yup.string().required(),
-  price: yup.number().required(),
-  tags: yup.array(),
+  name: yup.string().required("상품명은 필수 입력사항 입니다."),
+  remarks: yup.string().required("간단한 소개는 필수 입력사항 입니다."),
+  contents: yup.string().required("상세 설명은 필수 입력사항 입니다."),
+  price: yup.number().required("가격은 필수 입력사항 입니다."),
 });
 
 const ProductRegister = () => {
@@ -31,11 +30,12 @@ const ProductRegister = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<IFormDataProps>({
     resolver: yupResolver(createItemSchema),
+    mode: "onChange",
   });
 
-  const onSubmit = (formData: ICreateUseditemInput) => async () => {
+  const onSubmit = async (formData: IFormDataProps) => {
     console.log(formData);
     try {
       const result = await createUseditem({

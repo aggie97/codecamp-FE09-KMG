@@ -1,13 +1,16 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { cartItemsState } from "../../../../commons/store";
 
-const SideCart = () => {
-  const [items, setItems] = useState([]);
+const SideCartItemList = () => {
+  const [items, setItems] = useRecoilState(cartItemsState);
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem("useditems") ?? "[]");
+    console.log(savedItems);
     setItems(savedItems);
   }, []);
-  console.log("sideCart:", items);
+
   return (
     <div>
       {items.map((item) => (
@@ -19,7 +22,7 @@ const SideCart = () => {
   );
 };
 
-export default SideCart;
+export default SideCartItemList;
 
 const SideCartItemWrapper = styled.div`
   border-radius: 50%;

@@ -3,7 +3,7 @@ import Header from "./header";
 import Navigation from "./navigation";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
-import SideCart from "../../units/cart/sideCart";
+import SideCartItemList from "../../units/cart/sideCart";
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
           <Footer />
           <StickyNavigation>
             <CartTitle></CartTitle>
-            <SideCart />
+            <SideCartItemList />
           </StickyNavigation>
         </>
       )}
@@ -41,19 +41,19 @@ export const StickyNavigation = styled.div`
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   background-color: white;
   overflow: hidden;
 `;
 
 export const CartTitle = styled.span`
+  display: block;
   text-align: center;
   background-image: url("/11pnges.png");
   background-size: 363px 300px;
   background-position: -94px -70px;
-  width: 48px;
-  height: 48px;
-  padding: 10px 0;
-
+  width: 53px;
+  padding: 24px 0;
   border-bottom: 1px solid white;
 `;

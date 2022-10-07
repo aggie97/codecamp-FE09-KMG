@@ -10,3 +10,8 @@ export const isLoggedInUserState = atom({
   key: `isLoggedInUserState/${v4()}`,
   default: false,
 });
+
+export const cartItemsState = atom({
+  key: `cartItemsState/${v4()}`,
+  default: [],
+});

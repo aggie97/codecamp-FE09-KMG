@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { ChangeEvent } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 const StyledInput = styled.input`
   position: relative;
@@ -22,6 +23,7 @@ interface IInputProps {
   ref?: any;
   placeholder?: string;
   defaultValue?: string;
+  register?: UseFormRegisterReturn;
 }
 
 const Input = ({
@@ -30,9 +32,11 @@ const Input = ({
   onChange,
   placeholder,
   defaultValue,
+  register,
 }: IInputProps) => {
   return (
     <StyledInput
+      {...register}
       onChange={onChange}
       type={type}
       id={id}

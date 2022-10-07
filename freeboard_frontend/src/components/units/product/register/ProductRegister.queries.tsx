@@ -9,11 +9,8 @@ export const CREATE_USED_ITEM = gql`
       contents
       price
       images
-      tags
-      soldAt
       createdAt
       updatedAt
-      deletedAt
     }
   }
 `;
