@@ -26,13 +26,13 @@ const LOGIN_USER = gql`
 
 const MySchema = yup.object({
   email: yup.string().required("필수 입력란입니다."),
-  password: yup
-    .string()
-    .matches(
-      /^.*(?=^.{3,12}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/,
-      "영문, 숫자, 특수문자를 포함한 12자 이내로 입력해주세요."
-    )
-    .required("필수 입력란입니다."),
+  // password: yup
+  //   .string()
+  //   .matches(
+  //     /^.*(?=^.{3,12}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/,
+  //     "영문, 숫자, 특수문자를 포함한 12자 이내로 입력해주세요."
+  //   )
+  //   .required("필수 입력란입니다."),
 });
 
 const SignIn = () => {

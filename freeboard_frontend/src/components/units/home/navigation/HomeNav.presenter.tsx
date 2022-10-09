@@ -33,11 +33,14 @@ const HomeNavigationUI = ({ menu, onClickMenu, sign }: INavProps) => {
           </WrapperInnerLeft>
           <WrapperInnerRight>
             <ul style={{ display: "flex", listStyle: "none", gap: "20px" }}>
-              {sign.map((el) => (
-                <li key={el.id} id={el.id} onClick={onClickMenu}>
-                  {el.menu}
-                </li>
-              ))}
+              {sign.map(
+                (el) =>
+                  el === null || (
+                    <li key={el.id} id={el.id} onClick={onClickMenu}>
+                      {el.menu}
+                    </li>
+                  )
+              )}
             </ul>
           </WrapperInnerRight>
         </WrapperInner>

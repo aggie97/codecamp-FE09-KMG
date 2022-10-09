@@ -24,6 +24,8 @@ interface IInputProps {
   placeholder?: string;
   defaultValue?: string;
   register?: UseFormRegisterReturn;
+  value?: string | number;
+  readonly?: boolean;
 }
 
 const Input = ({
@@ -33,10 +35,14 @@ const Input = ({
   placeholder,
   defaultValue,
   register,
+  value,
+  readonly,
 }: IInputProps) => {
   return (
     <StyledInput
       {...register}
+      value={value}
+      readOnly={readonly}
       onChange={onChange}
       type={type}
       id={id}

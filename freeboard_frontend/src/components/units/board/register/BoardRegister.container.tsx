@@ -190,7 +190,6 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   ) => {
     if (event.target.id === "images") {
       const file = event.target.files?.[0];
-
       try {
         const result = await uploadFile({
           variables: { file },

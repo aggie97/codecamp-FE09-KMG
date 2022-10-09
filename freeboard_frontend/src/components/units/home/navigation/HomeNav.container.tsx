@@ -28,6 +28,12 @@ const HomeNavigation = () => {
   ];
 
   const sign = [
+    isLoggedInUser
+      ? {
+          id: "market/new",
+          menu: "상품 등록",
+        }
+      : null,
     {
       id: "signIn",
       menu: isLoggedInUser

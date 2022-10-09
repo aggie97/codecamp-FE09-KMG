@@ -20,7 +20,9 @@ const ProductListUI = ({ onClickCart, itemsData }: IProductListProps) => {
         {itemsData?.fetchUseditems.map((item, i) => (
           <ProductCard key={i}>
             <div style={{ overflow: "hidden" }}>
-              <ProductImg src={item.images?.[0]} />
+              <ProductImg
+                src={`https://storage.googleapis.com/${item.images?.[0] ?? ""}`}
+              />
               <ProductInfo>{item.name}</ProductInfo>
               <Button onClick={onClickCart(item)}>카트에 담기</Button>
             </div>
