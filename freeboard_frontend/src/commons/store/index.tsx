@@ -15,3 +15,8 @@ export const cartItemsState = atom({
   key: `cartItemsState/${v4()}`,
   default: [],
 });
+
+export const todayILookedProducts = atom({
+  key: `todayILookedProducts${v4()}`,
+  default: [],
+});

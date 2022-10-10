@@ -7,12 +7,13 @@ import {
   IMutation,
   IMutationCreateUseditemArgs,
   IMutationUploadFileArgs,
+  IUseditem,
 } from "../../../../commons/types/generated/types";
 import ProductRegisterUI from "./ProductRegister.presenter";
 import { CREATE_USED_ITEM, UPLOAD_FILE } from "./ProductRegister.queries";
 import * as yup from "yup";
 import { IFormDataProps } from "./ProductRegister.types";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Address } from "react-daum-postcode";
 
 const createItemSchema = yup.object({
@@ -22,7 +23,12 @@ const createItemSchema = yup.object({
   price: yup.string().required("가격은 필수 입력사항 입니다."),
 });
 
-const ProductRegister = () => {
+interface IEditProps {
+  data: { fetchUseditem: IUseditem };
+  isEdit: boolean;
+}
+
+const ProductRegister = ({ data, isEdit }: IEditProps) => {
   const router = useRouter();
   const imageRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +54,19 @@ const ProductRegister = () => {
     mode: "onChange",
   });
 
+  useEffect(() => {
+    if (isEdit) {
+      setValue("name", data?.fetchUseditem.name);
+      setValue("contents", data?.fetchUseditem.contents);
+      setValue("createdAt", data?.fetchUseditem.createdAt);
+      setValue("pickedCount", data?.fetchUseditem.pickedCount);
+      setValue("remarks", data?.fetchUseditem.remarks);
+      setValue("price", data?.fetchUseditem.price);
+      setValue("images", data?.fetchUseditem.images);
+      setValue("useditemAddress", data?.fetchUseditem.useditemAddress);
+    }
+  }, [data]);
+
   const onSubmit = async (formData: IFormDataProps) => {
     const [, ...rest] = formData.tags?.split("#");
     formData.tags = rest;
@@ -59,9 +78,9 @@ const ProductRegister = () => {
         variables: { createUseditemInput: { ...formData } },
       });
 
-      // await router.push(`/market/${result.data?.createUseditem._id ?? ""}`);
       alert("등록 완료");
-      await router.push("/");
+      await router.push(`/market/${result.data?.createUseditem._id ?? ""}`);
+
       // 상품 등록하고 홈으로 돌아가면 게시물 안 올라와있음.. (해결해야해)
     } catch (error) {
       if (error instanceof Error) Modal.error({ content: error.message });
@@ -108,6 +127,8 @@ const ProductRegister = () => {
       getValues={getValues}
       setValue={setValue}
       isOpen={isOpen}
+      isEdit={isEdit}
+      data={data}
     />
   );
 };

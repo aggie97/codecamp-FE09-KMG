@@ -18,6 +18,7 @@ export const ProductCard = styled.li`
   background-color: #eee;
   margin-top: 20px;
   border-radius: 0.5em;
+  overflow: hidden;
   transition: all 0.3s ease;
   border: 1px solid #dedede;
   cursor: pointer;

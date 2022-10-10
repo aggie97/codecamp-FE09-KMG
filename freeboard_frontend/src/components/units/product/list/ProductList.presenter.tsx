@@ -1,3 +1,4 @@
+import InfiniteScroll from "react-infinite-scroller";
 import { IQuery, IUseditem } from "../../../../commons/types/generated/types";
 import Button from "../../../common/button";
 
@@ -10,24 +11,38 @@ import {
 
 interface IProductListProps {
   onClickCart: (item: IUseditem) => () => void;
+  onClickProductItem: (itemId: string) => () => void;
   itemsData?: Pick<IQuery, "fetchUseditems">;
 }
 
-const ProductListUI = ({ onClickCart, itemsData }: IProductListProps) => {
+const ProductListUI = ({
+  onClickCart,
+  itemsData,
+  loadFunc,
+  onClickProductItem,
+}: IProductListProps) => {
   return (
     <>
-      <ProductWrapper style={{ margin: "0 auto", width: "1240px" }}>
-        {itemsData?.fetchUseditems.map((item, i) => (
-          <ProductCard key={i}>
-            <div style={{ overflow: "hidden" }}>
-              <ProductImg
-                src={`https://storage.googleapis.com/${item.images?.[0] ?? ""}`}
-              />
-              <ProductInfo>{item.name}</ProductInfo>
-              <Button onClick={onClickCart(item)}>카트에 담기</Button>
-            </div>
-          </ProductCard>
-        ))}
+      <ProductWrapper>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadFunc}
+          hasMore={true || false}
+        >
+          {itemsData?.fetchUseditems.map((item, i) => (
+            <ProductCard key={item._id} onClick={onClickProductItem(item)}>
+              <div>
+                <ProductImg
+                  src={`https://storage.googleapis.com/${
+                    item.images?.[0] ?? ""
+                  }`}
+                />
+                <ProductInfo>{item.name}</ProductInfo>
+                <Button onClick={onClickCart(item)}>카트에 담기</Button>
+              </div>
+            </ProductCard>
+          ))}
+        </InfiniteScroll>
       </ProductWrapper>
     </>
   );

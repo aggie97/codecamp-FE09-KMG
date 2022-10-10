@@ -5,19 +5,27 @@ import {
   UseFormHandleSubmit,
   UseFormRegister,
 } from "react-hook-form";
-import { IUseditemAddressInput } from "../../../../commons/types/generated/types";
+import {
+  IUseditem,
+  IUseditemAddressInput,
+  Maybe,
+} from "../../../../commons/types/generated/types";
 
 export interface IFormDataProps {
   name: string;
   remarks: string;
   contents: string;
-  price: number;
+  price: Maybe<number>;
   tags?: string[];
   useditemAddress?: IUseditemAddressInput;
-  images?: string[];
+  images?: Maybe<string[]>;
+  createdAt?: string;
+  pickedCount?: Maybe<number>;
 }
 
 export interface IProductProps {
+  data: { fetchUseditem: IUseditem };
+  isEdit: boolean;
   getValues: (arg: string) => string;
   onCompleteAddressSearch: ((address: Address) => void) | undefined;
   isOpen: any;

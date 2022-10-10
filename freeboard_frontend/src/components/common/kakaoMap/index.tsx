@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import Head from "next/script";
 
 declare global {
@@ -9,16 +9,11 @@ declare global {
 }
 
 interface IMapProps {
-  position: {
-    latitude?: number;
-    longitude?: number;
-  };
-  setPosition: SetStateAction<S>;
   address: string;
+  routerId: string;
 }
 
-const KakaoMapLauncher = ({ setValue, address }: IMapProps) => {
-  console.log(address);
+const KakaoMapLauncher = ({ setValue, address, routerId }: IMapProps) => {
   // const onClickMap = (mouseEvent: MouseEvent) => {
   //   setPosition({
   //     latitude: mouseEvent?.latLng.getLat(),
@@ -55,11 +50,12 @@ const KakaoMapLauncher = ({ setValue, address }: IMapProps) => {
               map,
               position: coords,
             });
-
-            setValue("useditemAddress", {
-              lat: coords.Ma,
-              lng: coords.La,
-            });
+            if (!routerId) {
+              setValue("useditemAddress", {
+                lat: coords.Ma,
+                lng: coords.La,
+              });
+            }
 
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
             map.setCenter(coords);
@@ -91,5 +87,7 @@ export default KakaoMapLauncher;
 
 const MapBox = styled.div`
   min-width: 400px;
-  aspect-ratio: 400 / 300;
+  width: 100%;
+  max-height: 480px;
+  height: 100%;
 `;

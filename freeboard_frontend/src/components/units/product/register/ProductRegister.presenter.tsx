@@ -14,7 +14,11 @@ const ProductRegisterUI = (props: IProductProps) => {
   return (
     <>
       {props.isOpen && (
-        <Modal visible={true}>
+        <Modal
+          onCancel={props.onClickSearchAddress}
+          onOk={props.onClickSearchAddress}
+          visible={true}
+        >
           <AddressInputModal onComplete={props.onCompleteAddressSearch} />
         </Modal>
       )}
@@ -58,10 +62,16 @@ const ProductRegisterUI = (props: IProductProps) => {
           />
 
           <div style={{ display: "flex" }}>
-            <KakaoMapLauncher
-              address={props.getValues("useditemAddress.address")}
-              setValue={props.setValue}
-            />
+            <div style={{ height: "300px" }}>
+              <KakaoMapLauncher
+                address={
+                  props.isEdit
+                    ? props.data?.fetchUseditem.useditemAddress?.address
+                    : props.getValues("useditemAddress.address")
+                }
+                setValue={props.setValue}
+              />
+            </div>
             <div>
               <Input
                 type="text"
@@ -126,7 +136,7 @@ const ProductRegisterUI = (props: IProductProps) => {
               </>
             ))}
           </div>
-          <Button>상품 등록하기</Button>
+          <Button>{props.isEdit ? "상품 수정하기" : "상품 등록하기"}</Button>
         </form>
       </ProductFormWrapper>
     </>
