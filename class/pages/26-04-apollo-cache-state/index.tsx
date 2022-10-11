@@ -52,9 +52,9 @@ export default function StaticRoutedPage() {
     await createBoard({
       variables: {
         createBoardInput: {
-          writer: "앙기",
+          writer: "곧",
           password: "1234",
-          title: "모륑 -박희현-",
+          title: " -박희현-",
           contents: "내용",
         },
       },
