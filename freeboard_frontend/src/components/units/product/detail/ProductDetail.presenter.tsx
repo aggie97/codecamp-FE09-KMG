@@ -24,6 +24,7 @@ import {
 } from "./ProductDetail.styles";
 
 interface IProductDetailProps {
+  onClickDelete(_id: string | undefined): (() => void) | undefined;
   routerId?: string | string[];
   data?: {
     fetchUseditem: IUseditem;
@@ -32,6 +33,7 @@ interface IProductDetailProps {
 }
 
 const ProductDetailUI = (props: IProductDetailProps) => {
+  console.log(props.data?.fetchUseditem.useditemAddress?.address);
   return (
     <ProductDetailWrapper>
       <Title>{props.data?.fetchUseditem.name}</Title>
@@ -90,6 +92,12 @@ const ProductDetailUI = (props: IProductDetailProps) => {
             <p>상품 신고하기</p>
             <Divider />
             <Button onClick={props.onClickMoveToBack}>돌아가기</Button>
+            <Divider />
+            <Button
+              onClick={props.onClickDelete(props.data?.fetchUseditem._id)}
+            >
+              삭제하기
+            </Button>
           </StickyBox>
         </MainRight>
       </MainContent>

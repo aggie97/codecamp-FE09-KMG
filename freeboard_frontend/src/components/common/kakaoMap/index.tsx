@@ -10,7 +10,8 @@ declare global {
 
 interface IMapProps {
   address: string;
-  routerId: string;
+  routerId?: string;
+  setValue?: any;
 }
 
 const KakaoMapLauncher = ({ setValue, address, routerId }: IMapProps) => {
@@ -20,6 +21,7 @@ const KakaoMapLauncher = ({ setValue, address, routerId }: IMapProps) => {
   //     longitude: mouseEvent?.latLng.getLng(),
   //   });
   // };
+  console.log(address, routerId);
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -51,10 +53,9 @@ const KakaoMapLauncher = ({ setValue, address, routerId }: IMapProps) => {
               position: coords,
             });
             if (!routerId) {
-              setValue("useditemAddress", {
-                lat: coords.Ma,
-                lng: coords.La,
-              });
+              console.log("here is createProduct");
+              setValue("useditemAddress.lat", coords.Ma);
+              setValue("useditemAddress.lng", coords.La);
             }
 
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다

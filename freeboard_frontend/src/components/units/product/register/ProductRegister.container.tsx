@@ -6,15 +6,21 @@ import { useForm } from "react-hook-form";
 import {
   IMutation,
   IMutationCreateUseditemArgs,
+  IMutationUpdateUseditemArgs,
   IMutationUploadFileArgs,
   IUseditem,
 } from "../../../../commons/types/generated/types";
 import ProductRegisterUI from "./ProductRegister.presenter";
-import { CREATE_USED_ITEM, UPLOAD_FILE } from "./ProductRegister.queries";
+import {
+  CREATE_USED_ITEM,
+  UPDATE_USED_ITEM,
+  UPLOAD_FILE,
+} from "./ProductRegister.queries";
 import * as yup from "yup";
 import { IFormDataProps } from "./ProductRegister.types";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Address } from "react-daum-postcode";
+import useAuth from "../../../common/useAuth";
 
 const createItemSchema = yup.object({
   name: yup.string().required("상품명은 필수 입력사항 입니다."),
@@ -29,6 +35,7 @@ interface IEditProps {
 }
 
 const ProductRegister = ({ data, isEdit }: IEditProps) => {
+  useAuth();
   const router = useRouter();
   const imageRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +50,11 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     IMutationUploadFileArgs
   >(UPLOAD_FILE);
 
+  const [updateUseditem] = useMutation<
+    Pick<IMutation, "updateUseditem">,
+    IMutationUpdateUseditemArgs
+  >(UPDATE_USED_ITEM);
+
   const {
     register,
     handleSubmit,
@@ -56,23 +68,23 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
 
   useEffect(() => {
     if (isEdit) {
+      delete data?.fetchUseditem.useditemAddress?.__typename;
       setValue("name", data?.fetchUseditem.name);
       setValue("contents", data?.fetchUseditem.contents);
-      setValue("createdAt", data?.fetchUseditem.createdAt);
-      setValue("pickedCount", data?.fetchUseditem.pickedCount);
       setValue("remarks", data?.fetchUseditem.remarks);
       setValue("price", data?.fetchUseditem.price);
       setValue("images", data?.fetchUseditem.images);
       setValue("useditemAddress", data?.fetchUseditem.useditemAddress);
+      setValue("tags", data?.fetchUseditem.tags);
     }
   }, [data]);
 
   const onSubmit = async (formData: IFormDataProps) => {
-    const [, ...rest] = formData.tags?.split("#");
-    formData.tags = rest;
+    // const [, ...rest] = formData.tags?.split("#");
+    // formData.tags = rest;
     formData.images = images;
     formData.price = parseInt(formData.price);
-    console.log(formData);
+    console.log("!", formData);
     try {
       const result = await createUseditem({
         variables: { createUseditemInput: { ...formData } },
@@ -84,6 +96,28 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
       // 상품 등록하고 홈으로 돌아가면 게시물 안 올라와있음.. (해결해야해)
     } catch (error) {
       if (error instanceof Error) Modal.error({ content: error.message });
+    }
+  };
+
+  const onEdit = async (formData: IFormDataProps) => {
+    console.log("수정 뮤테이션");
+    // const [, ...rest] = formData.tags?.split("#");
+    // formData.tags = rest;
+    formData.images = images;
+    formData.price = parseInt(formData.price);
+
+    console.log("!", formData);
+    try {
+      const result = await updateUseditem({
+        variables: {
+          updateUseditemInput: formData,
+          useditemId: String(router.query.id),
+        },
+      });
+
+      await router.push(`/market/${result.data?.updateUseditem._id}`);
+    } catch (error) {
+      if (error instanceof Error) alert(error.message);
     }
   };
 
@@ -111,11 +145,13 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     });
     setIsOpen((prev) => !prev);
   };
+
   return (
     <ProductRegisterUI
       register={register}
       handleSubmit={handleSubmit}
       onSubmit={onSubmit}
+      onEdit={onEdit}
       errors={errors}
       isValid={isValid}
       onChangeImageBox={onChangeImageBox}

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { IUseditem } from "../../../../../commons/types/generated/types";
 import Button from "../../../../common/button";
 import {
@@ -11,9 +12,12 @@ interface ITodayProps {
 }
 
 const TodayILookedProduct = ({ product }: ITodayProps) => {
+  const router = useRouter();
   return (
     <div>
-      <ProductCard key={product._id}>
+      <ProductCard
+        onClick={async () => await router.push(`/market/${product._id}`)}
+      >
         <div>
           <ProductImg
             src={`https://storage.googleapis.com/${product.images?.[0] ?? ""}`}

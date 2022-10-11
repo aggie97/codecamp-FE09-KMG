@@ -2,7 +2,10 @@ import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 import { useRecoilState } from "recoil";
-import { isLoggedInUserState } from "../../../../commons/store";
+import {
+  accessTokenState,
+  isLoggedInUserState,
+} from "../../../../commons/store";
 import { IQuery } from "../../../../commons/types/generated/types";
 import HomeNavigationUI from "./HomeNav.presenter";
 
@@ -18,8 +21,8 @@ const FETCH_USER_LOGGED_IN = gql`
 
 const HomeNavigation = () => {
   const router = useRouter();
-  const [isLoggedInUser] = useRecoilState(isLoggedInUserState);
-  console.log(isLoggedInUser ? "환영합니다." : "누구세요?");
+  const [token] = useRecoilState(accessTokenState);
+  console.log(token ? "환영합니다." : "누구세요?");
   const { data } =
     useQuery<Pick<IQuery, "fetchUserLoggedIn">>(FETCH_USER_LOGGED_IN);
   const menu = [
@@ -28,7 +31,7 @@ const HomeNavigation = () => {
   ];
 
   const sign = [
-    isLoggedInUser
+    token
       ? {
           id: "market/new",
           menu: "상품 등록",
@@ -36,11 +39,9 @@ const HomeNavigation = () => {
       : null,
     {
       id: "signIn",
-      menu: isLoggedInUser
-        ? `${data?.fetchUserLoggedIn.name ?? ""}님`
-        : "로그인",
+      menu: token ? `${data?.fetchUserLoggedIn.name ?? ""}님` : "로그인",
     },
-    { id: "signUp", menu: isLoggedInUser ? "Point: 0" : "회원가입" },
+    { id: "signUp", menu: token ? "Point: 0" : "회원가입" },
   ];
 
   const onClickMenu = async (event: MouseEvent<HTMLLIElement>) => {

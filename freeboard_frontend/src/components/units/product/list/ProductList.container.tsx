@@ -52,39 +52,49 @@ const ProductList = () => {
     localStorage.setItem("useditems", JSON.stringify(items));
   };
 
-  // 무한 스크롤 ...
-  const loadFunc = async () => {
-    if (itemsData === undefined) return;
-    await fetchMore({
-      variables: {
-        page: Math.ceil(itemsData.fetchUseditems.length / 10) + 1,
-      },
-      updateQuery: (prev, options) => {
-        console.log(prev, options);
-        if (options.fetchMoreResult?.fetchUseditems === undefined) {
-          return { fetchUseditems: [...prev.fetchUseditems] };
-        }
-        return {
-          fetchUseditems: [
-            ...prev.fetchUseditems,
-            ...options.fetchMoreResult.fetchUseditems,
-          ],
-        };
-      },
-    });
-  };
-
   const onClickProductItem = (item: IUseditem) => async () => {
+    const items = JSON.parse(localStorage.getItem("TILP") ?? "[]");
+    const temp = items.filter((el) => el._id === item._id);
+
+    if (temp.length === 1) {
+      console.log("로컬스토리지 아이템 중복");
+    } else items.unshift(item);
+
     setTodayItem((prev) => {
-      if (prev.length) return [item, ...prev];
-      else return [item];
+      if (prev.length) {
+        const newState = [item, ...prev];
+        return [...new Set(newState)];
+      } else return [item];
     });
+    localStorage.setItem("TILP", JSON.stringify(items));
     await router.push(`/market/${item._id}`);
   };
 
+  // 무한 스크롤 ...
+  // const loadFunc = async () => {
+  //   if (itemsData === undefined) return;
+  //   await fetchMore({
+  //     variables: {
+  //       page: Math.ceil(itemsData.fetchUseditems.length / 10) + 1,
+  //     },
+  //     updateQuery: (prev, options) => {
+  //       console.log(prev, options);
+  //       if (options.fetchMoreResult?.fetchUseditems === undefined) {
+  //         return { fetchUseditems: [...prev.fetchUseditems] };
+  //       }
+  //       return {
+  //         fetchUseditems: [
+  //           ...prev.fetchUseditems,
+  //           ...options.fetchMoreResult.fetchUseditems,
+  //         ],
+  //       };
+  //     },
+  //   });
+  // };
+
   return (
     <ProductListUI
-      loadFunc={loadFunc}
+      // loadFunc={loadFunc}
       onClickCart={onClickCart}
       itemsData={itemsData}
       onClickProductItem={onClickProductItem}

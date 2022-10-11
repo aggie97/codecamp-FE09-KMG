@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { cartItemsState } from "../../../../commons/store";
@@ -8,14 +9,19 @@ const SideCartItemList = () => {
   const [items, setItems] = useRecoilState(cartItemsState);
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem("useditems") ?? "[]");
-    console.log(savedItems);
+    console.log("local", savedItems);
     setItems(savedItems);
   }, []);
+
+  const router = useRouter();
 
   return (
     <div>
       {items.map((item: IUseditem) => (
-        <SideCartItemWrapper key={item._id}>
+        <SideCartItemWrapper
+          onClick={async () => await router.push(`/market/${item._id}`)}
+          key={item._id}
+        >
           <img
             width={50}
             height={50}
@@ -33,4 +39,10 @@ const SideCartItemWrapper = styled.div`
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid deepskyblue;
+  cursor: pointer;
+  transition: all ease 0.2s;
+  &:hover {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
 `;

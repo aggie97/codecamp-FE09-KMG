@@ -18,31 +18,29 @@ interface IProductListProps {
 const ProductListUI = ({
   onClickCart,
   itemsData,
-  loadFunc,
+  // loadFunc,
   onClickProductItem,
 }: IProductListProps) => {
   return (
     <>
       <ProductWrapper>
-        <InfiniteScroll
+        {/* <InfiniteScroll
           pageStart={0}
           loadMore={loadFunc}
           hasMore={true || false}
-        >
-          {itemsData?.fetchUseditems.map((item, i) => (
-            <ProductCard key={item._id} onClick={onClickProductItem(item)}>
-              <div>
-                <ProductImg
-                  src={`https://storage.googleapis.com/${
-                    item.images?.[0] ?? ""
-                  }`}
-                />
-                <ProductInfo>{item.name}</ProductInfo>
-                <Button onClick={onClickCart(item)}>카트에 담기</Button>
-              </div>
-            </ProductCard>
-          ))}
-        </InfiniteScroll>
+        > */}
+        {itemsData?.fetchUseditems.map((item, i) => (
+          <ProductCard key={item._id} onClick={onClickProductItem(item)}>
+            <div>
+              <ProductImg
+                src={`https://storage.googleapis.com/${item.images?.[0] ?? ""}`}
+              />
+              <ProductInfo>{item.name}</ProductInfo>
+              <Button onClick={onClickCart(item)}>카트에 담기</Button>
+            </div>
+          </ProductCard>
+        ))}
+        {/* </InfiniteScroll> */}
       </ProductWrapper>
     </>
   );

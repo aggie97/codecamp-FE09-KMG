@@ -23,7 +23,13 @@ const ProductRegisterUI = (props: IProductProps) => {
         </Modal>
       )}
       <ProductFormWrapper>
-        <form onSubmit={props.handleSubmit(props.onSubmit)}>
+        <form
+          onSubmit={
+            props.isEdit
+              ? props.handleSubmit(props.onEdit)
+              : props.handleSubmit(props.onSubmit)
+          }
+        >
           <div style={{ display: "flex", width: "100%" }}>
             <div>
               <Input

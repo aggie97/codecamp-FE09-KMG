@@ -4,10 +4,11 @@ import {
   FieldErrorsImpl,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormSetValue,
 } from "react-hook-form";
 import {
   IUseditem,
-  IUseditemAddressInput,
+  IUseditemAddress,
   Maybe,
 } from "../../../../commons/types/generated/types";
 
@@ -15,15 +16,18 @@ export interface IFormDataProps {
   name: string;
   remarks: string;
   contents: string;
-  price: Maybe<number>;
-  tags?: string[];
-  useditemAddress?: IUseditemAddressInput;
+  price: Maybe<number> | undefined;
+  tags?: Maybe<string[]>;
+  useditemAddress?: Maybe<IUseditemAddress>;
   images?: Maybe<string[]>;
   createdAt?: string;
   pickedCount?: Maybe<number>;
 }
 
 export interface IProductProps {
+  setValue: UseFormSetValue<IFormDataProps>;
+  onEdit: (formData: IFormDataProps) => Promise<void>;
+  onClickSearchAddress: (() => void) | undefined;
   data: { fetchUseditem: IUseditem };
   isEdit: boolean;
   getValues: (arg: string) => string;

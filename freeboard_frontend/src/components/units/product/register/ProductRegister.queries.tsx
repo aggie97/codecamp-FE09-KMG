@@ -10,7 +10,41 @@ export const CREATE_USED_ITEM = gql`
       price
       images
       createdAt
-      updatedAt
+      useditemAddress {
+        zipcode
+        address
+        addressDetail
+        lat
+        lng
+      }
+    }
+  }
+`;
+
+export const UPDATE_USED_ITEM = gql`
+  mutation updateUseditem(
+    $updateUseditemInput: UpdateUseditemInput!
+    $useditemId: ID!
+  ) {
+    updateUseditem(
+      updateUseditemInput: $updateUseditemInput
+      useditemId: $useditemId
+    ) {
+      _id
+      name
+      remarks
+      contents
+      price
+      pickedCount
+      tags
+      useditemAddress {
+        zipcode
+        address
+        addressDetail
+        lat
+        lng
+      }
+      images
     }
   }
 `;
