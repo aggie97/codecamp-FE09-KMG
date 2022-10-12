@@ -36,6 +36,7 @@ interface IEditProps {
 
 const ProductRegister = ({ data, isEdit }: IEditProps) => {
   useAuth();
+
   const router = useRouter();
   const imageRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
@@ -61,6 +62,7 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     formState: { errors, isValid },
     setValue,
     getValues,
+    trigger,
   } = useForm<IFormDataProps>({
     resolver: yupResolver(createItemSchema),
     mode: "onChange",
@@ -115,7 +117,7 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
         },
       });
 
-      await router.push(`/market/${result.data?.updateUseditem._id}`);
+      await router.push(`/market/${result.data?.updateUseditem._id ?? ""}`);
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
@@ -137,7 +139,9 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     };
 
   const onClickBox = () => imageRef.current?.click();
+
   const onClickSearchAddress = () => setIsOpen((prev) => !prev);
+
   const onCompleteAddressSearch = (address: Address) => {
     setValue("useditemAddress", {
       zipcode: address.zonecode,
@@ -146,8 +150,14 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     setIsOpen((prev) => !prev);
   };
 
+  const onChangeValue = (value) => {
+    setValue("contents", value === "<p><br></p>" ? "" : value); // 빈값일 경우 태그가 남기 때문에 초기화시켜주는 부분
+    void trigger("contents");
+  };
+
   return (
     <ProductRegisterUI
+      onChangeValue={onChangeValue}
       register={register}
       handleSubmit={handleSubmit}
       onSubmit={onSubmit}

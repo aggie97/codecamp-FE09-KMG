@@ -60,6 +60,10 @@ const ProductList = () => {
       console.log("로컬스토리지 아이템 중복");
     } else items.unshift(item);
 
+    if (items.length > 5) {
+      items.pop();
+    }
+
     setTodayItem((prev) => {
       if (prev.length) {
         const newState = [item, ...prev];

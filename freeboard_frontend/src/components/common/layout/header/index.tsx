@@ -1,9 +1,5 @@
-import styled from "@emotion/styled";
 import HomeHeader from "../../../units/home/header/HomeHeader.conainter";
-
-const Wrapper = styled.div`
-  text-align: center;
-`;
+import Wrapper from "./intersectionObserver";
 
 export default function Header() {
   return (

@@ -1,3 +1,4 @@
+import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroller";
 import { IQuery, IUseditem } from "../../../../commons/types/generated/types";
 import Button from "../../../common/button";
@@ -31,13 +32,11 @@ const ProductListUI = ({
         > */}
         {itemsData?.fetchUseditems.map((item, i) => (
           <ProductCard key={item._id} onClick={onClickProductItem(item)}>
-            <div>
-              <ProductImg
-                src={`https://storage.googleapis.com/${item.images?.[0] ?? ""}`}
-              />
-              <ProductInfo>{item.name}</ProductInfo>
-              <Button onClick={onClickCart(item)}>카트에 담기</Button>
-            </div>
+            <ProductImg
+              src={`https://storage.googleapis.com/${item.images?.[0] ?? ""}`}
+            />
+            <ProductInfo>{item.name}</ProductInfo>
+            <Button onClick={onClickCart(item)}>카트에 담기</Button>
           </ProductCard>
         ))}
         {/* </InfiniteScroll> */}

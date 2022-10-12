@@ -4,10 +4,13 @@ import Navigation from "./navigation";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import SideCartItemList from "../../units/cart/sideCart";
+import Link from "next/link";
+import { stuckState } from "../../../commons/store";
+import { useRecoilState } from "recoil";
 
 const Layout = ({ children }) => {
   const router = useRouter();
-
+  const [stuck] = useRecoilState(stuckState);
   return (
     <>
       {router.asPath === "/signIn" ? (
@@ -18,10 +21,15 @@ const Layout = ({ children }) => {
           {router.asPath === "/signUp" || <Navigation />}
           <div>{children}</div>
           <Footer />
-          <StickyNavigation>
-            <CartTitle></CartTitle>
-            <SideCartItemList />
-          </StickyNavigation>
+          {stuck ? (
+            <StickyNavigation>
+              <CartTitle></CartTitle>
+              <SideCartItemList />
+              <Link href="/">
+                <a>TOP ⬆️</a>
+              </Link>
+            </StickyNavigation>
+          ) : null}
         </>
       )}
     </>

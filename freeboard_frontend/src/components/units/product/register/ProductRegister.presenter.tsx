@@ -9,6 +9,12 @@ import {
   ProductFormWrapper,
 } from "./ProductRegister.styles";
 import { IProductProps } from "./ProductRegister.types";
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(async () => await import("react-quill"), {
+  ssr: false,
+});
 
 const ProductRegisterUI = (props: IProductProps) => {
   return (
@@ -54,10 +60,11 @@ const ProductRegisterUI = (props: IProductProps) => {
             register={props.register("remarks")}
           />
           <CommonError>{props.errors.remarks?.message}</CommonError>
-          <textarea
+          <ReactQuill
+            theme="snow"
             style={{ width: "100%", height: "300px", resize: "none" }}
             placeholder="추가적인 설명을 작성해주세요."
-            {...props.register("contents")}
+            onChange={props.onChangeValue}
           />
           <CommonError>{props.errors.contents?.message}</CommonError>
 
@@ -101,13 +108,13 @@ const ProductRegisterUI = (props: IProductProps) => {
             <div>
               <label htmlFor="lat">위도</label>
               <Input
-                type="text"
+                type="number"
                 readonly={true}
                 register={props.register("useditemAddress.lat")}
               />
               <label htmlFor="lng">경도</label>
               <Input
-                type="text"
+                type="number"
                 readonly={true}
                 register={props.register("useditemAddress.lng")}
               />

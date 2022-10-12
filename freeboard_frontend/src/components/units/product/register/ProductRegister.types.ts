@@ -25,6 +25,14 @@ export interface IFormDataProps {
 }
 
 export interface IProductProps {
+  onChangeValue:
+    | ((
+        value: string,
+        delta: DeltaStatic,
+        source: Sources,
+        editor: UnprivilegedEditor
+      ) => void)
+    | undefined;
   setValue: UseFormSetValue<IFormDataProps>;
   onEdit: (formData: IFormDataProps) => Promise<void>;
   onClickSearchAddress: (() => void) | undefined;

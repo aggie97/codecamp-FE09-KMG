@@ -20,3 +20,8 @@ export const todayILookedProducts = atom({
   key: `todayILookedProducts${v4()}`,
   default: [],
 });
+
+export const stuckState = atom({
+  key: `stuckState/${v4()}`,
+  default: false,
+});
