@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="onClickThen()">Promise 실행하기(.then)</button>
+    <button onclick="onClickAwait()">Promise 실행하기(await)</button>
+    <script>
+      const onClickThen = () => {
+        new Promise((resolve, reject) => {
+          // 시간이 걸리는 작업(ex, API 보내기 등)
+          // ...
+          setTimeout(() => {
+            // Promise 안에 setTimeout을 만듦으로써 임의로 2초가 걸리는 작업을 만든다.
+            // .then()이나 async-await 사용으로 동기 작동으로 변환 가능!
+            const res = "응답";
+            try {
+              resolve(res); // 성공
+            } catch (error) {
+              reject("에러 발생"); // 실패
+            }
+          }, 2000);
+        }).then((res) => {
+          console.log(res); // "응답"
+        });
+      };
+      const onClickAwait = async () => {
+        const result = await new Promise((resolve, reject) => {
+          // 시간이 걸리는 작업(ex, API 보내기 등)
+          // ...
+          setTimeout(() => {
+            const res = "응답";
+            try {
+              resolve(res); // 성공
+            } catch (error) {
+              reject("에러 발생"); // 실패
+            }
+          }, 2000);
+        });
+        console.log(result); // "응답"
+      };
+    </script>
+  </body>
+</html>
