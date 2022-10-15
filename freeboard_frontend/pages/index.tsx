@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Divider } from "antd";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { todayILookedProducts } from "../src/commons/store";
@@ -33,7 +33,7 @@ const Home = () => {
     <>
       <Banner />
       {typeof window !== "undefined" &&
-        JSON.parse(localStorage.getItem("TILP") ?? "[]").length && (
+        JSON.parse(localStorage.getItem("TILP") ?? "[]").length > 0 && (
           <>
             <TodayILookedProducts />
             <Divider />

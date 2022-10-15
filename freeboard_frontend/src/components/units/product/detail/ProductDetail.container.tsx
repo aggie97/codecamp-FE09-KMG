@@ -3,28 +3,23 @@ import { Modal } from "antd";
 import { useRouter } from "next/router";
 import {
   IMutation,
-  IMutationCreatePointTransactionOfLoadingArgs,
+  IMutationCreatePointTransactionOfBuyingAndSellingArgs,
   IMutationDeleteUseditemArgs,
   IMutationToggleUseditemPickArgs,
   IQuery,
   IQueryFetchUseditemArgs,
   IQueryFetchUseditemsIPickedArgs,
-  IUseditem,
 } from "../../../../commons/types/generated/types";
 import { FETCH_USED_ITEMS_I_PICKED } from "../list/ProductList.queries";
-// import useAuth from "../../../common/useAuth";
 
 import ProductDetailUI from "./ProductDetail.presenter";
 import {
-  CREATE_POINT_TRANSACTION_OF_LOADING,
+  CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING,
   DELETE_USED_ITEM,
   FETCH_USED_ITEM,
+  FETCH_USER_LOGGED_IN,
   TOGGLE_USED_ITEM_PICK,
 } from "./ProductDetail.queries";
-
-declare const window: typeof globalThis & {
-  IMP: any;
-};
 
 const ProductDetail = () => {
   const router = useRouter();
@@ -52,10 +47,15 @@ const ProductDetail = () => {
     variables: { search: "" },
   });
 
-  const [createPointTransactionOfLoading] = useMutation<
-    Pick<IMutation, "createPointTransactionOfLoading">,
-    IMutationCreatePointTransactionOfLoadingArgs
-  >(CREATE_POINT_TRANSACTION_OF_LOADING);
+  const [createPointTransactionOfBuyingAndSelling] = useMutation<
+    Pick<IMutation, "createPointTransactionOfBuyingAndSelling">,
+    IMutationCreatePointTransactionOfBuyingAndSellingArgs
+  >(CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING);
+
+  // const [createPointTransactionOfLoading] = useMutation<
+  //   Pick<IMutation, "createPointTransactionOfLoading">,
+  //   IMutationCreatePointTransactionOfLoadingArgs
+  // >(CREATE_POINT_TRANSACTION_OF_LOADING);
 
   const onClickMoveToBack = async () => {
     await router.push("/");
@@ -97,49 +97,23 @@ const ProductDetail = () => {
     }
   };
 
-  const onClickBuy = (item: IUseditem) => () => {
-    const IMP = window.IMP;
-    IMP.init("imp58383030");
-    IMP.request_pay(
-      {
-        // param
-        pg: "nice",
-        pay_method: "card",
-        // merchant_uid: "ORD20180131-0000011",
-        name: item.name,
-        amount: 100, // item.price
-        buyer_email: "gildong@gmail.com",
-        buyer_name: "홍길동",
-        buyer_tel: "010-4242-4242",
-        buyer_addr: "서울특별시 강남구 신사동",
-        buyer_postcode: "01181",
-        m_redirect_url: `http://localhost:3000/market${item._id}`,
-      },
-      async (rsp: { success: any; imp_uid: any }) => {
-        // callback
-        if (rsp.success) {
-          // 결제 성공 시 로직,
-          console.log(rsp);
-          try {
-            const result = await createPointTransactionOfLoading({
-              variables: { impUid: rsp.imp_uid },
-              // refetchQueries: [
-              //   {
-              //     query: FETCH_USED_ITEM,
-              //     variables: { useditemId: item._id },
-              //   },
-              // ],
-            });
-            console.log("뮤테이션 결과", result);
-            alert("뮤테이션 요청 완료");
-          } catch (error) {
-            if (error instanceof Error) console.log(error);
-          }
-        } else {
-          // 결제 실패 시 로직,
-        }
-      }
-    );
+  const onClickBuy = (useritemId: string) => async () => {
+    console.log("구매시작");
+    try {
+      const result = await createPointTransactionOfBuyingAndSelling({
+        variables: { useritemId },
+        refetchQueries: [
+          {
+            query: FETCH_USER_LOGGED_IN,
+          },
+        ],
+      });
+      console.log("구매 결과", result);
+      Modal.success({ content: "구매 완료되었습니다." });
+      await router.push("/myPage"); // 구매 물품 목록 페이지
+    } catch (error) {
+      if (error instanceof Error) alert(error);
+    }
   };
 
   return (

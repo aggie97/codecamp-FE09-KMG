@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
@@ -33,6 +33,16 @@ interface IEditProps {
   data: { fetchUseditem: IUseditem };
   isEdit: boolean;
 }
+
+const FETCH_USED_ITEMS = gql`
+  query fetchUseditems($page: Int) {
+    fetchUseditems(page: $page) {
+      _id
+      name
+      contents
+    }
+  }
+`;
 
 const ProductRegister = ({ data, isEdit }: IEditProps) => {
   useAuth();
@@ -86,14 +96,13 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     // formData.tags = rest;
     formData.images = images;
     formData.price = parseInt(formData.price);
-    console.log("!", formData);
+
     try {
       const result = await createUseditem({
         variables: { createUseditemInput: { ...formData } },
       });
 
-      alert("등록 완료");
-      await router.push(`/market/${result.data?.createUseditem._id ?? ""}`);
+      await router.push(`/`);
 
       // 상품 등록하고 홈으로 돌아가면 게시물 안 올라와있음.. (해결해야해)
     } catch (error) {
@@ -102,13 +111,11 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
   };
 
   const onEdit = async (formData: IFormDataProps) => {
-    console.log("수정 뮤테이션");
     // const [, ...rest] = formData.tags?.split("#");
     // formData.tags = rest;
     formData.images = images;
     formData.price = parseInt(formData.price);
 
-    console.log("!", formData);
     try {
       const result = await updateUseditem({
         variables: {
@@ -126,7 +133,7 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
   const onChangeImageBox =
     (index: number) => async (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-      console.log(file);
+
       const result = await uploadFile({
         variables: { file },
       });

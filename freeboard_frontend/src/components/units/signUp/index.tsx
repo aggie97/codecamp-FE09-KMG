@@ -3,8 +3,7 @@ import styled from "@emotion/styled";
 import { Button, Modal } from "antd";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
-import { isLoginPageState } from "../../../commons/store";
+
 import {
   IMutation,
   IMutationCreateUserArgs,
@@ -25,10 +24,12 @@ const CREATE_USER = gql`
 const SignUp = () => {
   const router = useRouter();
   const inputRef = useRef(null);
+
   const [createUser] = useMutation<
     Pick<IMutation, "createUser">,
     IMutationCreateUserArgs
   >(CREATE_USER);
+
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -64,7 +65,7 @@ const SignUp = () => {
       });
       console.log(result);
       Modal.success({ content: "회원가입이 완료되었습니다." });
-      await router.push("/logIn");
+      await router.push("/signIn");
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }

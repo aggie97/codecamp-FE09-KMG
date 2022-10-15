@@ -1,4 +1,5 @@
 import Logo from "../../../common/logo";
+import User from "../../../common/user";
 import {
   Best,
   HamburgerBox,
@@ -38,7 +39,7 @@ const HomeHeaderUI = () => {
         <WrapperRight id="top__wrapper__right">
           <UserMenuUl>
             <UserMenuLI id="myInfo">
-              <MyInfo></MyInfo>
+              <User />
             </UserMenuLI>
             <UserMenuLI id="order">
               <MyOrder></MyOrder>

@@ -1,6 +1,5 @@
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Divider } from "antd";
-import Head from "next/head";
 import { IQuery, IUseditem } from "../../../../commons/types/generated/types";
 import Button from "../../../common/button";
 import KakaoMapLauncher from "../../../common/kakaoMap";
@@ -34,23 +33,13 @@ interface IProductDetailProps {
   };
   onClickMoveToBack: () => void;
   pickedItemsData: Pick<IQuery, "fetchUseditemsIPicked">;
+  onClickBuy: (id: string) => () => Promise<void>;
 }
 
 const ProductDetailUI = (props: IProductDetailProps) => {
   console.log(props.data?.fetchUseditem.useditemAddress?.address);
   return (
     <>
-      <Head>
-        <script
-          type="text/javascript"
-          src="https://code.jquery.com/jquery-1.12.4.min.js"
-        ></script>
-        {/* iamport.payment.js */}
-        <script
-          type="text/javascript"
-          src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
-        ></script>
-      </Head>
       <ProductDetailWrapper>
         <Title>{props.data?.fetchUseditem.name}</Title>
         <Header>
@@ -133,7 +122,11 @@ const ProductDetailUI = (props: IProductDetailProps) => {
             <StickyBox>
               <Price>₩{props.data?.fetchUseditem.price}</Price>
               <Divider />
-              <Button onClick={props.onClickBuy(props.data?.fetchUseditem)}>
+              <Button
+                onClick={props.onClickBuy(
+                  String(props.data?.fetchUseditem._id)
+                )}
+              >
                 {props.data?.fetchUseditem.soldAt
                   ? "판매 완료된 상품입니다."
                   : "구매하기"}

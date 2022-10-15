@@ -1,5 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
+import { Modal } from "antd";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
   cartItemsState,
@@ -31,11 +33,13 @@ const FETCH_USED_ITEMS = gql`
 
 const ProductList = () => {
   const router = useRouter();
-  const [, setTodayItem] = useRecoilState(todayILookedProducts);
+
   const { data: itemsData, fetchMore } = useQuery<
     Pick<IQuery, "fetchUseditems">,
     IQueryFetchUseditemsArgs
-  >(FETCH_USED_ITEMS);
+  >(FETCH_USED_ITEMS, { fetchPolicy: "network-only" });
+
+  const [, setTodayItem] = useRecoilState(todayILookedProducts);
 
   const [, setItems] = useRecoilState(cartItemsState);
 
@@ -44,7 +48,7 @@ const ProductList = () => {
     const items = JSON.parse(localStorage.getItem("useditems") ?? "[]");
     const temp = items.filter((el: IUseditem) => el._id === item._id);
     if (temp.length === 1) {
-      alert("이미 담으신 물품입니다!!!");
+      Modal.warning({ content: "이미 담으신 물품입니다!!!" });
       return;
     }
     items.push(item);
@@ -75,30 +79,30 @@ const ProductList = () => {
   };
 
   // 무한 스크롤 ...
-  // const loadFunc = async () => {
-  //   if (itemsData === undefined) return;
-  //   await fetchMore({
-  //     variables: {
-  //       page: Math.ceil(itemsData.fetchUseditems.length / 10) + 1,
-  //     },
-  //     updateQuery: (prev, options) => {
-  //       console.log(prev, options);
-  //       if (options.fetchMoreResult?.fetchUseditems === undefined) {
-  //         return { fetchUseditems: [...prev.fetchUseditems] };
-  //       }
-  //       return {
-  //         fetchUseditems: [
-  //           ...prev.fetchUseditems,
-  //           ...options.fetchMoreResult.fetchUseditems,
-  //         ],
-  //       };
-  //     },
-  //   });
-  // };
+  const loadFunc = async () => {
+    if (itemsData === undefined) return;
+    await fetchMore({
+      variables: {
+        page: Math.ceil(itemsData.fetchUseditems.length / 10) + 1,
+      },
+      updateQuery: (prev, options) => {
+        console.log(prev, options);
+        if (options.fetchMoreResult?.fetchUseditems === undefined) {
+          return { fetchUseditems: [...prev.fetchUseditems] };
+        }
+        return {
+          fetchUseditems: [
+            ...prev.fetchUseditems,
+            ...options.fetchMoreResult.fetchUseditems,
+          ],
+        };
+      },
+    });
+  };
 
   return (
     <ProductListUI
-      // loadFunc={loadFunc}
+      loadFunc={loadFunc}
       onClickCart={onClickCart}
       itemsData={itemsData}
       onClickProductItem={onClickProductItem}

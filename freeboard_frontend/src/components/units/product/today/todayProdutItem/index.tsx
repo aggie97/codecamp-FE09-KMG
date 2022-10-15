@@ -14,7 +14,7 @@ interface ITodayProps {
 const TodayILookedProduct = ({ product }: ITodayProps) => {
   const router = useRouter();
   return (
-    <div>
+    <div style={{ flex: "0 0 auto" }}>
       <ProductCard
         onClick={async () => await router.push(`/market/${product._id}`)}
       >

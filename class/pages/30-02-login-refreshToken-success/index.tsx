@@ -20,9 +20,13 @@ const LoginSuccessPage = () => {
   const client = useApolloClient();
 
   const onClickButton = async () => {
-    const result = await client.query({
-      query: FETCH_USER_LOGGED_IN,
-    });
+    try {
+      const result = await client.query({
+        query: FETCH_USER_LOGGED_IN,
+      });
+    } catch (error) {
+      if (error instanceof Error) console.log(error.message);
+    }
   };
   return <button onClick={onClickButton}>클릭하세요</button>;
 };

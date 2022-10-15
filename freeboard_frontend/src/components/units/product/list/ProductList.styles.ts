@@ -3,10 +3,13 @@ import styled from "@emotion/styled";
 export const ProductWrapper = styled.div`
   width: 1240px;
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   padding-top: 50px;
+
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 35px;
+  }
 `;
 
 export const ProductCard = styled.li`
@@ -16,7 +19,6 @@ export const ProductCard = styled.li`
   position: relative;
   list-style: none;
   background-color: #eee;
-  margin-top: 20px;
   border-radius: 0.5em;
   overflow: hidden;
   transition: all 0.3s ease;

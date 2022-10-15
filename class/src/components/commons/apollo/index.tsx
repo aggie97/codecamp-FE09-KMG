@@ -3,12 +3,10 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloLink,
-  gql,
   fromPromise,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { createUploadLink } from "apollo-upload-client";
-import { GraphQLClient } from "graphql-request";
 import _ from "lodash";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";

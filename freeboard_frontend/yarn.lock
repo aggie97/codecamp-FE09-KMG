@@ -3643,7 +3643,7 @@ graphql-config@^4.3.5:
 
 graphql-request@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.npmjs.org/graphql-request/-/graphql-request-5.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-5.0.0.tgz#7504a807d0e11be11a3c448e900f0cc316aa18ef"
   integrity sha512-SpVEnIo2J5k2+Zf76cUkdvIRaq5FMZvGQYnA4lUWYbc99m+fHh4CZYRRO/Ff4tCLQ613fzCm3SiDT64ubW5Gyw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
