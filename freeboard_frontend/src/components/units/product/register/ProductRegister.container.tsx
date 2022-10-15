@@ -34,16 +34,6 @@ interface IEditProps {
   isEdit: boolean;
 }
 
-const FETCH_USED_ITEMS = gql`
-  query fetchUseditems($page: Int) {
-    fetchUseditems(page: $page) {
-      _id
-      name
-      contents
-    }
-  }
-`;
-
 const ProductRegister = ({ data, isEdit }: IEditProps) => {
   useAuth();
 
@@ -102,7 +92,7 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
         variables: { createUseditemInput: { ...formData } },
       });
 
-      await router.push(`/`);
+      await router.push(`/market/${result.data?.createUseditem._id ?? ""}`);
 
       // 상품 등록하고 홈으로 돌아가면 게시물 안 올라와있음.. (해결해야해)
     } catch (error) {

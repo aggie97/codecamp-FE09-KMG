@@ -22,7 +22,7 @@ const FETCH_USER_LOGGED_IN = gql`
 const HomeNavigation = () => {
   const router = useRouter();
   const [token] = useRecoilState(accessTokenState);
-  console.log(token ? "환영합니다." : "누구세요?");
+
   const { data } =
     useQuery<Pick<IQuery, "fetchUserLoggedIn">>(FETCH_USER_LOGGED_IN);
   const menu = [

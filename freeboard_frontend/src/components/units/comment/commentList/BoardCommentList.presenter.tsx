@@ -119,8 +119,8 @@ const BoardCommentListUI = ({
                       key={comment._id}
                     >
                       <CommentListProfileImg
-                        width="40px"
-                        height="40px"
+                        width={40}
+                        height={40}
                         id="profile_img"
                         src="/profileImgComment.png"
                       />

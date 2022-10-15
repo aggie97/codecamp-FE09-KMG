@@ -11,7 +11,7 @@ import {
 
 interface IProductListProps {
   onClickCart: (item: IUseditem) => () => void;
-  onClickProductItem: (itemId: string) => () => void;
+  onClickProductItem: (itemId: IUseditem) => () => void;
   itemsData?: Pick<IQuery, "fetchUseditems">;
 }
 

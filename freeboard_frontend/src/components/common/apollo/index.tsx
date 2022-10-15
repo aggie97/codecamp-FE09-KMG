@@ -3,11 +3,14 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloLink,
+  fromPromise,
 } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "../../../commons/store";
+import { onError } from "@apollo/client/link/error";
+import getAccessToken from "../../../commons/libraries/getAccessToken";
 interface IApolloSettingProps {
   children: JSX.Element;
 }
@@ -18,16 +21,42 @@ export default function ApolloSetting(props: IApolloSettingProps) {
   const [token, setToken] = useRecoilState(accessTokenState);
 
   useEffect(() => {
-    const result = localStorage.getItem("token");
-    if (result) setToken(result);
+    void getAccessToken().then((newAccessToken) => {
+      setToken(newAccessToken);
+    });
   }, []);
 
-  const uploadLink = createUploadLink({
-    uri: "http://backend09.codebootcamp.co.kr/graphql",
-    headers: { Authorization: `Bearer ${token}` },
+  const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+    if (graphQLErrors) {
+      for (const err of graphQLErrors) {
+        if (err.extensions.code === "UNAUTHENTICATION") {
+          return fromPromise(
+            getAccessToken().then((newAccessToken) => {
+              setToken(newAccessToken);
+
+              if (typeof newAccessToken !== "string") return;
+
+              operation.setContext({
+                headers: {
+                  ...operation.getContext().headers,
+                  Authorization: `Beaer ${newAccessToken}`,
+                },
+              });
+            })
+          ).flatMap(() => forward(operation));
+        }
+      }
+    }
   });
+
+  const uploadLink = createUploadLink({
+    uri: "https://backend09.codebootcamp.co.kr/graphql",
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
+  });
+
   const client = new ApolloClient({
-    link: ApolloLink.from([uploadLink]),
+    link: ApolloLink.from([errorLink, uploadLink]),
     cache: GLOBAL_STATE,
   });
 

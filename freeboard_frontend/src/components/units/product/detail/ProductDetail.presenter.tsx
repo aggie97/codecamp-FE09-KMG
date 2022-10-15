@@ -3,6 +3,8 @@ import { Divider } from "antd";
 import { IQuery, IUseditem } from "../../../../commons/types/generated/types";
 import Button from "../../../common/button";
 import KakaoMapLauncher from "../../../common/kakaoMap";
+import ProductCommentList from "../comment/commentList/ProductCommentList.container";
+import ProductNewComment from "../comment/newComment/ProductComment.container";
 import {
   Header,
   HeaderLeft,
@@ -37,7 +39,6 @@ interface IProductDetailProps {
 }
 
 const ProductDetailUI = (props: IProductDetailProps) => {
-  console.log(props.data?.fetchUseditem.useditemAddress?.address);
   return (
     <>
       <ProductDetailWrapper>
@@ -152,6 +153,9 @@ const ProductDetailUI = (props: IProductDetailProps) => {
           />
         </div>
       </ProductDetailWrapper>
+      <ProductNewComment useditemId={props.routerId} />
+      <Divider />
+      <ProductCommentList useditemId={props.routerId} />
     </>
   );
 };

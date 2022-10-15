@@ -21,7 +21,7 @@ const KakaoMapLauncher = ({ setValue, address, routerId }: IMapProps) => {
   //     longitude: mouseEvent?.latLng.getLng(),
   //   });
   // };
-  console.log(address, routerId);
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src =

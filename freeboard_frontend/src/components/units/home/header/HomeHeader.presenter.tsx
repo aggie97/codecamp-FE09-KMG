@@ -5,7 +5,6 @@ import {
   HamburgerBox,
   HamburgerButton,
   MyCart,
-  MyInfo,
   MyLately,
   MyOrder,
   SearchBox,

@@ -37,7 +37,7 @@ const ProductList = () => {
   const { data: itemsData, fetchMore } = useQuery<
     Pick<IQuery, "fetchUseditems">,
     IQueryFetchUseditemsArgs
-  >(FETCH_USED_ITEMS, { fetchPolicy: "network-only" });
+  >(FETCH_USED_ITEMS);
 
   const [, setTodayItem] = useRecoilState(todayILookedProducts);
 

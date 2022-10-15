@@ -60,7 +60,6 @@ const ProductDetail = () => {
   const onClickMoveToBack = async () => {
     await router.push("/");
   };
-  console.log("디테일", data);
 
   const onClickDelete = (useditemId: string) => async () => {
     try {
@@ -91,14 +90,12 @@ const ProductDetail = () => {
           { query: FETCH_USED_ITEM, variables: { useditemId } },
         ],
       });
-      console.log("찜 횟수", result.data?.toggleUseditemPick);
     } catch (error) {
       if (error instanceof Error) Modal.error({ content: error.message });
     }
   };
 
   const onClickBuy = (useritemId: string) => async () => {
-    console.log("구매시작");
     try {
       const result = await createPointTransactionOfBuyingAndSelling({
         variables: { useritemId },
@@ -108,7 +105,7 @@ const ProductDetail = () => {
           },
         ],
       });
-      console.log("구매 결과", result);
+
       Modal.success({ content: "구매 완료되었습니다." });
       await router.push("/myPage"); // 구매 물품 목록 페이지
     } catch (error) {

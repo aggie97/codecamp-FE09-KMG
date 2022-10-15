@@ -4,7 +4,7 @@ import { stuckState } from "../../../../commons/store";
 const Wrapper = ({ children }) => {
   const [stuck, setStuck] = useRecoilState(stuckState);
   const ref = useRef<HTMLDivElement | null>(null);
-  console.log(stuck);
+
   useEffect(() => {
     if (!ref.current) return;
     const cachedRef = ref.current;

@@ -9,7 +9,6 @@ const SideCartItemList = () => {
   const [items, setItems] = useRecoilState(cartItemsState);
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem("useditems") ?? "[]");
-    console.log("local", savedItems);
     setItems(savedItems);
   }, []);
 

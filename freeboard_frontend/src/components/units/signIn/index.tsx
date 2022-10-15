@@ -68,7 +68,7 @@ const SignIn = () => {
       }
       setToken(accessToken);
       setIsLoggedInUser(true);
-      localStorage.setItem("token", accessToken);
+
       Modal.success({ content: "로그인이 완료되었습니다." });
 
       await router.push("/");
