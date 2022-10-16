@@ -31,7 +31,7 @@ const ProductNewComment = ({ useditemId }: string) => {
         refetchQueries: [
           {
             query: FETCH_USED_ITEM_QUESTIONS,
-            variables: { useditemId },
+            variables: { useditemId, page: 1 },
           },
         ],
       });
