@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>리소스 다운로드 순서</title>
+    <script>
+      alert("정지!");
+    </script>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <script src="./index.js"></script>
+  </body>
+</html>
+
+<!-- index.html 을 가지고 오면 태그에 달려있는 주소들을 전부 골라낸 다음,
+  background로 보내서 요청을 보내놓고 태그를 그리기 시작한다. 위 코드를 실행해보면,
+  alert()로 인해 정지된 시점에 css파일과 js파일이 pending 상태에 멈춰있는 것을 볼 수 있다. -->

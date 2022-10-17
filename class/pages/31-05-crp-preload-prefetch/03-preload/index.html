@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+
+    <link rel="preload" as="image" href="./dog.jpeg" />
+    <!-- 이미지 프리로드 하는 법! -->
+    <!-- 아래를 보면 js파일과 css파일이 총합 6개 이상이기 때문에 한 번에 받아올 수 있는 범위를 넘어선다.
+      이런 상황에서 이미지가 js파일보다 렌더링 우선순위가 높다면, 위와 같은 링크 태그를 넣어주면 된다. -->
+
+    <!-- prefetch와 preload의 차이는? 
+      사용하는 목적이 다르다! 
+      prefetch는 다음 페이지에서 쓸 것, preload는 현재 페이지에서 쓸 것 -->
+    <link rel="stylesheet" href="./index.css" />
+    <script src="./index1.js"></script>
+    <script src="./index2.js"></script>
+    <script src="./index3.js"></script>
+    <script src="./index4.js"></script>
+    <script src="./index5.js"></script>
+    <script src="./index6.js"></script>
+  </head>
+  <body>
+    <img src="./dog.jpeg" />
+  </body>
+</html>
