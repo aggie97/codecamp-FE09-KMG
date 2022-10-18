@@ -21,6 +21,7 @@ const ProductNewComment = ({ useditemId }: string) => {
   const onSubmit = async (data) => {
     if (!data.contents) {
       Modal.warning({ content: "질문 내용을 입력해주세요!" });
+      return;
     }
     try {
       const result = await createUseditemQuestion({
@@ -31,7 +32,7 @@ const ProductNewComment = ({ useditemId }: string) => {
         refetchQueries: [
           {
             query: FETCH_USED_ITEM_QUESTIONS,
-            variables: { useditemId, page: 1 },
+            variables: { useditemId },
           },
         ],
       });

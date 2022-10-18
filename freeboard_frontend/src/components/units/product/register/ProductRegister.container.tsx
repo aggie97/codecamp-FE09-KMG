@@ -1,4 +1,4 @@
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
@@ -56,17 +56,11 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     IMutationUpdateUseditemArgs
   >(UPDATE_USED_ITEM);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    setValue,
-    getValues,
-    trigger,
-  } = useForm<IFormDataProps>({
-    resolver: yupResolver(createItemSchema),
-    mode: "onChange",
-  });
+  const { register, handleSubmit, formState, setValue, getValues, trigger } =
+    useForm<IFormDataProps>({
+      resolver: yupResolver(createItemSchema),
+      mode: "onChange",
+    });
 
   useEffect(() => {
     if (isEdit) {
@@ -159,8 +153,7 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
       handleSubmit={handleSubmit}
       onSubmit={onSubmit}
       onEdit={onEdit}
-      errors={errors}
-      isValid={isValid}
+      formState={formState}
       onChangeImageBox={onChangeImageBox}
       onClickBox={onClickBox}
       imageRef={imageRef}

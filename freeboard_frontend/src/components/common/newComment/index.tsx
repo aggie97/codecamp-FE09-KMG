@@ -1,5 +1,4 @@
-import { ConsoleSqlOutlined } from "@ant-design/icons";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
 import { Dispatch, MouseEvent, SetStateAction, useEffect } from "react";
@@ -45,6 +44,7 @@ import {
 } from "./styles";
 
 interface ICommentProps {
+  isSubmit: any;
   comment?: IUseditemQuestion;
   isEdit: boolean;
   setIdForEdit: Dispatch<SetStateAction<string>>;
@@ -53,9 +53,7 @@ interface ICommentProps {
 
 const Comment = (props: ICommentProps) => {
   const router = useRouter();
-
   const { register, handleSubmit, setValue } = useForm();
-
   useEffect(() => {
     setValue("contents", props.comment?.contents);
     if (props.isSubmit) setValue("contents", "");
@@ -94,6 +92,7 @@ const Comment = (props: ICommentProps) => {
       useditemQuestionId: String(props.comment?._id),
       page: 1,
     },
+    fetchPolicy: "cache-and-network",
   });
 
   const onEdit = async (formData) => {
@@ -126,7 +125,7 @@ const Comment = (props: ICommentProps) => {
   };
 
   const onSubmit = async (formData) => {
-    console.log("!", props.comment?._id);
+    console.log("!", formData);
     if (!formData.contents) {
       Modal.warning({ content: "내용을 입력해주세요!" });
       return;
@@ -147,7 +146,7 @@ const Comment = (props: ICommentProps) => {
           },
         ],
       });
-      props.setIdForOpenAnswer([props.comment?._id, data]);
+
       Modal.success({ content: "답글이 등록되었습니다." });
       props.setIdForSubmit("");
     } catch (error) {
@@ -161,16 +160,21 @@ const Comment = (props: ICommentProps) => {
         console.log("!", props.commentQId);
         await deleteUseditemQuestionAnswer({
           variables: { useditemQuestionAnswerId: String(props.comment?._id) },
-          refetchQueries: [
-            {
-              query: FETCH_USED_ITEM_QUESTION_ANSWERS,
-              variables: {
-                useditemQuestionId: props.commentQId,
+          update(cache, { data }) {
+            cache.modify({
+              fields: {
+                fetchUseditemQuestionAnswers: (prev, { readField }) => {
+                  const deleteId = data?.deleteUseditemQuestionAnswer;
+                  const filteredPrev = prev.filter(
+                    (el) => readField("_id", el) !== deleteId
+                  );
+                  return [...filteredPrev];
+                },
               },
-            },
-          ],
+            });
+          },
         });
-        props.setIdForOpenAnswer([props.comment?._id, data]);
+
         Modal.success({ content: "문의 답글이 삭제되었습니다." });
       } else {
         await deleteUseditemQuestion({
@@ -196,10 +200,6 @@ const Comment = (props: ICommentProps) => {
 
   const onClickSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    props.setIdForOpenAnswer((prev) => {
-      if (prev[0]) return ["", {}];
-      else return [props.comment?._id, data];
-    });
     props.setIdForSubmit((prev) => {
       if (prev) {
         return "";
@@ -210,14 +210,14 @@ const Comment = (props: ICommentProps) => {
 
   const onClickShowAnswers = async () => {
     props.setIdForOpenAnswer((prev) => {
-      if (prev[0]) return ["", {}];
-      else return [props.comment?._id, data];
+      if (prev) return "";
+      else return props.comment?._id;
     });
   };
 
   return (
     <>
-      {props.isSubmit && (
+      {props.isSubmit ? (
         <NewCommentWrapper>
           <Title>답글 달기</Title>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -228,45 +228,46 @@ const Comment = (props: ICommentProps) => {
             <Button>답글달기</Button>
           </Form>
         </NewCommentWrapper>
+      ) : (
+        <CommentBox>
+          <CommentUser>
+            <UserPicture imgUrl={props.comment?.user.picture ?? ""} />
+            <UserName>{props.comment?.user.name}</UserName>
+          </CommentUser>
+          <CommentForm>
+            <CommentInput
+              disabled={!props.isEdit}
+              {...register("contents")}
+            ></CommentInput>
+            <ButtonBox>
+              <CommentCreatedAt>
+                {props.comment?.createdAt.slice(0, 10)}
+              </CommentCreatedAt>
+              <div>
+                {props.isAnswer || (
+                  <>
+                    <button type="button" onClick={onClickShowAnswers}>
+                      답글 보기
+                    </button>
+                    <button type="submit" onClick={onClickSubmit}>
+                      답글 달기
+                    </button>
+                  </>
+                )}
+                <button type="submit" onClick={handleSubmit(onDelete)}>
+                  삭제하기
+                </button>
+                <button
+                  type="submit"
+                  onClick={props.isEdit ? handleSubmit(onEdit) : onClickEdit}
+                >
+                  수정하기
+                </button>
+              </div>
+            </ButtonBox>
+          </CommentForm>
+        </CommentBox>
       )}
-      <CommentBox>
-        <CommentUser>
-          <UserPicture imgUrl={props.comment?.user.picture ?? ""} />
-          <UserName>{props.comment?.user.name}</UserName>
-        </CommentUser>
-        <CommentForm>
-          <CommentInput
-            disabled={!props.isEdit}
-            {...register("contents")}
-          ></CommentInput>
-          <ButtonBox>
-            <CommentCreatedAt>
-              {props.comment?.createdAt.slice(0, 10)}
-            </CommentCreatedAt>
-            <div>
-              {props.isAnswer || (
-                <>
-                  <button type="button" onClick={onClickShowAnswers}>
-                    답글 보기
-                  </button>
-                  <button type="submit" onClick={onClickSubmit}>
-                    답글 달기
-                  </button>
-                </>
-              )}
-              <button type="submit" onClick={handleSubmit(onDelete)}>
-                삭제하기
-              </button>
-              <button
-                type="submit"
-                onClick={props.isEdit ? handleSubmit(onEdit) : onClickEdit}
-              >
-                수정하기
-              </button>
-            </div>
-          </ButtonBox>
-        </CommentForm>
-      </CommentBox>
     </>
   );
 };

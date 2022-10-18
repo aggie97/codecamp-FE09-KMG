@@ -43,7 +43,7 @@ const ProductRegisterUI = (props: IProductProps) => {
                 placeholder="상품명을 작성해주세요."
                 register={props.register("name")}
               />
-              <CommonError>{props.errors.name?.message}</CommonError>
+              <CommonError>{props.formState.errors.name?.message}</CommonError>
             </div>
             <div>
               <Input
@@ -51,7 +51,7 @@ const ProductRegisterUI = (props: IProductProps) => {
                 placeholder="판매 가격을 입력해주세요."
                 register={props.register("price")}
               />
-              <CommonError>{props.errors.price?.message}</CommonError>
+              <CommonError>{props.formState.errors.price?.message}</CommonError>
             </div>
           </div>
           <Input
@@ -59,14 +59,14 @@ const ProductRegisterUI = (props: IProductProps) => {
             placeholder="상품에 대해 간단하게 소개해주세요."
             register={props.register("remarks")}
           />
-          <CommonError>{props.errors.remarks?.message}</CommonError>
+          <CommonError>{props.formState.errors.remarks?.message}</CommonError>
           <ReactQuill
             theme="snow"
             style={{ width: "100%", height: "300px", resize: "none" }}
             placeholder="추가적인 설명을 작성해주세요."
             onChange={props.onChangeValue}
           />
-          <CommonError>{props.errors.contents?.message}</CommonError>
+          <CommonError>{props.formState.errors.contents?.message}</CommonError>
 
           <Input
             type="text"

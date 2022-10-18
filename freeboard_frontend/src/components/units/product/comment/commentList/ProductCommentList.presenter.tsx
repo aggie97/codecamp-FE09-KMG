@@ -1,71 +1,63 @@
-import { useState } from "react";
-import { IUseditemQuestion } from "../../../../../commons/types/generated/types";
-import Comment from "../../../../common/commentBox";
+import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import {
+  IMutation,
+  IMutationDeleteUseditemQuestionArgs,
+  IQuery,
+  IQueryFetchUseditemQuestionsArgs,
+} from "../../../../../commons/types/generated/types";
+import CommentQuestion from "../../../../commentQuestion";
+import { DELETE_USED_ITEM_QUESTION } from "../../../../common/newComment/queries";
+import { FETCH_USED_ITEM_QUESTIONS } from "./ProductCommentList.queries";
 import { ProductCommentListWrapper } from "./ProductCommentList.styles";
 
 interface IProductCommentProps {
-  dataQ: { fetchUseditemQuestions?: IUseditemQuestion[] };
+  useditemId: string;
 }
 
 const ProductCommentListUI = (props: IProductCommentProps) => {
-  const [idForEditQ, setIdForEditQ] = useState("");
-  const [idForEditA, setIdForEditA] = useState("");
-  const [idForSubmit, setIdForSubmit] = useState("");
+  const { data: dataQ } = useQuery<
+    Pick<IQuery, "fetchUseditemQuestions">,
+    IQueryFetchUseditemQuestionsArgs
+  >(FETCH_USED_ITEM_QUESTIONS, {
+    variables: { useditemId: props.useditemId },
+  });
 
-  const [idForOpenAnswer, setIdForOpenAnswer] = useState(["", {}]);
-  console.log(idForSubmit);
+  const [deleteUseditemQuestion] = useMutation<
+    Pick<IMutation, "deleteUseditemQuestion">,
+    IMutationDeleteUseditemQuestionArgs
+  >(DELETE_USED_ITEM_QUESTION);
+
+  const onClickDeleteQuestion = (id: string) => async () => {
+    try {
+      await deleteUseditemQuestion({
+        variables: { useditemQuestionId: id },
+        refetchQueries: [
+          {
+            query: FETCH_USED_ITEM_QUESTIONS,
+            variables: { useditemId: props.useditemId },
+          },
+        ],
+      });
+    } catch (error) {
+      if (error instanceof Error) alert(error.message);
+    }
+  };
+
   return (
     <ProductCommentListWrapper>
-      상품 문의 목록
       <div>
-        {props.dataQ?.fetchUseditemQuestions?.map((commentQ) => (
-          <>
-            <Comment
-              isEdit={idForEditQ === commentQ._id}
-              setIdForEdit={setIdForEditQ}
-              key={commentQ._id}
-              comment={commentQ}
-              setIdForOpenAnswer={setIdForOpenAnswer}
-              setIdForSubmit={setIdForSubmit}
-            />
-            {idForSubmit === commentQ._id ? (
-              <>
-                <Comment
-                  setIdForSubmit={setIdForSubmit}
-                  comment={commentQ}
-                  isEdit={true}
-                  isSubmit={true}
-                  setIdForOpenAnswer={setIdForOpenAnswer}
-                />
-              </>
-            ) : null}
-            {idForOpenAnswer[0] === commentQ._id
-              ? idForOpenAnswer[1].fetchUseditemQuestionAnswers.map(
-                  (commentA) => (
-                    <>
-                      <div
-                        key={commentA._id}
-                        style={{ display: "flex", alignItems: "center" }}
-                      >
-                        <div style={{ width: "50px", textAlign: "center" }}>
-                          A
-                        </div>
-                        <Comment
-                          isEdit={idForEditA === commentA._id}
-                          isAnswer={true}
-                          comment={commentA}
-                          commentQId={commentQ._id}
-                          setIdForOpenAnswer={setIdForOpenAnswer}
-                          setIdForEdit={setIdForEditA}
-                        />
-                      </div>
-                    </>
-                  )
-                )
-              : null}
-          </>
-        ))}
+        <span>상품 문의 목록</span>
       </div>
+      <ul>
+        {dataQ?.fetchUseditemQuestions?.map((commentQ) => (
+          <CommentQuestion
+            data={commentQ}
+            onClickDeleteQuestion={onClickDeleteQuestion}
+            key={commentQ._id}
+          />
+        ))}
+      </ul>
     </ProductCommentListWrapper>
   );
 };

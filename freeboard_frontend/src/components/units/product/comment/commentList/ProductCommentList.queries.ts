@@ -59,6 +59,7 @@ export const UPDATE_USED_ITEM_QUESTION_ANSWER = gql`
       useditemQuestionAnswerId: $useditemQuestionAnswerId
     ) {
       _id
+      contents
     }
   }
 `;
