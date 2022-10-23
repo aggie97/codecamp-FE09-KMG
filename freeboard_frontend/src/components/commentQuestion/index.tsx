@@ -15,12 +15,7 @@ import {
   FETCH_USED_ITEM_QUESTION_ANSWERS,
 } from "../units/product/comment/commentList/ProductCommentList.queries";
 
-const CommentQuestion = ({
-  data,
-  // onClickEditQuestion,
-  // onClickShowAnswers,
-  onClickDeleteQuestion,
-}) => {
+const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
   const { register, handleSubmit, reset } = useForm();
   const [isEditAnswerOpen, setIsEditAnswerOpen] = useState(false);
   const [isSubmitAnswerOpen, setIsSubmitAnswerOpen] = useState(false);
@@ -115,13 +110,7 @@ const CommentQuestion = ({
       </div>
       <div>
         {dataA?.fetchUseditemQuestionAnswers.map((el) => (
-          <CommentAnswerItem
-            key={el._id}
-            answer={el}
-            questionId={data._id}
-            // onClickEditAnswer={onClickEditAnswer}
-            // onClickDeleteAnswer={onClickDeleteAnswer}
-          />
+          <CommentAnswerItem key={el._id} answer={el} questionId={data._id} />
         ))}
       </div>
     </>

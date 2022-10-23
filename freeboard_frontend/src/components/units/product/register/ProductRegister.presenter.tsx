@@ -121,14 +121,19 @@ const ProductRegisterUI = (props: IProductProps) => {
             </div>
           </div>
           <span>중고 상품 이미지 올리기</span>
+          {console.log(props.images)}
 
           <div style={{ display: "flex" }}>
             {new Array(3).fill(1).map((_, index) => (
               <>
                 <NoImageBox onClick={props.onClickBox} htmlFor={`file${index}`}>
-                  {props.images[index] ? (
+                  {props.images?.[index] || props.preImages[index] ? (
                     <img
-                      src={`https://storage.googleapis.com/${props.images?.[index]}`}
+                      src={
+                        props.images?.[index] !== ""
+                          ? `https://storage.googleapis.com/${props.images?.[index]}`
+                          : props.preImages?.[index]
+                      }
                       style={{
                         width: "100px",
                         height: "100px",

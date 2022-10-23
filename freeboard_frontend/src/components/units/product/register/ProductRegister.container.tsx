@@ -41,6 +41,8 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
   const imageRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const [images, setImages] = useState(["", "", ""]);
+  const [preImages, setPreImages] = useState(new Array(3));
+  const [files, setFiles] = useState<File[]>([undefined, undefined, undefined]);
   const [createUseditem] = useMutation<
     Pick<IMutation, "createUseditem">,
     IMutationCreateUseditemArgs
@@ -64,22 +66,42 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
 
   useEffect(() => {
     if (isEdit) {
-      delete data?.fetchUseditem.useditemAddress?.__typename;
       setValue("name", data?.fetchUseditem.name);
       setValue("contents", data?.fetchUseditem.contents);
       setValue("remarks", data?.fetchUseditem.remarks);
       setValue("price", data?.fetchUseditem.price);
       setValue("images", data?.fetchUseditem.images);
-      setValue("useditemAddress", data?.fetchUseditem.useditemAddress);
+      setValue(
+        "useditemAddress.address",
+        data?.fetchUseditem.useditemAddress?.address
+      );
+      setValue(
+        "useditemAddress.addressDetail",
+        data?.fetchUseditem.useditemAddress?.addressDetail
+      );
+      setValue(
+        "useditemAddress.zipcode",
+        data?.fetchUseditem.useditemAddress?.zipcode
+      );
+      setValue("useditemAddress.lat", data?.fetchUseditem.useditemAddress?.lat);
+      setValue("useditemAddress.lng", data?.fetchUseditem.useditemAddress?.lng);
       setValue("tags", data?.fetchUseditem.tags);
+      // delete data?.fetchUseditem.useditemAddress?.__typename;
+      setImages(data?.fetchUseditem.images);
     }
   }, [data]);
+  console.log("수정 패치 데이터", data);
 
   const onSubmit = async (formData: IFormDataProps) => {
     // const [, ...rest] = formData.tags?.split("#");
     // formData.tags = rest;
-    formData.images = images;
     formData.price = parseInt(formData.price);
+    const results = await Promise.all(
+      files.map((el) => el && uploadFile({ variables: { file: el } }))
+    );
+
+    const resultUrls = results.map((el) => (el ? el.data?.uploadFile.url : ""));
+    formData.images = [...resultUrls];
 
     try {
       const result = await createUseditem({
@@ -99,6 +121,12 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     // formData.tags = rest;
     formData.images = images;
     formData.price = parseInt(formData.price);
+    const results = await Promise.all(
+      files.map((el) => el && uploadFile({ variables: { file: el } }))
+    );
+
+    const resultUrls = results.map((el) => (el ? el.data?.uploadFile.url : ""));
+    formData.images = [...resultUrls];
 
     try {
       const result = await updateUseditem({
@@ -118,15 +146,30 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     (index: number) => async (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
 
-      const result = await uploadFile({
-        variables: { file },
-      });
-      const imgUrl = result.data?.uploadFile.url;
-      setImages((prev) => {
-        prev[index] = imgUrl ?? "";
-        const newState = [...prev];
-        return newState;
-      });
+      if (file == null) return;
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = (event) => {
+        if (typeof event.target?.result === "string") {
+          const imgUrl = event.target?.result;
+          setPreImages((prev) => {
+            prev[index] = imgUrl ?? "";
+            const newState = [...prev];
+            return newState;
+          });
+          setFiles((prev) => {
+            prev[index] = file;
+            return [...prev];
+          });
+        }
+      };
+
+      // const imgUrl = result.data?.uploadFile.url;
+      // setImages((prev) => {
+      //   prev[index] = imgUrl ?? "";
+      //   const newState = [...prev];
+      //   return newState;
+      // });
     };
 
   const onClickBox = () => imageRef.current?.click();
@@ -157,6 +200,7 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
       onChangeImageBox={onChangeImageBox}
       onClickBox={onClickBox}
       imageRef={imageRef}
+      preImages={preImages}
       images={images}
       onClickSearchAddress={onClickSearchAddress}
       onCompleteAddressSearch={onCompleteAddressSearch}

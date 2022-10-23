@@ -2,6 +2,7 @@ import { ChangeEventHandler, MouseEventHandler, MutableRefObject } from "react";
 import { Address } from "react-daum-postcode";
 import {
   FieldErrorsImpl,
+  FormState,
   UseFormHandleSubmit,
   UseFormRegister,
   UseFormSetValue,
@@ -25,6 +26,7 @@ export interface IFormDataProps {
 }
 
 export interface IProductProps {
+  formState: FormState<IFormDataProps>;
   onChangeValue:
     | ((
         value: string,
@@ -42,6 +44,7 @@ export interface IProductProps {
   onCompleteAddressSearch: ((address: Address) => void) | undefined;
   isOpen: any;
   images: string[];
+  preImages: string[];
   imageRef: MutableRefObject<undefined>;
   onChangeImageBox: (
     index: number
