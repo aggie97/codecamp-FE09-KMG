@@ -11,15 +11,20 @@ const PickedProductList = (props) => {
     <PickProductListWrapper>
       <Title>찜하신 상품들을 모아봤어요!</Title>
       <ListUl>
-        {props.data?.fetchUseditemsIPicked.map((item) => (
-          <ProductCard key={item._id} onClick={props.onClickProductItem(item)}>
-            <ProductImg
-              src={`https://storage.googleapis.com/${item.images?.[0] ?? ""}`}
-            />
-            <ProductInfo>{item.name}</ProductInfo>
-            <Button>카트에 담기</Button>
-          </ProductCard>
-        ))}
+        {props.data?.fetchUseditemsIPicked.map((item, i) =>
+          i < 5 ? (
+            <ProductCard
+              key={item._id}
+              onClick={props.onClickProductItem(item)}
+            >
+              <ProductImg
+                src={`https://storage.googleapis.com/${item.images?.[0] ?? ""}`}
+              />
+              <ProductInfo>{item.name}</ProductInfo>
+              <Button>카트에 담기</Button>
+            </ProductCard>
+          ) : null
+        )}
       </ListUl>
     </PickProductListWrapper>
   );
@@ -43,5 +48,5 @@ const ListUl = styled.ul`
   list-style: none;
   display: flex;
   width: 100%;
-  gap: 20px;
+  gap: 35px;
 `;

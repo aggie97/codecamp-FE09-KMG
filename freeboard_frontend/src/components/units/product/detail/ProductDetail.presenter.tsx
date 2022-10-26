@@ -91,7 +91,7 @@ const ProductDetailUI = (props: IProductDetailProps) => {
           <MainLeft>
             <LeftHeader>
               <LeftTitle>
-                {props.data?.fetchUseditem.seller}님이 떠나보내는{" "}
+                {props.data?.fetchUseditem.seller.name}님이 떠나보내는{" "}
                 {props.data?.fetchUseditem.name}
                 {props.data?.fetchUseditem.tags?.map((tag, i) => (
                   <LeftTags key={i}>#{tag}</LeftTags>
@@ -136,6 +136,11 @@ const ProductDetailUI = (props: IProductDetailProps) => {
               <Divider />
               <Button onClick={props.onClickMoveToBack}>돌아가기</Button>
               <Divider />
+              <Button
+                onClick={props.onClickUpdate(props.data?.fetchUseditem._id)}
+              >
+                수정하기
+              </Button>
               <Button
                 onClick={props.onClickDelete(
                   props.data?.fetchUseditem._id ?? ""

@@ -71,9 +71,9 @@ const CommentAnswerItem = ({
     setContents(event.target.value);
   };
   return (
-    <div key={answer._id}>
+    <div style={{ textIndent: "20px" }} key={answer._id}>
       <div style={{ display: "flex", gap: "10px" }}>
-        ㄴA
+        ㄴ A
         {isAnswerEditOpen ? (
           <input
             onChange={onChangeEditAnswer}

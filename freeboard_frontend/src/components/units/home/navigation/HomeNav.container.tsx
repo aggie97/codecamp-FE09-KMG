@@ -2,10 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 import { useRecoilState } from "recoil";
-import {
-  accessTokenState,
-  isLoggedInUserState,
-} from "../../../../commons/store";
+import { accessTokenState } from "../../../../commons/store";
 import { IQuery } from "../../../../commons/types/generated/types";
 import HomeNavigationUI from "./HomeNav.presenter";
 
@@ -15,6 +12,10 @@ const FETCH_USER_LOGGED_IN = gql`
       _id
       email
       name
+      picture
+      userPoint {
+        amount
+      }
     }
   }
 `;
@@ -41,7 +42,12 @@ const HomeNavigation = () => {
       id: "signIn",
       menu: token ? `${data?.fetchUserLoggedIn.name ?? ""}님` : "로그인",
     },
-    { id: "signUp", menu: token ? "Point: 0" : "회원가입" },
+    {
+      id: "signUp",
+      menu: token
+        ? `Point: ${data?.fetchUserLoggedIn.userPoint?.amount}`
+        : "회원가입",
+    },
   ];
 
   const onClickMenu = async (event: MouseEvent<HTMLLIElement>) => {

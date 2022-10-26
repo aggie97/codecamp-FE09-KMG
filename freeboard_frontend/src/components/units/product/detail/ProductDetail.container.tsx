@@ -61,6 +61,10 @@ const ProductDetail = () => {
     await router.push("/");
   };
 
+  const onClickUpdate = (useditemId: string) => async () => {
+    await router.push(`/market/${useditemId}/edit`);
+  };
+
   const onClickDelete = (useditemId: string) => async () => {
     try {
       await deleteUseditem({
@@ -104,9 +108,8 @@ const ProductDetail = () => {
             query: FETCH_USER_LOGGED_IN,
           },
         ],
-        
       });
-      
+
       Modal.success({ content: "구매 완료되었습니다." });
       await router.push("/myPage"); // 구매 물품 목록 페이지
     } catch (error) {
@@ -123,6 +126,7 @@ const ProductDetail = () => {
       onClickPick={onClickPick}
       onClickBuy={onClickBuy}
       pickedItemsData={pickedItemsData}
+      onClickUpdate={onClickUpdate}
     />
   );
 };

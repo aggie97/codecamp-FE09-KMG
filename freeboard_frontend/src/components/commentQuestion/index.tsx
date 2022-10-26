@@ -1,4 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
+import styled from "@emotion/styled";
+import { Divider } from "antd";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -9,6 +11,7 @@ import {
   IQueryFetchUseditemQuestionAnswersArgs,
 } from "../../commons/types/generated/types";
 import CommentAnswerItem from "../commentAnswerItem";
+import Button from "../common/button";
 import { UPDATE_USED_ITEM_QUESTION } from "../common/newComment/queries";
 import {
   CREATE_USED_ITEM_QUESTION_ANSWER,
@@ -83,38 +86,51 @@ const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
 
   return (
     <>
-      <div style={{ display: "flex", gap: "20px" }}>
-        <div>글쓴이: {data.user.name}</div>
-        <div>질문: {data.contents}</div>
+      <QuestionWrapper style={{ display: "flex", gap: "20px" }}>
+        <span>
+          <img src={data.user.picture} /> {data.user.name}
+        </span>
+        <span>질문: {data.contents}</span>
+        <ButtonBox>
+          <Button onClick={onClickSubmitAnswer}>A달기</Button>
+          <Button onClick={onClickEditQuestion}>Q수정</Button>
+          <Button onClick={onClickDeleteQuestion(data._id)}>Q삭제</Button>
+        </ButtonBox>
+      </QuestionWrapper>
+      <Divider />
+      {isSubmitAnswerOpen ? (
         <div>
-          <button onClick={onClickSubmitAnswer}>A달기</button>
-          <button onClick={onClickEditQuestion}>Q수정</button>
-          <button onClick={onClickDeleteQuestion(data._id)}>Q삭제</button>
-        </div>
-      </div>
-      <div>
-        {isSubmitAnswerOpen ? (
           <form onSubmit={handleSubmit(onSubmitAnswer)}>
             <input type="text" {...register("contents")} />
             <button>A등록</button>
           </form>
-        ) : null}
-      </div>
-      <div>
-        {isEditAnswerOpen ? (
+        </div>
+      ) : null}
+      {isEditAnswerOpen ? (
+        <div>
           <form onSubmit={handleSubmit(onEditAnswer)}>
             <input type="text" {...register("contents")} />
             <button>Q수정</button>
           </form>
-        ) : null}
-      </div>
-      <div>
-        {dataA?.fetchUseditemQuestionAnswers.map((el) => (
-          <CommentAnswerItem key={el._id} answer={el} questionId={data._id} />
-        ))}
-      </div>
+        </div>
+      ) : null}
+      {dataA?.fetchUseditemQuestionAnswers.map((el) => (
+        <CommentAnswerItem key={el._id} answer={el} questionId={data._id} />
+      ))}
     </>
   );
 };
 
 export default CommentQuestion;
+
+const QuestionWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  min-width: 300px;
+`;
