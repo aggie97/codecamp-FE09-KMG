@@ -6,5 +6,5 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 2000:3000
+      - 3000:3000
       # 2000(내 환경) -> 3000(도커 환경) port forwarding
