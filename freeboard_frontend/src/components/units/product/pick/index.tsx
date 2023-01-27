@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { IQuery, IUseditem } from "../../../../commons/types/generated/types";
 import Button from "../../../common/button";
 import {
   ProductCard,
@@ -6,7 +7,12 @@ import {
   ProductInfo,
 } from "../list/ProductList.styles";
 
-const PickedProductList = (props) => {
+interface IPickedProductListProps {
+  data?: Pick<IQuery, "fetchUseditemsIPicked">;
+  onClickProductItem: (item: IUseditem) => () => void;
+}
+
+const PickedProductList = (props: IPickedProductListProps) => {
   return (
     <PickProductListWrapper>
       <Title>찜하신 상품들을 모아봤어요!</Title>

@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { v4 } from "uuid";
+import { IUseditem } from "../types/generated/types";
 
 export const accessTokenState = atom({
   key: `accessTokenState/${v4()}`,
@@ -16,7 +17,7 @@ export const cartItemsState = atom({
   default: [],
 });
 
-export const todayILookedProducts = atom({
+export const todayILookedProducts = atom<IUseditem[]>({
   key: `todayILookedProducts${v4()}`,
   default: [],
 });

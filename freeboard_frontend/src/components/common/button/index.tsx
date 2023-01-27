@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 
 interface IButtonProps {
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   children: string | JSX.Element;
-  type?: string;
+  type?: "button" | "submit";
 }
 
 const Button = (props: IButtonProps) => {

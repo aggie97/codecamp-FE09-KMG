@@ -10,9 +10,12 @@ import {
 } from "./ProductList.styles";
 
 interface IProductListProps {
-  onClickCart: (item: IUseditem) => () => void;
+  onClickCart: (
+    item: IUseditem
+  ) => (event: React.MouseEvent<HTMLButtonElement>) => void;
   onClickProductItem: (itemId: IUseditem) => () => void;
   itemsData?: Pick<IQuery, "fetchUseditems">;
+  loadFunc: () => void;
 }
 
 const ProductListUI = ({

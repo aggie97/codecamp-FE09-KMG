@@ -30,19 +30,19 @@ const createItemSchema = yup.object({
 });
 
 interface IEditProps {
-  data: { fetchUseditem: IUseditem };
-  isEdit: boolean;
+  data?: { fetchUseditem: IUseditem };
+  isEdit?: boolean;
 }
 
 const ProductRegister = ({ data, isEdit }: IEditProps) => {
   useAuth();
 
   const router = useRouter();
-  const imageRef = useRef();
+  const imageRef = useRef<HTMLLabelElement | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [images, setImages] = useState(["", "", ""]);
   const [preImages, setPreImages] = useState(new Array(3));
-  const [files, setFiles] = useState<File[]>([undefined, undefined, undefined]);
+  const [files, setFiles] = useState<File[]>(new Array(3));
   const [createUseditem] = useMutation<
     Pick<IMutation, "createUseditem">,
     IMutationCreateUseditemArgs
@@ -66,10 +66,10 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
 
   useEffect(() => {
     if (isEdit) {
-      setValue("name", data?.fetchUseditem.name);
-      setValue("contents", data?.fetchUseditem.contents);
-      setValue("remarks", data?.fetchUseditem.remarks);
-      setValue("price", data?.fetchUseditem.price);
+      setValue("name", String(data?.fetchUseditem.name));
+      setValue("contents", String(data?.fetchUseditem.contents));
+      setValue("remarks", String(data?.fetchUseditem.remarks));
+      setValue("price", Number(data?.fetchUseditem.price));
       setValue("images", data?.fetchUseditem.images);
       setValue(
         "useditemAddress.address",
@@ -86,21 +86,24 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
       setValue("useditemAddress.lat", data?.fetchUseditem.useditemAddress?.lat);
       setValue("useditemAddress.lng", data?.fetchUseditem.useditemAddress?.lng);
       setValue("tags", data?.fetchUseditem.tags);
-      // delete data?.fetchUseditem.useditemAddress?.__typename;
-      setImages(data?.fetchUseditem.images);
+      setImages(data?.fetchUseditem.images ?? [""]);
     }
   }, [data]);
-  console.log("수정 패치 데이터", data);
 
   const onSubmit = async (formData: IFormDataProps) => {
     // const [, ...rest] = formData.tags?.split("#");
     // formData.tags = rest;
-    formData.price = parseInt(formData.price);
+    formData.price = Number(formData.price);
     const results = await Promise.all(
-      files.map((el) => el && uploadFile({ variables: { file: el } }))
+      files.map(
+        async (el) => el && (await uploadFile({ variables: { file: el } }))
+      )
     );
 
-    const resultUrls = results.map((el) => (el ? el.data?.uploadFile.url : ""));
+    const resultUrls = results.map((el) =>
+      el ? String(el.data?.uploadFile.url) : ""
+    );
+
     formData.images = [...resultUrls];
 
     try {
@@ -120,12 +123,16 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     // const [, ...rest] = formData.tags?.split("#");
     // formData.tags = rest;
     formData.images = images;
-    formData.price = parseInt(formData.price);
+    formData.price = Number(formData.price);
     const results = await Promise.all(
-      files.map((el) => el && uploadFile({ variables: { file: el } }))
+      files.map(
+        async (el) => el && (await uploadFile({ variables: { file: el } }))
+      )
     );
 
-    const resultUrls = results.map((el) => (el ? el.data?.uploadFile.url : ""));
+    const resultUrls = results.map((el) =>
+      el.data ? el.data?.uploadFile.url : ""
+    );
     formData.images = [...resultUrls];
 
     try {
@@ -184,7 +191,7 @@ const ProductRegister = ({ data, isEdit }: IEditProps) => {
     setIsOpen((prev) => !prev);
   };
 
-  const onChangeValue = (value) => {
+  const onChangeValue = (value: string) => {
     setValue("contents", value === "<p><br></p>" ? "" : value); // 빈값일 경우 태그가 남기 때문에 초기화시켜주는 부분
     void trigger("contents");
   };

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   IMutation,
   IMutationCreateUseditemQuestionArgs,
+  IUseditemQuestion,
 } from "../../../../../commons/types/generated/types";
 import ProductNewCommentUI from "./ProductComment.presenter";
 import {
@@ -11,20 +12,20 @@ import {
   FETCH_USED_ITEM_QUESTIONS,
 } from "./ProductComment.queries";
 
-const ProductNewComment = ({ useditemId }: string) => {
-  const { register, handleSubmit, reset } = useForm();
+const ProductNewComment = ({ useditemId }: { useditemId: string }) => {
+  const { register, handleSubmit, reset } = useForm<IUseditemQuestion>();
   const [createUseditemQuestion] = useMutation<
     Pick<IMutation, "createUseditemQuestion">,
     IMutationCreateUseditemQuestionArgs
   >(CREATE_USED_ITEM_QUESTION);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: IUseditemQuestion) => {
     if (!data.contents) {
       Modal.warning({ content: "질문 내용을 입력해주세요!" });
       return;
     }
     try {
-      const result = await createUseditemQuestion({
+      await createUseditemQuestion({
         variables: {
           createUseditemQuestionInput: { ...data },
           useditemId,
@@ -36,7 +37,6 @@ const ProductNewComment = ({ useditemId }: string) => {
           },
         ],
       });
-
       reset();
     } catch (error) {
       error instanceof Error && Modal.error({ content: error.message });

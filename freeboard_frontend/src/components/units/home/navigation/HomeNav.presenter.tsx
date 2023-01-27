@@ -6,7 +6,7 @@ import {
   WrapperInnerRight,
 } from "./HomeNav.styles";
 
-interface IIdMenuProps {
+export interface IIdMenuProps {
   id: string;
   menu: string;
 }
@@ -14,7 +14,7 @@ interface IIdMenuProps {
 interface INavProps {
   onClickMenu: (event: MouseEvent<HTMLLIElement>) => void;
   menu: IIdMenuProps[];
-  sign: IIdMenuProps[];
+  sign: Array<IIdMenuProps | null>;
 }
 
 const HomeNavigationUI = ({ menu, onClickMenu, sign }: INavProps) => {

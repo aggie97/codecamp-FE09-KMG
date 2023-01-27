@@ -8,7 +8,7 @@ import Link from "next/link";
 import { stuckState } from "../../../commons/store";
 import { useRecoilState } from "recoil";
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: JSX.Element }) => {
   const router = useRouter();
   const [stuck] = useRecoilState(stuckState);
   return (

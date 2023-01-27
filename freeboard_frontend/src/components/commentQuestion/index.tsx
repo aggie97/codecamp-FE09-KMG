@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
 import { Divider } from "antd";
-import { useState } from "react";
+import Image from "next/image";
+import { MouseEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   IMutation,
@@ -9,6 +10,8 @@ import {
   IMutationUpdateUseditemQuestionArgs,
   IQuery,
   IQueryFetchUseditemQuestionAnswersArgs,
+  IUseditemQuestion,
+  IUseditemQuestionAnswer,
 } from "../../commons/types/generated/types";
 import CommentAnswerItem from "../commentAnswerItem";
 import Button from "../common/button";
@@ -18,8 +21,18 @@ import {
   FETCH_USED_ITEM_QUESTION_ANSWERS,
 } from "../units/product/comment/commentList/ProductCommentList.queries";
 
-const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
-  const { register, handleSubmit, reset } = useForm();
+const CommentQuestion = ({
+  data,
+  onClickDeleteQuestion,
+}: {
+  data?: IUseditemQuestion;
+  onClickDeleteQuestion: (
+    dataId: string
+  ) => (event: MouseEvent<HTMLButtonElement>) => void;
+}) => {
+  const { register, handleSubmit, reset } = useForm<
+    IUseditemQuestion & IUseditemQuestionAnswer
+  >();
   const [isEditAnswerOpen, setIsEditAnswerOpen] = useState(false);
   const [isSubmitAnswerOpen, setIsSubmitAnswerOpen] = useState(false);
 
@@ -28,7 +41,7 @@ const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
     IQueryFetchUseditemQuestionAnswersArgs
   >(FETCH_USED_ITEM_QUESTION_ANSWERS, {
     variables: {
-      useditemQuestionId: String(data._id),
+      useditemQuestionId: String(data?._id),
     },
   });
   const [updateUseditemQuestion] = useMutation<
@@ -45,17 +58,17 @@ const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
     setIsSubmitAnswerOpen((prev) => !prev);
   };
 
-  const onSubmitAnswer = async (formData) => {
+  const onSubmitAnswer = async (formData: IUseditemQuestionAnswer) => {
     try {
       await createUseditemQuestionAnswer({
         variables: {
           createUseditemQuestionAnswerInput: { ...formData },
-          useditemQuestionId: data._id,
+          useditemQuestionId: String(data?._id),
         },
         refetchQueries: [
           {
             query: FETCH_USED_ITEM_QUESTION_ANSWERS,
-            variables: { useditemQuestionId: data._id },
+            variables: { useditemQuestionId: String(data?._id) },
           },
         ],
       });
@@ -66,12 +79,12 @@ const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
     }
   };
 
-  const onEditAnswer = async (formData) => {
+  const onEditAnswer = async (formData: IUseditemQuestion) => {
     try {
-      const result = await updateUseditemQuestion({
+      await updateUseditemQuestion({
         variables: {
           updateUseditemQuestionInput: { ...formData },
-          useditemQuestionId: data._id,
+          useditemQuestionId: String(data?._id),
         },
       });
       setIsEditAnswerOpen((prev) => !prev);
@@ -88,13 +101,15 @@ const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
     <>
       <QuestionWrapper style={{ display: "flex", gap: "20px" }}>
         <span>
-          <img src={data.user.picture} /> {data.user.name}
+          <Image src={String(data?.user.picture)} /> {data?.user.name}
         </span>
-        <span>질문: {data.contents}</span>
+        <span>질문: {data?.contents}</span>
         <ButtonBox>
           <Button onClick={onClickSubmitAnswer}>A달기</Button>
           <Button onClick={onClickEditQuestion}>Q수정</Button>
-          <Button onClick={onClickDeleteQuestion(data._id)}>Q삭제</Button>
+          <button onClick={onClickDeleteQuestion(String(data?._id))}>
+            Q삭제
+          </button>
         </ButtonBox>
       </QuestionWrapper>
       <Divider />
@@ -115,7 +130,11 @@ const CommentQuestion = ({ data, onClickDeleteQuestion }) => {
         </div>
       ) : null}
       {dataA?.fetchUseditemQuestionAnswers.map((el) => (
-        <CommentAnswerItem key={el._id} answer={el} questionId={data._id} />
+        <CommentAnswerItem
+          key={el._id}
+          answer={el}
+          questionId={String(data?._id)}
+        />
       ))}
     </>
   );

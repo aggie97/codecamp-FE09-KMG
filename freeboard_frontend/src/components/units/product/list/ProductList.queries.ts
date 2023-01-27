@@ -11,3 +11,16 @@ export const FETCH_USED_ITEMS_I_PICKED = gql`
     }
   }
 `;
+
+export const FETCH_USED_ITEMS = gql`
+  query fetchUseditems($page: Int) {
+    fetchUseditems(page: $page) {
+      _id
+      name
+      contents
+      price
+      images
+      pickedCount
+    }
+  }
+`;

@@ -1,6 +1,6 @@
 import ProductCommentListUI from "./ProductCommentList.presenter";
 
-const ProductCommentList = ({ useditemId }: string) => {
+const ProductCommentList = ({ useditemId }: { useditemId: string }) => {
   return <ProductCommentListUI useditemId={useditemId} />;
 };
 

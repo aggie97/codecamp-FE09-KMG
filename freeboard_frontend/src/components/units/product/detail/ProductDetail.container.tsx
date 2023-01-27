@@ -79,12 +79,11 @@ const ProductDetail = () => {
   };
 
   const onClickPick = (useditemId: string) => async () => {
-    const temp = pickedItemsData?.fetchUseditemsIPicked.filter(
-      (el) => el._id === useditemId
-    );
-
+    // const temp = pickedItemsData?.fetchUseditemsIPicked.filter(
+    //   (el) => el._id === useditemId
+    // );
     try {
-      const result = await toggleUseditemPick({
+      await toggleUseditemPick({
         variables: { useditemId },
         refetchQueries: [
           {
@@ -101,7 +100,7 @@ const ProductDetail = () => {
 
   const onClickBuy = (useritemId: string) => async () => {
     try {
-      const result = await createPointTransactionOfBuyingAndSelling({
+      await createPointTransactionOfBuyingAndSelling({
         variables: { useritemId },
         refetchQueries: [
           {

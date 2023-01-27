@@ -22,7 +22,7 @@ export const UserPicture = styled.div`
   border-radius: 50%;
   border: 1px solid #ddd;
   overflow: hidden;
-  background-image: url(${(props) => props.imgUrl});
+  background-image: url(${(props: { imgUrl: string }) => props.imgUrl});
 `;
 
 export const UserName = styled.span`

@@ -22,7 +22,7 @@ const AntdModal = (props: any) => {
         {props.children}
       </Button>
       <Modal
-        title={`게시글 ${props.children}`}
+        title={`게시글 ${String(props.children)}`}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

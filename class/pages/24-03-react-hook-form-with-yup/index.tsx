@@ -34,7 +34,6 @@ const HookForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isValid },
     // useForm에 yup을 연결하는 방법...!
   } = useForm<IFormData>({ resolver: yupResolver(mySchema), mode: "onChange" }); // mode를 선언해주면 비제어 -> 제어 컴포넌트로 전환 가능

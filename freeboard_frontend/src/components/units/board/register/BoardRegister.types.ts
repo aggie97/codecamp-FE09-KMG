@@ -39,7 +39,7 @@ export interface IProps {
   onClickAddressSearch: () => void;
   onClickPicture: () => void;
   onChangeInput: (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
   ) => void;
   submitForm: (event: SyntheticEvent) => Promise<void>;
   editForm: (event: SyntheticEvent) => Promise<void>;

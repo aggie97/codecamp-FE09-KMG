@@ -4,7 +4,7 @@ import { MouseEvent } from "react";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "../../../../commons/store";
 import { IQuery } from "../../../../commons/types/generated/types";
-import HomeNavigationUI from "./HomeNav.presenter";
+import HomeNavigationUI, { IIdMenuProps } from "./HomeNav.presenter";
 
 const FETCH_USER_LOGGED_IN = gql`
   query fetchUserLoggedIn {
@@ -31,7 +31,7 @@ const HomeNavigation = () => {
     { id: "firebase", menu: "파이어베이스" },
   ];
 
-  const sign = [
+  const sign: Array<IIdMenuProps | null> = [
     token
       ? {
           id: "market/new",
@@ -45,7 +45,7 @@ const HomeNavigation = () => {
     {
       id: "signUp",
       menu: token
-        ? `Point: ${data?.fetchUserLoggedIn.userPoint?.amount}`
+        ? `Point: ${String(data?.fetchUserLoggedIn.userPoint?.amount)}`
         : "회원가입",
     },
   ];

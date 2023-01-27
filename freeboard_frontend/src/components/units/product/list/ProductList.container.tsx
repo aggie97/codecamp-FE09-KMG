@@ -1,8 +1,7 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import {
   cartItemsState,
   todayILookedProducts,
@@ -13,23 +12,7 @@ import {
   IUseditem,
 } from "../../../../commons/types/generated/types";
 import ProductListUI from "./ProductList.presenter";
-
-// type IItems = Array<
-//   Pick<IUseditem, "_id" | "contents" | "images" | "name" | "remarks" | "price">
-// >;
-
-const FETCH_USED_ITEMS = gql`
-  query fetchUseditems($page: Int) {
-    fetchUseditems(page: $page) {
-      _id
-      name
-      contents
-      price
-      images
-      pickedCount
-    }
-  }
-`;
+import { FETCH_USED_ITEMS } from "./ProductList.queries";
 
 const ProductList = () => {
   const router = useRouter();
@@ -39,26 +22,26 @@ const ProductList = () => {
     IQueryFetchUseditemsArgs
   >(FETCH_USED_ITEMS, { fetchPolicy: "cache-and-network" });
 
-  const [, setTodayItem] = useRecoilState(todayILookedProducts);
+  const setTodayItem = useSetRecoilState(todayILookedProducts);
+  const setItems = useSetRecoilState(cartItemsState);
 
-  const [, setItems] = useRecoilState(cartItemsState);
-
-  const onClickCart = (item: IUseditem) => (event: MouseEvent) => {
-    event.stopPropagation();
-    const items = JSON.parse(localStorage.getItem("useditems") ?? "[]");
-    const temp = items.filter((el: IUseditem) => el._id === item._id);
-    if (temp.length === 1) {
-      Modal.warning({ content: "이미 담으신 물품입니다!!!" });
-      return;
-    }
-    items.push(item);
-    setItems(items);
-    localStorage.setItem("useditems", JSON.stringify(items));
-  };
+  const onClickCart =
+    (item: IUseditem) => (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+      const items = JSON.parse(localStorage.getItem("useditems") ?? "[]");
+      const temp = items.filter((el: IUseditem) => el._id === item._id);
+      if (temp.length === 1) {
+        Modal.warning({ content: "이미 담으신 물품입니다!!!" });
+        return;
+      }
+      items.push(item);
+      setItems(items);
+      localStorage.setItem("useditems", JSON.stringify(items));
+    };
 
   const onClickProductItem = (item: IUseditem) => async () => {
     const items = JSON.parse(localStorage.getItem("TILP") ?? "[]");
-    const temp = items.filter((el) => el._id === item._id);
+    const temp = items.filter((el: IUseditem) => el._id === item._id);
 
     if (temp.length === 1) {
       console.log("로컬스토리지 아이템 중복");
@@ -70,8 +53,11 @@ const ProductList = () => {
 
     setTodayItem((prev) => {
       if (prev.length) {
-        const newState = [item, ...prev];
-        return [...new Set(newState)];
+        const newArray: IUseditem[] = [];
+        [item, ...prev].forEach((el) => {
+          if (newArray.includes(el)) newArray.push(el);
+        });
+        return newArray;
       } else return [item];
     });
     localStorage.setItem("TILP", JSON.stringify(items));

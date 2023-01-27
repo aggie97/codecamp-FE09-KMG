@@ -21,7 +21,3 @@ export const WrapperInnerRight = styled.div`
 `;
 
 export const MenuBox = styled.div``;
-// export const WrapperInner = styled.div``;
-// export const WrapperInner = styled.div``;
-// export const WrapperInner = styled.div``;
-// export const WrapperInner = styled.div``;

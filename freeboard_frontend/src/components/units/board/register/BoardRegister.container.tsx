@@ -56,7 +56,7 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
 
   useEffect(() => {
     if (isEdit) {
-      setInput({ ...input, images: data?.fetchBoard.images });
+      setInput({ ...input, images: data?.fetchBoard.images ?? [""] });
     }
   }, []);
 
@@ -68,8 +68,6 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
     setInput({ ...input, address: address.address, zipcode: address.zonecode });
     setIsOpen((prev) => !prev);
   };
-
-  console.log("input:", input);
 
   const submitForm = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -186,10 +184,10 @@ const BoardRegister = ({ isEdit, data }: IBoardRegisterProps) => {
   };
 
   const onChangeInput = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
   ) => {
-    if (event.target.id === "images") {
-      const file = event.target.files?.[0];
+    if (event.currentTarget.id === "images") {
+      const file = event.currentTarget.files?.[0];
       try {
         const result = await uploadFile({
           variables: { file },

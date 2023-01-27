@@ -1,6 +1,5 @@
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Divider } from "antd";
-import { IQuery, IUseditem } from "../../../../commons/types/generated/types";
 import Button from "../../../common/button";
 import KakaoMapLauncher from "../../../common/kakaoMap";
 import ProductCommentList from "../comment/commentList/ProductCommentList.container";
@@ -25,18 +24,7 @@ import {
   StickyBox,
   Title,
 } from "./ProductDetail.styles";
-
-interface IProductDetailProps {
-  onClickPick: (id: string) => () => void;
-  onClickDelete: (useditemId: string) => () => void;
-  routerId?: string | string[];
-  data?: {
-    fetchUseditem: IUseditem;
-  };
-  onClickMoveToBack: () => void;
-  pickedItemsData: Pick<IQuery, "fetchUseditemsIPicked">;
-  onClickBuy: (id: string) => () => Promise<void>;
-}
+import { IProductDetailProps } from "./ProductDetail.types";
 
 const ProductDetailUI = (props: IProductDetailProps) => {
   return (
@@ -91,7 +79,7 @@ const ProductDetailUI = (props: IProductDetailProps) => {
           <MainLeft>
             <LeftHeader>
               <LeftTitle>
-                {props.data?.fetchUseditem.seller.name}님이 떠나보내는{" "}
+                {props.data?.fetchUseditem.seller?.name}님이 떠나보내는{" "}
                 {props.data?.fetchUseditem.name}
                 {props.data?.fetchUseditem.tags?.map((tag, i) => (
                   <LeftTags key={i}>#{tag}</LeftTags>
@@ -137,7 +125,9 @@ const ProductDetailUI = (props: IProductDetailProps) => {
               <Button onClick={props.onClickMoveToBack}>돌아가기</Button>
               <Divider />
               <Button
-                onClick={props.onClickUpdate(props.data?.fetchUseditem._id)}
+                onClick={props.onClickUpdate(
+                  props.data?.fetchUseditem._id ?? ""
+                )}
               >
                 수정하기
               </Button>
@@ -158,9 +148,9 @@ const ProductDetailUI = (props: IProductDetailProps) => {
           />
         </div>
       </ProductDetailWrapper>
-      <ProductNewComment useditemId={props.routerId} />
+      <ProductNewComment useditemId={String(props.routerId)} />
       <Divider />
-      <ProductCommentList useditemId={props.routerId} />
+      <ProductCommentList useditemId={String(props.routerId)} />
     </>
   );
 };

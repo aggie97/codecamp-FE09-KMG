@@ -1,12 +1,14 @@
+import { IUseditem } from "../../../commons/types/generated/types";
 import {
   ProductCard,
   ProductImg,
   ProductInfo,
 } from "../../units/product/list/ProductList.styles";
 
-// import Button from "../button";
-
-interface IProductItemProps {}
+interface IProductItemProps {
+  item: IUseditem;
+  onClickProductItem: (item: IUseditem) => () => void;
+}
 
 const ProductItem = ({ item, onClickProductItem }: IProductItemProps) => {
   return (

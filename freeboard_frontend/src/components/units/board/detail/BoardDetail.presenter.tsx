@@ -63,11 +63,11 @@ const BoardDetailUI = ({
                         <B.AddressBackground src="/addressAlert.png" />
                         <B.AddressTextBox>
                           <B.AddressText>
-                            {data?.fetchBoard?.boardAddress?.address ||
+                            {data?.fetchBoard?.boardAddress?.address ??
                               "등록된 주소가 없습니다."}
                           </B.AddressText>
                           <B.AddressText>
-                            {data?.fetchBoard?.boardAddress?.addressDetail ||
+                            {data?.fetchBoard?.boardAddress?.addressDetail ??
                               "등록된 상세주소가 없습니다."}
                           </B.AddressText>
                         </B.AddressTextBox>

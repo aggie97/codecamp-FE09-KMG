@@ -39,7 +39,7 @@ export default function ApolloSetting(props: IApolloSettingProps) {
               operation.setContext({
                 headers: {
                   ...operation.getContext().headers,
-                  Authorization: `Beaer ${newAccessToken}`,
+                  Authorization: `Beaerer ${newAccessToken}`,
                 },
               });
             })
@@ -51,6 +51,7 @@ export default function ApolloSetting(props: IApolloSettingProps) {
 
   const uploadLink = createUploadLink({
     uri: "https://backend09.codebootcamp.co.kr/graphql",
+    // http://34.64.71.91:3000
     headers: { Authorization: `Bearer ${token}` },
     credentials: "include",
   });

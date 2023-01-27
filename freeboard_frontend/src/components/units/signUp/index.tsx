@@ -23,7 +23,7 @@ const CREATE_USER = gql`
 
 const SignUp = () => {
   const router = useRouter();
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [createUser] = useMutation<
     Pick<IMutation, "createUser">,

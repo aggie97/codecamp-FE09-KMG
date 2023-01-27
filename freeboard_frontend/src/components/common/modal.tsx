@@ -1,7 +1,13 @@
-import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 
-const MyModal = (props) => {
+interface IMyModalProps {
+  children: JSX.Element;
+  title: string;
+  onClickModalWrapper: () => void;
+  onToggleModal: () => void;
+}
+
+const MyModal = (props: IMyModalProps) => {
   return (
     <>
       <ModalWrapper id="wrapper" onClick={props.onClickModalWrapper}>

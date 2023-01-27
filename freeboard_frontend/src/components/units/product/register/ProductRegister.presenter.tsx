@@ -20,14 +20,11 @@ const ProductRegisterUI = (props: IProductProps) => {
   return (
     <>
       {props.isOpen && (
-        <Modal
-          onCancel={props.onClickSearchAddress}
-          onOk={props.onClickSearchAddress}
-          visible={true}
-        >
+        <Modal>
           <AddressInputModal onComplete={props.onCompleteAddressSearch} />
         </Modal>
       )}
+
       <ProductFormWrapper>
         <form
           onSubmit={
@@ -79,7 +76,7 @@ const ProductRegisterUI = (props: IProductProps) => {
               <KakaoMapLauncher
                 address={
                   props.isEdit
-                    ? props.data?.fetchUseditem.useditemAddress?.address
+                    ? props.data?.fetchUseditem.useditemAddress?.address ?? ""
                     : props.getValues("useditemAddress.address")
                 }
                 setValue={props.setValue}
@@ -121,8 +118,6 @@ const ProductRegisterUI = (props: IProductProps) => {
             </div>
           </div>
           <span>중고 상품 이미지 올리기</span>
-          {console.log(props.images)}
-
           <div style={{ display: "flex" }}>
             {new Array(3).fill(1).map((_, index) => (
               <>
@@ -146,6 +141,7 @@ const ProductRegisterUI = (props: IProductProps) => {
                 <input
                   id={`file${index}`}
                   type="file"
+                  // @ts-expect-error
                   ref={props.imageRef}
                   style={{ opacity: "0", width: "0px" }}
                   {...props.register("images")}

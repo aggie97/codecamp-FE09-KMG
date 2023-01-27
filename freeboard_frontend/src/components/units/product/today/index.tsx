@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { IUseditem } from "../../../../commons/types/generated/types";
 import TodayILookedProduct from "./todayProdutItem";
 
 const TodayILookedProducts = () => {
@@ -16,7 +17,7 @@ const TodayILookedProducts = () => {
           }}
         >
           {JSON.parse(localStorage.getItem("TILP") ?? "[]")?.map(
-            (product, i) => (
+            (product: IUseditem, i: number) => (
               <TodayILookedProduct key={i} product={product} />
             )
           )}

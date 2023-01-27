@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { Reference, StoreObject, useMutation } from "@apollo/client";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
 import { Dispatch, MouseEvent, SetStateAction, useEffect } from "react";
@@ -10,9 +10,10 @@ import {
   IMutationDeleteUseditemQuestionArgs,
   IMutationUpdateUseditemQuestionAnswerArgs,
   IMutationUpdateUseditemQuestionArgs,
-  IQuery,
-  IQueryFetchUseditemQuestionAnswersArgs,
+  // IQuery,
+  // IQueryFetchUseditemQuestionAnswersArgs,
   IUseditemQuestion,
+  IUseditemQuestionAnswer,
 } from "../../../commons/types/generated/types";
 import {
   CREATE_USED_ITEM_QUESTION_ANSWER,
@@ -49,13 +50,16 @@ interface ICommentProps {
   isEdit: boolean;
   setIdForEdit: Dispatch<SetStateAction<string>>;
   isAnswer?: boolean;
+  setIdForSubmit: Dispatch<SetStateAction<string>>;
+  setIdForOpenAnswer: Dispatch<SetStateAction<string>>;
 }
 
 const Comment = (props: ICommentProps) => {
   const router = useRouter();
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue } =
+    useForm<IUseditemQuestionAnswer>();
   useEffect(() => {
-    setValue("contents", props.comment?.contents);
+    setValue("contents", String(props.comment?.contents));
     if (props.isSubmit) setValue("contents", "");
   }, []);
 
@@ -84,18 +88,18 @@ const Comment = (props: ICommentProps) => {
     IMutationDeleteUseditemQuestionAnswerArgs
   >(DELETE_USED_ITEM_QUESTION_ANSWER);
 
-  const { data } = useQuery<
-    Pick<IQuery, "fetchUseditemQuestionAnswers">,
-    IQueryFetchUseditemQuestionAnswersArgs
-  >(FETCH_USED_ITEM_QUESTION_ANSWERS, {
-    variables: {
-      useditemQuestionId: String(props.comment?._id),
-      page: 1,
-    },
-    fetchPolicy: "cache-and-network",
-  });
+  // const { data } = useQuery<
+  //   Pick<IQuery, "fetchUseditemQuestionAnswers">,
+  //   IQueryFetchUseditemQuestionAnswersArgs
+  // >(FETCH_USED_ITEM_QUESTION_ANSWERS, {
+  //   variables: {
+  //     useditemQuestionId: String(props.comment?._id),
+  //     page: 1,
+  //   },
+  //   fetchPolicy: "cache-and-network",
+  // });
 
-  const onEdit = async (formData) => {
+  const onEdit = async (formData: IUseditemQuestionAnswer) => {
     if (!formData.contents) {
       Modal.warning({ content: "내용을 입력해주세요!" });
       return;
@@ -124,7 +128,7 @@ const Comment = (props: ICommentProps) => {
     }
   };
 
-  const onSubmit = async (formData) => {
+  const onSubmit = async (formData: IUseditemQuestionAnswer) => {
     console.log("!", formData);
     if (!formData.contents) {
       Modal.warning({ content: "내용을 입력해주세요!" });
@@ -157,7 +161,6 @@ const Comment = (props: ICommentProps) => {
   const onDelete = async () => {
     try {
       if (props.isAnswer) {
-        console.log("!", props.commentQId);
         await deleteUseditemQuestionAnswer({
           variables: { useditemQuestionAnswerId: String(props.comment?._id) },
           update(cache, { data }) {
@@ -166,7 +169,8 @@ const Comment = (props: ICommentProps) => {
                 fetchUseditemQuestionAnswers: (prev, { readField }) => {
                   const deleteId = data?.deleteUseditemQuestionAnswer;
                   const filteredPrev = prev.filter(
-                    (el) => readField("_id", el) !== deleteId
+                    (el: Reference | StoreObject | undefined) =>
+                      readField("_id", el) !== deleteId
                   );
                   return [...filteredPrev];
                 },
@@ -211,7 +215,7 @@ const Comment = (props: ICommentProps) => {
   const onClickShowAnswers = async () => {
     props.setIdForOpenAnswer((prev) => {
       if (prev) return "";
-      else return props.comment?._id;
+      else return String(props.comment?._id);
     });
   };
 
@@ -244,7 +248,7 @@ const Comment = (props: ICommentProps) => {
                 {props.comment?.createdAt.slice(0, 10)}
               </CommentCreatedAt>
               <div>
-                {props.isAnswer || (
+                {props.isAnswer ?? (
                   <>
                     <button type="button" onClick={onClickShowAnswers}>
                       답글 보기

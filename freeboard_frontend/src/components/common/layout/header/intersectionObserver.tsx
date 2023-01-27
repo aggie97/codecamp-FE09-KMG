@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { stuckState } from "../../../../commons/store";
-const Wrapper = ({ children }) => {
-  const [stuck, setStuck] = useRecoilState(stuckState);
+const Wrapper = ({ children }: { children: JSX.Element }) => {
+  const setStuck = useSetRecoilState(stuckState);
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

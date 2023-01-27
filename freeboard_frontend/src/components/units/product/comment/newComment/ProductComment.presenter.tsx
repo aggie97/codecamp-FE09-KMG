@@ -1,3 +1,9 @@
+import {
+  SubmitHandler,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from "react-hook-form";
+import { IUseditemQuestion } from "../../../../../commons/types/generated/types";
 import Button from "../../../../common/button";
 import {
   Form,
@@ -6,7 +12,13 @@ import {
   Title,
 } from "./ProductComment.styles";
 
-const ProductNewCommentUI = (props) => {
+interface IProductNewCommentUIProps {
+  onSubmit: SubmitHandler<IUseditemQuestion>;
+  register: UseFormRegister<IUseditemQuestion>;
+  handleSubmit: UseFormHandleSubmit<IUseditemQuestion>;
+}
+
+const ProductNewCommentUI = (props: IProductNewCommentUIProps) => {
   return (
     <NewCommentWrapper>
       <Title>질문하기</Title>

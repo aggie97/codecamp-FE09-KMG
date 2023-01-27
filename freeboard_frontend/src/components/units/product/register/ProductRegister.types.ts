@@ -1,7 +1,6 @@
-import { ChangeEventHandler, MouseEventHandler, MutableRefObject } from "react";
+import { ChangeEventHandler, MutableRefObject } from "react";
 import { Address } from "react-daum-postcode";
 import {
-  FieldErrorsImpl,
   FormState,
   UseFormHandleSubmit,
   UseFormRegister,
@@ -17,9 +16,9 @@ export interface IFormDataProps {
   name: string;
   remarks: string;
   contents: string;
-  price: Maybe<number> | undefined;
+  price: number;
   tags?: Maybe<string[]>;
-  useditemAddress?: Maybe<IUseditemAddress>;
+  useditemAddress?: Partial<IUseditemAddress>;
   images?: Maybe<string[]>;
   createdAt?: string;
   pickedCount?: Maybe<number>;
@@ -27,32 +26,23 @@ export interface IFormDataProps {
 
 export interface IProductProps {
   formState: FormState<IFormDataProps>;
-  onChangeValue:
-    | ((
-        value: string,
-        delta: DeltaStatic,
-        source: Sources,
-        editor: UnprivilegedEditor
-      ) => void)
-    | undefined;
+  onChangeValue: (value: string) => void;
   setValue: UseFormSetValue<IFormDataProps>;
   onEdit: (formData: IFormDataProps) => Promise<void>;
   onClickSearchAddress: (() => void) | undefined;
-  data: { fetchUseditem: IUseditem };
-  isEdit: boolean;
+  data?: { fetchUseditem: IUseditem };
+  isEdit?: boolean;
   getValues: (arg: string) => string;
   onCompleteAddressSearch: ((address: Address) => void) | undefined;
   isOpen: any;
   images: string[];
   preImages: string[];
-  imageRef: MutableRefObject<undefined>;
+  imageRef: MutableRefObject<undefined | HTMLLabelElement>;
   onChangeImageBox: (
     index: number
   ) => ChangeEventHandler<HTMLInputElement> | undefined;
-  onClickBox: MouseEventHandler<HTMLLabelElement> | undefined;
-  isValid: boolean;
+  onClickBox: () => void;
   onSubmit: (formData: IFormDataProps) => Promise<void>;
   handleSubmit: UseFormHandleSubmit<IFormDataProps>;
   register: UseFormRegister<IFormDataProps>;
-  errors: FieldErrorsImpl<IFormDataProps>;
 }

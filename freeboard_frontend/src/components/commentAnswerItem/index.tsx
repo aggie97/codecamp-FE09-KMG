@@ -1,9 +1,10 @@
 import { useMutation } from "@apollo/client";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   IMutation,
   IMutationDeleteUseditemQuestionAnswerArgs,
   IMutationUpdateUseditemQuestionAnswerArgs,
+  IUseditemQuestionAnswer,
 } from "../../commons/types/generated/types";
 import {
   DELETE_USED_ITEM_QUESTION_ANSWER,
@@ -14,8 +15,9 @@ import {
 const CommentAnswerItem = ({
   answer,
   questionId,
-  // onClickEditAnswer,
-  // onClickDeleteAnswer,
+}: {
+  answer: IUseditemQuestionAnswer;
+  questionId: string;
 }) => {
   const [isAnswerEditOpen, setIsAnswerEditOpen] = useState(false);
   const [contents, setContents] = useState("");
@@ -67,7 +69,7 @@ const CommentAnswerItem = ({
     }
   };
 
-  const onChangeEditAnswer = (event) => {
+  const onChangeEditAnswer = (event: ChangeEvent<HTMLInputElement>) => {
     setContents(event.target.value);
   };
   return (

@@ -2,9 +2,9 @@ import { useQuery } from "@apollo/client";
 import { Divider } from "antd";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { todayILookedProducts } from "../src/commons/store";
-import { IQuery } from "../src/commons/types/generated/types";
+import { IQuery, IUseditem } from "../src/commons/types/generated/types";
 import Banner from "../src/components/common/layout/banner";
 import ProductList from "../src/components/units/product/list/ProductList.container";
 import { FETCH_USED_ITEMS_I_PICKED } from "../src/components/units/product/list/ProductList.queries";
@@ -15,7 +15,7 @@ import TodayILookedProducts from "../src/components/units/product/today";
 
 const Home = () => {
   const router = useRouter();
-  const [todayItem, setTodayItem] = useRecoilState(todayILookedProducts);
+  const setTodayItem = useSetRecoilState(todayILookedProducts);
   useEffect(() => {
     const todayItems = JSON.parse(localStorage.getItem("TILP") ?? "[]");
     if (todayItems.length) setTodayItem(todayItems);
@@ -26,7 +26,7 @@ const Home = () => {
     variables: { search: "" },
   });
 
-  const onClickProductItem = (item) => async () => {
+  const onClickProductItem = (item: IUseditem) => async () => {
     await router.push(`/market/${item._id}`);
   };
   return (
