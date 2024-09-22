@@ -22,7 +22,7 @@
     "antd": "^4.22.8",
     "apollo-upload-client": "^17.0.0",
     "axios": "^0.27.2",
-    "dompurify": "^2.4.0",
+    "dompurify": "^2.5.4",
     "firebase": "^9.10.0",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
